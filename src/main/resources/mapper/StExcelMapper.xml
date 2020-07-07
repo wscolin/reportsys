@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.report.mapper.StExcelMapper" >
+  <insert id="insertSelective" parameterType="com.zxd.report.model.ImIcome" >
+    insert into t_income
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="KMBM != null" >
+        KMBM,
+      </if>
+      <if test="KMMC != null" >
+        KMMC,
+      </if>
+      <if test="AMT != null" >
+        AMT,
+      </if>
+      <if test="SZ != null" >
+        SZ,
+      </if>
+      <if test="GXQ != null" >
+        GXQ,
+      </if>
+      <if test="LCQ != null" >
+        LCQ,
+      </if>
+      <if test="DXQ != null" >
+        DXQ,
+      </if>
+      <if test="NCX != null" >
+        NCX,
+      </if>
+      <if test="NFX != null" >
+        NFX,
+      </if>
+      <if test="LCX != null" >
+        LCX,
+      </if>
+      <if test="CRX != null" >
+        CRX,
+      </if>
+      <if test="YHX != null" >
+        YHX,
+      </if>
+      <if test="LAX != null" >
+        LAX,
+      </if>
+      <if test="JXX != null" >
+        JXX,
+      </if>
+      <if test="ZXX != null" >
+        ZXX,
+      </if>
+      <if test="GCX != null" >
+        GCX,
+      </if>
+      <if test="TYPE != null" >
+        TYPE,
+      </if>
+      <if test="YEAR != null" >
+        YEAR,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="KMBM != null" >
+        #{KMBM,jdbcType=VARCHAR},
+      </if>
+      <if test="KMMC != null" >
+        #{KMMC,jdbcType=VARCHAR},
+      </if>
+      <if test="AMT != null" >
+        #{AMT,jdbcType=VARCHAR},
+      </if>
+      <if test="SZ != null" >
+        #{SZ,jdbcType=VARCHAR},
+      </if>
+      <if test="GXQ != null" >
+        #{GXQ,jdbcType=VARCHAR},
+      </if>
+      <if test="LCQ != null" >
+        #{LCQ,jdbcType=VARCHAR},
+      </if>
+      <if test="DXQ != null" >
+        #{DXQ},
+      </if>
+      <if test="NCX != null" >
+        #{NCX},
+      </if>
+      <if test="NFX != null" >
+        #{NFX},
+      </if>
+      <if test="LCX != null" >
+        #{LCX},
+      </if>
+      <if test="CRX != null" >
+        #{CRX},
+      </if>
+      <if test="YHX != null" >
+        #{YHX},
+      </if>
+      <if test="LAX != null" >
+        #{LAX},
+      </if>
+      <if test="JXX != null" >
+        #{JXX},
+      </if>
+      <if test="ZXX != null" >
+        #{ZXX},
+      </if>
+      <if test="GCX != null" >
+        #{GCX},
+      </if>
+      <if test="TYPE != null" >
+        #{TYPE},
+      </if>
+      <if test="YEAR != null" >
+        #{YEAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertSelective_batch_income" parameterType="java.util.List" >
+    insert into t_income
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        KMBM,
+        KMMC,
+        AMT,
+        SZ,
+        GXQ,
+        LCQ,
+        DXQ,
+        NCX,
+        NFX,
+        LCX,
+        CRX,
+        YHX,
+        LAX,
+        JXX,
+        ZXX,
+        GCX,
+        TYPE,
+        YEAR,
+    </trim>
+        VALUES
+      <foreach collection="list" item="income" index="index"  separator=",">
+        (
+        #{income.KMBM},
+        #{income.KMMC},
+        #{income.AMT},
+        #{income.SZ},
+        #{income.GXQ},
+        #{income.LCQ},
+        #{income.DXQ},
+        #{income.NCX},
+        #{income.NFX},
+        #{income.LCX},
+        #{income.CRX},
+        #{income.YHX},
+        #{income.LAX},
+        #{income.JXX},
+        #{income.ZXX},
+        #{income.GCX},
+        #{income.TYPE},
+        #{income.YEAR}
+        )
+      </foreach>
+
+
+  </insert>
+  <insert id="insertSelective_batch_disburse" parameterType="java.util.List" >
+    insert into t_disburse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      KMBM,
+      KMMC,
+      AMT,
+      SZ,
+      GXQ,
+      LCQ,
+      DXQ,
+      NCX,
+      NFX,
+      LCX,
+      CRX,
+      YHX,
+      LAX,
+      JXX,
+      ZXX,
+      GCX,
+      TYPE,
+      YEAR,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.KMBM},
+      #{income.KMMC},
+      #{income.AMT},
+      #{income.SZ},
+      #{income.GXQ},
+      #{income.LCQ},
+      #{income.DXQ},
+      #{income.NCX},
+      #{income.NFX},
+      #{income.LCX},
+      #{income.CRX},
+      #{income.YHX},
+      #{income.LAX},
+      #{income.JXX},
+      #{income.ZXX},
+      #{income.GCX},
+      #{income.TYPE},
+      #{income.YEAR}
+      )
+    </foreach>
+
+
+  </insert>
+  <select id="querybysql" parameterType="String" resultType="com.zxd.report.model.Min_11">
+     ${sql}
+  </select>
+  <select id="selectBysql" parameterType="String" resultType="map">
+    ${sql}
+  </select>
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.report.mapper.StRoleResourceMapper" >
+  <resultMap id="BaseResultMap" type="com.zxd.report.model.StRoleResource" >
+    <id column="ROLEID" property="ROLEID" jdbcType="INTEGER" />
+    <id column="RESOURCEID" property="RESOURCEID" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.zxd.report.model.StRoleResource" >
+    delete from ST_ROLE_RESOURCE
+    where ROLEID = #{ROLEID,jdbcType=INTEGER}
+    and RESOURCEID = #{RESOURCEID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zxd.report.model.StRoleResource" >
+    insert into ST_ROLE_RESOURCE (ROLEID, RESOURCEID)
+    values (#{ROLEID,jdbcType=INTEGER}, #{RESOURCEID,jdbcType=INTEGER})
+  </insert>
+  <delete id="deletebyroleid">
+    delete from ST_ROLE_RESOURCE where ROLEID=#{roleid}
+  </delete>
+</mapper>

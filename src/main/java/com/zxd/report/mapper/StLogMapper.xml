@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.report.mapper.StLogMapper" >
+  <resultMap id="BaseResultMap" type="com.zxd.report.model.StLog" >
+    <id column="ID" property="ID" jdbcType="INTEGER" />
+    <result column="YHJGDM" property="YHJGDM" jdbcType="VARCHAR" />
+    <result column="USERID" property="USERID" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="USERNAME" jdbcType="VARCHAR" />
+    <result column="DEPTID" property="DEPTID" jdbcType="VARCHAR" />
+    <result column="DEPTNAME" property="DEPTNAME" jdbcType="VARCHAR" />
+    <result column="CLASS_NAME" property="CLASS_NAME" jdbcType="VARCHAR" />
+    <result column="METHOD_NAME" property="METHOD_NAME" jdbcType="VARCHAR" />
+    <result column="IP_ADDRESS" property="IP_ADDRESS" jdbcType="VARCHAR" />
+    <result column="MAC" property="MAC" jdbcType="VARCHAR" />
+    <result column="LOG_LEVEL" property="LOG_LEVEL" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="CREATETIME" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zxd.report.model.StLogWithBLOBs" extends="BaseResultMap" >
+    <result column="PARAMS" property="PARAMS" jdbcType="LONGVARCHAR" />
+    <result column="REMARKS" property="REMARKS" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, YHJGDM, USERID, USERNAME, DEPTID, DEPTNAME, CLASS_NAME, METHOD_NAME, IP_ADDRESS, 
+    MAC, LOG_LEVEL, CREATETIME
+  </sql>
+  <sql id="Blob_Column_List" >
+    PARAMS, REMARKS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from ST_LOG
+    where ID = #{ID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ST_LOG
+    where ID = #{ID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zxd.report.model.StLogWithBLOBs" >
+    insert into ST_LOG (ID, YHJGDM, USERID, 
+      USERNAME, DEPTID, DEPTNAME, 
+      CLASS_NAME, METHOD_NAME, IP_ADDRESS, 
+      MAC, LOG_LEVEL, CREATETIME, 
+      PARAMS, REMARKS)
+    values (#{ID,jdbcType=INTEGER}, #{YHJGDM,jdbcType=VARCHAR}, #{USERID,jdbcType=VARCHAR}, 
+      #{USERNAME,jdbcType=VARCHAR}, #{DEPTID,jdbcType=VARCHAR}, #{DEPTNAME,jdbcType=VARCHAR}, 
+      #{CLASS_NAME,jdbcType=VARCHAR}, #{METHOD_NAME,jdbcType=VARCHAR}, #{IP_ADDRESS,jdbcType=VARCHAR}, 
+      #{MAC,jdbcType=VARCHAR}, #{LOG_LEVEL,jdbcType=VARCHAR}, #{CREATETIME,jdbcType=TIMESTAMP}, 
+      #{PARAMS,jdbcType=LONGVARCHAR}, #{REMARKS,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zxd.report.model.StLogWithBLOBs" >
+    insert into ST_LOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        ID,
+      </if>
+      <if test="YHJGDM != null" >
+        YHJGDM,
+      </if>
+      <if test="USERID != null" >
+        USERID,
+      </if>
+      <if test="USERNAME != null" >
+        USERNAME,
+      </if>
+      <if test="DEPTID != null" >
+        DEPTID,
+      </if>
+      <if test="DEPTNAME != null" >
+        DEPTNAME,
+      </if>
+      <if test="CLASS_NAME != null" >
+        CLASS_NAME,
+      </if>
+      <if test="METHOD_NAME != null" >
+        METHOD_NAME,
+      </if>
+      <if test="IP_ADDRESS != null" >
+        IP_ADDRESS,
+      </if>
+      <if test="MAC != null" >
+        MAC,
+      </if>
+      <if test="LOG_LEVEL != null" >
+        LOG_LEVEL,
+      </if>
+      <if test="CREATETIME != null" >
+        CREATETIME,
+      </if>
+      <if test="PARAMS != null" >
+        PARAMS,
+      </if>
+      <if test="REMARKS != null" >
+        REMARKS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        #{ID,jdbcType=INTEGER},
+      </if>
+      <if test="YHJGDM != null" >
+        #{YHJGDM,jdbcType=VARCHAR},
+      </if>
+      <if test="USERID != null" >
+        #{USERID,jdbcType=VARCHAR},
+      </if>
+      <if test="USERNAME != null" >
+        #{USERNAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DEPTID != null" >
+        #{DEPTID,jdbcType=VARCHAR},
+      </if>
+      <if test="DEPTNAME != null" >
+        #{DEPTNAME,jdbcType=VARCHAR},
+      </if>
+      <if test="CLASS_NAME != null" >
+        #{CLASS_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="METHOD_NAME != null" >
+        #{METHOD_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="IP_ADDRESS != null" >
+        #{IP_ADDRESS,jdbcType=VARCHAR},
+      </if>
+      <if test="MAC != null" >
+        #{MAC,jdbcType=VARCHAR},
+      </if>
+      <if test="LOG_LEVEL != null" >
+        #{LOG_LEVEL,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATETIME != null" >
+        #{CREATETIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="PARAMS != null" >
+        #{PARAMS,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="REMARKS != null" >
+        #{REMARKS,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxd.report.model.StLogWithBLOBs" >
+    update ST_LOG
+    <set >
+      <if test="YHJGDM != null" >
+        YHJGDM = #{YHJGDM,jdbcType=VARCHAR},
+      </if>
+      <if test="USERID != null" >
+        USERID = #{USERID,jdbcType=VARCHAR},
+      </if>
+      <if test="USERNAME != null" >
+        USERNAME = #{USERNAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DEPTID != null" >
+        DEPTID = #{DEPTID,jdbcType=VARCHAR},
+      </if>
+      <if test="DEPTNAME != null" >
+        DEPTNAME = #{DEPTNAME,jdbcType=VARCHAR},
+      </if>
+      <if test="CLASS_NAME != null" >
+        CLASS_NAME = #{CLASS_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="METHOD_NAME != null" >
+        METHOD_NAME = #{METHOD_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="IP_ADDRESS != null" >
+        IP_ADDRESS = #{IP_ADDRESS,jdbcType=VARCHAR},
+      </if>
+      <if test="MAC != null" >
+        MAC = #{MAC,jdbcType=VARCHAR},
+      </if>
+      <if test="LOG_LEVEL != null" >
+        LOG_LEVEL = #{LOG_LEVEL,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATETIME != null" >
+        CREATETIME = #{CREATETIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="PARAMS != null" >
+        PARAMS = #{PARAMS,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="REMARKS != null" >
+        REMARKS = #{REMARKS,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{ID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zxd.report.model.StLogWithBLOBs" >
+    update ST_LOG
+    set YHJGDM = #{YHJGDM,jdbcType=VARCHAR},
+      USERID = #{USERID,jdbcType=VARCHAR},
+      USERNAME = #{USERNAME,jdbcType=VARCHAR},
+      DEPTID = #{DEPTID,jdbcType=VARCHAR},
+      DEPTNAME = #{DEPTNAME,jdbcType=VARCHAR},
+      CLASS_NAME = #{CLASS_NAME,jdbcType=VARCHAR},
+      METHOD_NAME = #{METHOD_NAME,jdbcType=VARCHAR},
+      IP_ADDRESS = #{IP_ADDRESS,jdbcType=VARCHAR},
+      MAC = #{MAC,jdbcType=VARCHAR},
+      LOG_LEVEL = #{LOG_LEVEL,jdbcType=VARCHAR},
+      CREATETIME = #{CREATETIME,jdbcType=TIMESTAMP},
+      PARAMS = #{PARAMS,jdbcType=LONGVARCHAR},
+      REMARKS = #{REMARKS,jdbcType=LONGVARCHAR}
+    where ID = #{ID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zxd.report.model.StLog" >
+    update ST_LOG
+    set YHJGDM = #{YHJGDM,jdbcType=VARCHAR},
+      USERID = #{USERID,jdbcType=VARCHAR},
+      USERNAME = #{USERNAME,jdbcType=VARCHAR},
+      DEPTID = #{DEPTID,jdbcType=VARCHAR},
+      DEPTNAME = #{DEPTNAME,jdbcType=VARCHAR},
+      CLASS_NAME = #{CLASS_NAME,jdbcType=VARCHAR},
+      METHOD_NAME = #{METHOD_NAME,jdbcType=VARCHAR},
+      IP_ADDRESS = #{IP_ADDRESS,jdbcType=VARCHAR},
+      MAC = #{MAC,jdbcType=VARCHAR},
+      LOG_LEVEL = #{LOG_LEVEL,jdbcType=VARCHAR},
+      CREATETIME = #{CREATETIME,jdbcType=TIMESTAMP}
+    where ID = #{ID,jdbcType=INTEGER}
+  </update>
+  <select id="selectByList" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from ST_LOG
+    <where>
+      <if test="map.userid != null and map.userid!=''" >
+        AND  USERID like CONCAT('%',#{map.userid},'%' )
+      </if>
+      <if test="map.search_begin != null and map.search_begin!=''" >
+        AND  CREATETIME BETWEEN #{map.search_begin} and #{map.search_end}
+      </if>
+    </where>
+    order by ${page.orderColumn} ${page.orderDir} limit #{page.start},#{page.length}
+  </select>
+  <select id="selectByCount" resultType="int">
+    select
+    COUNT(1)
+    from ST_LOG
+    <where>
+      <if test="map.userid != null and map.userid!=''" >
+        AND  USERID like CONCAT('%',#{map.userid},'%' )
+      </if>
+      <if test="map.search_begin != null and map.search_begin!=''" >
+        AND  CREATETIME BETWEEN #{map.search_begin} and #{map.search_end}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByList_ck" resultType="Map">
+    select a.QQDH,a.STATE,a.FLAG,a.CREATE_TIME,a.UPDATE_TIME,
+    (select GROUP_CONCAT(ID) from CK_FEEDBACK where QQDH=a.QQDH)FK from CK_REQUEST a
+    <where>
+      <if test="map.userid != null and map.userid!=''" >
+        AND  a.QQDH like CONCAT('%',#{map.userid},'%' )
+      </if>
+      <if test="map.search_begin != null and map.search_begin!=''" >
+        AND  a.CREATE_TIME BETWEEN #{map.search_begin} and #{map.search_end}
+      </if>
+    </where>
+    order by ${page.orderColumn} ${page.orderDir} limit #{page.start},#{page.length}
+  </select>
+  <select id="selectByCount_ck" resultType="int">
+    select
+    COUNT(1)
+    from CK_REQUEST
+    <where>
+      <if test="map.userid != null and map.userid!=''" >
+        AND  QQDH like CONCAT('%',#{map.userid},'%' )
+      </if>
+      <if test="map.search_begin != null and map.search_begin!=''" >
+        AND  CREATE_TIME BETWEEN #{map.search_begin} and #{map.search_end}
+      </if>
+    </where>
+  </select>
+  <update id="ckcfqq">
+    UPDATE CK_REQUEST set STATE=0 where QQDH=#{qqdh}
+  </update>
+  <select id="getfks" resultType="Map">
+    select b.ID FK,b.FILE_PATH FK_FILE_PATH,b.STATE FK_STATE,b.FLAG FK_FLAG,b.CREATE_TIME FK_CREATE_TIME,b.UPDATE_TIME FK_UPDATE_TIME from CK_FEEDBACK b where b.ID in
+    <foreach collection="fks" item="item" index="index" open="(" close=")" separator=",">
+        #{item}
+    </foreach>
+    order by ${page.orderColumn} ${page.orderDir} limit #{page.start},#{page.length}
+  </select>
+</mapper>

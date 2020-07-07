@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.report.mapper.InterfaceMapper" >
+    <select id="getqqfiles" resultType="Map">
+        select FILE_PATH ITEM from CK_REQUEST where STATE=0
+    </select>
+    <update id="SetqqYtq">
+        update CK_REQUEST set STATE=1,CREATE_TIME=NOW() where QQDH=#{qqdh}
+    </update>
+    <insert id="savefeedback" parameterType="Map">
+        REPLACE into CK_FEEDBACK(YHJGDM, QQDH,FILE_PATH, STATE, FLAG, CREATE_TIME,UPDATE_TIME) VALUES (
+          #{YHJGDM},#{QQDH},#{FILE_PATH},'0','0',NOW(),NOW()
+        )
+    </insert>
+</mapper>

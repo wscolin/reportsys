@@ -1,0 +1,175 @@
+.groupTitle{
+    color: #ffffff;
+}
+.nav-btn50 img{
+    cursor: pointer;
+}
+.nav-btn50 {
+    position: relative;
+    float: left;
+    font-family: 微软雅黑 宋体;
+    font-size: 16px;
+    padding: 0 10px;
+}
+.navtitle{
+    font-family: 微软雅黑;
+    font-size: 14px;
+    color: #E4DAFF;
+}
+.navtitle:hover{
+    background-color: transparent;!important;
+}
+.helpbimg{
+    height: 35px;
+    width: 35px;
+}
+#headerWrapper {
+    width:100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+#catchScroll{
+    background:rgb(30,30,30);
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=00)';
+    filter: alpha(opacity=00);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity:0;
+}
+#headerCenter{
+    width:100%;
+    max-width:initial;
+    padding: 0 10px 0 20px;
+}
+.left_but {
+    float:left;
+    width: 55.2rem;
+}
+.left_but img{
+    display: block;
+    width:100%;
+    height:100%;
+}
+.right_but {
+    float: right;
+    width: initial;
+    height: initial;
+    padding: 0;
+    margin-top: 2.375rem;
+}
+/*退出字体*/
+.x-body {
+    font-size: 14px!important;
+}
+/*弹框边框*/
+.x-window-default {
+    border-width: 2px!important;
+    min-width: 1000px;
+    min-height: 600px;
+}
+/*menu样式*/
+.navtitle img{
+    margin-top: 35px;
+}
+.navtitle{
+    width: 127px;
+    height: 138px;
+    background-image: url("../images/menu.png")!important;
+    background-repeat: no-repeat;
+}
+.navActive {
+    background-image: url("../images/menubag.png")!important;
+}
+/*用户信息文本框样式*/
+.form-group.form-md-line-input {
+    padding-top: 10px!important;
+}
+.form-control{
+    width: 95%;
+    text-indent: 100px;
+    color: #e3bc8e !important;
+}
+.form-control~label{
+    top: 17px!important;
+    color: #ffffff !important;
+}
+.form-group {
+    margin-bottom: 0px!important;
+}
+/*消息分页样式*/
+*{ margin:0; padding:0; list-style:none;}
+a{ text-decoration:none;}
+a:hover{ text-decoration:none;}
+.tcdPageCode{padding: 15px 8px;text-align: left;color: #ccc;}
+.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px!important;vertical-align: middle;}
+.tcdPageCode a:hover{text-decoration: none;border: 1px solid #4dca5b;}
+.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #4dca5b;	border: 1px solid #428bca;border-radius: 4px!important;vertical-align: middle;}
+.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px!important;vertical-align: middle;}
+/*系统名称样式*/
+.app_title{
+    line-height: 100px;
+    font-size: 50px;
+    font-family: "微软雅黑";
+    color: #FFFFFF;
+}
+
+/*退出样式*/
+.modal{
+    z-index: 20000;
+}
+.modal-dialog {
+    margin: 10% auto;
+}
+.modal-dialog .modal-title{
+    font-family: "微软雅黑";
+    font-size: 22px;
+    color: #999999;
+}
+.modal-dialog .modal-content{
+    background-color: #edfaff;
+}
+.modal-dialog .modal-header{
+    height:45px;
+}
+.modal-dialog .bootbox-body{
+    padding-top: 37px;
+    padding-bottom: 27px;
+    text-align: center;
+    font-family: "方正大标宋简体";
+    font-size: 30px;
+}
+.modal-dialog .modal-footer{
+    text-align: center;
+}
+.modal-dialog  .modal-footer{
+    border: none !important;
+}
+.modal-dialog  .btn{
+    color: #FFFFFF;
+    width: 120px;
+    height: 40px;
+    margin: 0 20px;
+    -webkit-border-radius: 5px !important;
+    -moz-border-radius: 5px !important;
+    border-radius: 5px !important;;
+}
+.modal-dialog  .modal-content{
+    height: 300px;
+}
+.modal-dialog .btn-primary{
+    background-color: #0282c5;
+}
+.modal-dialog .btn-primary:hover{
+    background-color: #0b8ccf;
+}
+.modal-dialog .btn-default{
+    background-color: #67809f;
+}
+.modal-dialog .btn-default:hover{
+    background-color: #7290b5;
+}
+.modal .modal-header {
+    border-bottom: 1px solid #c2c2c2;
+}
+.modal-header {
+    padding: 8px;
+}

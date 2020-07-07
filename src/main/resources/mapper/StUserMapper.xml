@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.report.mapper.StUserMapper" >
+  <resultMap id="BaseResultMap" type="com.zxd.report.model.StUser" >
+    <id column="OPERATORID" property="OPERATORID" jdbcType="BIGINT" />
+    <result column="USERID" property="USERID" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="PASSWORD" jdbcType="VARCHAR" />
+    <result column="OPERATORNAME" property="OPERATORNAME" jdbcType="VARCHAR" />
+    <result column="DEPTID" property="DEPTID" jdbcType="VARCHAR" />
+    <result column="IDENTITY" property="IDENTITY" jdbcType="VARCHAR" />
+    <result column="TELNO" property="TELNO" jdbcType="VARCHAR" />
+    <result column="POSITION" property="POSITION" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="EMAIL" jdbcType="VARCHAR" />
+    <result column="STATUS" property="STATUS" jdbcType="CHAR" />
+    <result column="LASTLOGIN" property="LASTLOGIN" jdbcType="TIMESTAMP" />
+    <result column="MACCODE" property="MACCODE" jdbcType="VARCHAR" />
+    <result column="IPADDRESS" property="IPADDRESS" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="CREATOR" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="CREATETIME" jdbcType="TIMESTAMP" />
+    <result column="UPDATOR" property="UPDATOR" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="UPDATETIME" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OPERATORID, USERID, PASSWORD, OPERATORNAME, DEPTID, IDENTITY,TELNO, POSITION, EMAIL, STATUS,
+    LASTLOGIN, MACCODE, IPADDRESS, CREATOR, CREATETIME, UPDATOR, UPDATETIME
+  </sql>
+  <insert id="insertSelective" parameterType="com.zxd.report.model.StUser" >
+    insert into ST_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="OPERATORID != null" >
+        OPERATORID,
+      </if>
+      <if test="USERID != null" >
+        USERID,
+      </if>
+      <if test="PASSWORD != null" >
+        PASSWORD,
+      </if>
+      <if test="OPERATORNAME != null" >
+        OPERATORNAME,
+      </if>
+      <if test="DEPTID != null" >
+        DEPTID,
+      </if>
+      <if test="IDENTITY != null" >
+        IDENTITY,
+      </if>
+      <if test="TELNO != null" >
+        TELNO,
+      </if>
+      <if test="POSITION != null" >
+        POSITION,
+      </if>
+      <if test="EMAIL != null" >
+        EMAIL,
+      </if>
+      <if test="STATUS != null" >
+        STATUS,
+      </if>
+      <if test="LASTLOGIN != null" >
+        LASTLOGIN,
+      </if>
+      <if test="MACCODE != null" >
+        MACCODE,
+      </if>
+      <if test="IPADDRESS != null" >
+        IPADDRESS,
+      </if>
+      <if test="CREATOR != null" >
+        CREATOR,
+      </if>
+      <if test="CREATETIME != null" >
+        CREATETIME,
+      </if>
+      <if test="UPDATOR != null" >
+        UPDATOR,
+      </if>
+      <if test="UPDATETIME != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="OPERATORID != null" >
+        #{OPERATORID,jdbcType=INTEGER},
+      </if>
+      <if test="USERID != null" >
+        #{USERID,jdbcType=VARCHAR},
+      </if>
+      <if test="PASSWORD != null" >
+        #{PASSWORD,jdbcType=VARCHAR},
+      </if>
+      <if test="OPERATORNAME != null" >
+        #{OPERATORNAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DEPTID != null" >
+        #{DEPTID,jdbcType=VARCHAR},
+      </if>
+      <if test="IDENTITY != null" >
+        #{IDENTITY,jdbcType=VARCHAR},
+      </if>
+      <if test="TELNO != null" >
+        #{TELNO,jdbcType=VARCHAR},
+      </if>
+      <if test="POSITION != null" >
+        #{POSITION,jdbcType=VARCHAR},
+      </if>
+      <if test="EMAIL != null" >
+        #{EMAIL,jdbcType=VARCHAR},
+      </if>
+      <if test="STATUS != null" >
+        #{STATUS,jdbcType=CHAR},
+      </if>
+      <if test="LASTLOGIN != null" >
+        #{LASTLOGIN,jdbcType=TIMESTAMP},
+      </if>
+      <if test="MACCODE != null" >
+        #{MACCODE,jdbcType=VARCHAR},
+      </if>
+      <if test="IPADDRESS != null" >
+        #{IPADDRESS,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATOR != null" >
+        #{CREATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATETIME != null" >
+        #{CREATETIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="UPDATOR != null" >
+        #{UPDATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="UPDATETIME != null" >
+        #{UPDATETIME,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxd.report.model.StUser" >
+    update ST_USER
+    <set >
+      <if test="USERID != null" >
+        USERID = #{USERID,jdbcType=VARCHAR},
+      </if>
+      <if test="PASSWORD != null" >
+        PASSWORD = #{PASSWORD,jdbcType=VARCHAR},
+      </if>
+      <if test="OPERATORNAME != null" >
+        OPERATORNAME = #{OPERATORNAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DEPTID != null" >
+        DEPTID = #{DEPTID,jdbcType=VARCHAR},
+      </if>
+      <if test="IDENTITY != null" >
+        IDENTITY = #{IDENTITY,jdbcType=VARCHAR},
+      </if>
+      <if test="TELNO != null" >
+        TELNO = #{TELNO,jdbcType=VARCHAR},
+      </if>
+      <if test="POSITION != null" >
+        POSITION = #{POSITION,jdbcType=VARCHAR},
+      </if>
+      <if test="EMAIL != null" >
+        EMAIL = #{EMAIL,jdbcType=VARCHAR},
+      </if>
+      <if test="STATUS != null" >
+        STATUS = #{STATUS,jdbcType=CHAR},
+      </if>
+      <if test="LASTLOGIN != null" >
+        LASTLOGIN = #{LASTLOGIN,jdbcType=TIMESTAMP},
+      </if>
+      <if test="MACCODE != null" >
+        MACCODE = #{MACCODE,jdbcType=VARCHAR},
+      </if>
+      <if test="IPADDRESS != null" >
+        IPADDRESS = #{IPADDRESS,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATOR != null" >
+        CREATOR = #{CREATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATETIME != null" >
+        CREATETIME = #{CREATETIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="UPDATOR != null" >
+        UPDATOR = #{UPDATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="UPDATETIME != null" >
+        UPDATETIME = #{UPDATETIME,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where OPERATORID = #{OPERATORID,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ST_USER
+    where USERID = #{USERID,jdbcType=VARCHAR}
+  </select>
+  <select id="getuserrole" resultType="java.util.Map">
+    <if test="bm=='admin'">
+      select a.ROLEID,NAME,NULL setROLEID from ST_ROLE a order by a.ROLEID
+    </if>
+    <if test="bm!='admin'">
+      select a.ROLEID,NAME,b.ROLEID setROLEID from ST_ROLE a
+      LEFT JOIN ST_USER_ROLE b on a.ROLEID=b.ROLEID and b.OPERATORID=#{operatorid}
+      order by a.ROLEID
+    </if>
+  </select>
+  <!--全部信息 -->
+  <select id="selectByList" resultType="Map" parameterType="java.util.Map">
+    select
+    IFNULL(ITEM_NAME,'') ZW,a.*,b.`NAME`
+    from ST_USER a LEFT JOIN ST_DEPT b on a.DEPTID=b.DEPTID LEFT JOIN ST_DICTIONARY on ITEM_CODE=a.POSITION and PARENT_ID=(select id from ST_DICTIONARY where ITEM_CODE='ZW')
+    <where>
+      <if test="model.searchValue!=null and model.searchValue!=''">
+        AND  USERID like CONCAT('%',#{model.searchValue},'%' )
+      </if>
+      <if test="deptids != null and deptids != ''" >
+        AND FIND_IN_SET(a.DEPTID,#{deptids})
+      </if>
+    </where>
+    order by STATUS,DEPTID limit #{model.start},#{model.length}
+  </select>
+  <!--总记录数 -->
+  <select id="selectByCount" resultType="int" parameterType="java.util.Map">
+    select count(*) from ST_USER
+    <where>
+      <if test="deptids != null and deptids != ''" >
+        AND FIND_IN_SET(DEPTID,#{deptids})
+      </if>
+      <if test="model!=null">
+        <if test="model.searchValue!=null and model.searchValue!=''">
+          AND  USERID like CONCAT('%',#{model.searchValue},'%' )
+        </if>
+      </if>
+    </where>
+  </select>
+  <select id="whileIdsbyPid" resultType="String">
+    select whileIdsbyPid(#{deptid})
+  </select>
+  <select id="whilePidsbyId" resultType="String">
+    select whilePidsbyId(#{deptid})
+  </select>
+  <delete id="deleteuserrole">
+    DELETE FROM ST_USER_ROLE where OPERATORID=#{operatorid};
+  </delete>
+  <insert id="saveuserrole">
+    insert into ST_USER_ROLE(OPERATORID,ROLEID,CREATOR,CREATETIME)
+    VALUES
+    <foreach collection="roles" item="item" index="index" separator=",">
+      (#{item.OPERATORID},#{item.ROLEID},#{item.CREATOR},#{item.CREATETIME})
+    </foreach>
+  </insert>
+  <insert id="saveuserrolebydeptid">
+    REPLACE into ST_USER_ROLE
+    <foreach collection="roles" item="item" index="index" separator="UNION">
+      SELECT OPERATORID,#{item.ROLEID},#{item.CREATOR},#{item.CREATETIME} FROM `ST_USER` where DEPTID=#{deptid}
+    </foreach>
+  </insert>
+  <select id="useridisone" resultType="int">
+    select count(*) from ST_USER where USERID=#{USERID} OR IDENTITY=#{USERID}
+  </select>
+</mapper>

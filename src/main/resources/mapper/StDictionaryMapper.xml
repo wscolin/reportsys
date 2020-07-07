@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.report.mapper.StDictionaryMapper" >
+  <resultMap id="BaseResultMap" type="com.zxd.report.model.StDictionary" >
+    <id column="ID" property="ID" jdbcType="INTEGER" />
+    <result column="ITEM_CODE" property="ITEM_CODE" jdbcType="VARCHAR" />
+    <result column="ITEM_NAME" property="ITEM_NAME" jdbcType="VARCHAR" />
+    <result column="DESCN" property="DESCN" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="PARENT_ID" jdbcType="INTEGER" />
+    <result column="FLAG" property="FLAG" jdbcType="CHAR" />
+    <result column="ENABLED" property="ENABLED" jdbcType="CHAR" />
+    <result column="THESORT" property="THESORT" jdbcType="INTEGER" />
+    <result column="CREATOR" property="CREATOR" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="CREATE_TIME" jdbcType="TIMESTAMP" />
+    <result column="UPDATOR" property="UPDATOR" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="UPDATE_TIME" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ITEM_CODE, ITEM_NAME, DESCN, PARENT_ID, FLAG, ENABLED, THESORT, CREATOR, CREATE_TIME, 
+    UPDATOR, UPDATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ST_DICTIONARY
+    where ID = #{ID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ST_DICTIONARY
+    where ID = #{ID,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.zxd.report.model.StDictionary" >
+    insert into ST_DICTIONARY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        ID,
+      </if>
+      <if test="ITEM_CODE != null" >
+        ITEM_CODE,
+      </if>
+      <if test="ITEM_NAME != null" >
+        ITEM_NAME,
+      </if>
+      <if test="DESCN != null" >
+        DESCN,
+      </if>
+      <if test="PARENT_ID != null" >
+        PARENT_ID,
+      </if>
+      <if test="FLAG != null" >
+        FLAG,
+      </if>
+      <if test="ENABLED != null" >
+        ENABLED,
+      </if>
+        THESORT,
+      <if test="CREATOR != null" >
+        CREATOR,
+      </if>
+      <if test="CREATE_TIME != null" >
+        CREATE_TIME,
+      </if>
+      <if test="UPDATOR != null" >
+        UPDATOR,
+      </if>
+      <if test="UPDATE_TIME != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        #{ID,jdbcType=INTEGER},
+      </if>
+      <if test="ITEM_CODE != null" >
+        #{ITEM_CODE,jdbcType=VARCHAR},
+      </if>
+      <if test="ITEM_NAME != null" >
+        #{ITEM_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DESCN != null" >
+        #{DESCN,jdbcType=VARCHAR},
+      </if>
+      <if test="PARENT_ID != null" >
+        #{PARENT_ID,jdbcType=INTEGER},
+      </if>
+      <if test="FLAG != null" >
+        #{FLAG,jdbcType=CHAR},
+      </if>
+      <if test="ENABLED != null" >
+        #{ENABLED,jdbcType=CHAR},
+      </if>
+      (SELECT * from (select (CASE WHEN MAX(THESORT) is null THEN 0 else MAX(THESORT) END)+1 from ST_DICTIONARY where PARENT_ID=#{PARENT_ID,jdbcType=VARCHAR})t),
+      <if test="CREATOR != null" >
+        #{CREATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATE_TIME != null" >
+        #{CREATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="UPDATOR != null" >
+        #{UPDATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="UPDATE_TIME != null" >
+        #{UPDATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxd.report.model.StDictionary" >
+    update ST_DICTIONARY
+    <set >
+      <if test="ITEM_CODE != null" >
+        ITEM_CODE = #{ITEM_CODE,jdbcType=VARCHAR},
+      </if>
+      <if test="ITEM_NAME != null" >
+        ITEM_NAME = #{ITEM_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DESCN != null" >
+        DESCN = #{DESCN,jdbcType=VARCHAR},
+      </if>
+      <if test="PARENT_ID != null" >
+        PARENT_ID = #{PARENT_ID,jdbcType=INTEGER},
+      </if>
+      <if test="FLAG != null" >
+        FLAG = #{FLAG,jdbcType=CHAR},
+      </if>
+      <if test="ENABLED != null" >
+        ENABLED = #{ENABLED,jdbcType=CHAR},
+      </if>
+      <if test="THESORT != null" >
+        THESORT = #{THESORT,jdbcType=INTEGER},
+      </if>
+      <if test="CREATOR != null" >
+        CREATOR = #{CREATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATE_TIME != null" >
+        CREATE_TIME = #{CREATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="UPDATOR != null" >
+        UPDATOR = #{UPDATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="UPDATE_TIME != null" >
+        UPDATE_TIME = #{UPDATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{ID,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectDictionaryType" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from ST_DICTIONARY
+    where FLAG = '0' AND ENABLED = '0'
+    <if test="itemCode!= null and itemCode!='' " >
+     AND ITEM_CODE = #{itemCode,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+
+  <select id="selectDictionaryDesc" resultMap="BaseResultMap" parameterType="int">
+    select
+    <include refid="Base_Column_List" />
+    from ST_DICTIONARY
+    where FLAG = '1' AND ENABLED = '0'
+    AND PARENT_ID = #{id,jdbcType=INTEGER}
+    ORDER BY THESORT ASC
+  </select>
+  <select id="selectDepttree" resultType="java.util.Map">
+       select ID id,ITEM_NAME name,PARENT_ID pId,ITEM_CODE,DESCN,ENABLED from ST_DICTIONARY ORDER BY THESORT
+  </select>
+  <select id="selectbyfatherId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ST_DICTIONARY WHERE PARENT_ID=#{pId} order by THESORT
+  </select>
+  <select id="selectByitemcode" resultType="int">
+    select count(*) from ST_DICTIONARY where ITEM_CODE=#{itemcode} and PARENT_ID=#{pId}
+  </select>
+  <select id="getDicsbyItem" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ST_DICTIONARY where PARENT_ID=(select ID from ST_DICTIONARY where ITEM_CODE=#{itemcode} and PARENT_ID=0) AND ENABLED=0 ORDER BY THESORT ASC
+  </select>
+  <!--全部信息 -->
+  <select id="selectByList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+    <include refid="Base_Column_List" />
+    from ST_DICTIONARY
+    <where>
+      FLAG=#{map.FLAG}
+      <if test="map.pId != null" >
+        AND PARENT_ID =#{map.pId}
+      </if>
+      <if test="model.searchValue!=null and model.searchValue!=''">
+        AND  ITEM_CODE like CONCAT('%',#{model.searchValue},'%' )
+      </if>
+    </where>
+    <if test="map.pId != null" >
+      order by THESORT
+    </if>
+    <if test="map.pId == null" >
+      order by UPDATE_TIME DESC
+    </if>
+    <if test="model != null">
+      limit #{model.start},#{model.length}
+    </if>
+  </select>
+  <!--总记录数 -->
+  <select id="selectByCount" resultType="int" parameterType="java.util.Map">
+    select count(*) from ST_DICTIONARY
+    <where>
+      FLAG=#{map.FLAG}
+      <if test="map.pId != null" >
+        AND PARENT_ID =#{map.pId}
+      </if>
+      <if test="model.searchValue!=null and model.searchValue!=''">
+        AND  ITEM_CODE like CONCAT('%',#{model.searchValue},'%' )
+      </if>
+    </where>
+  </select>
+  <select id="selectBypandcode" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+    <include refid="Base_Column_List" />
+    from ST_DICTIONARY
+    where ITEM_CODE=#{itemcode} and PARENT_ID=(select id from st_dictionary where ITEM_CODE=#{pitemcode})
+  </select>
+</mapper>

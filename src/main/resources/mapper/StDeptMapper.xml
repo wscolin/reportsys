@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.report.mapper.StDeptMapper" >
+  <resultMap id="BaseResultMap" type="com.zxd.report.model.StDept" >
+    <id column="DEPTID" property="DEPTID" jdbcType="VARCHAR" />
+    <result column="NAME" property="NAME" jdbcType="VARCHAR" />
+    <result column="DESCN" property="DESCN" jdbcType="VARCHAR" />
+    <result column="PARENTID" property="PARENTID" jdbcType="VARCHAR" />
+    <result column="THESORT" property="THESORT" jdbcType="BIGINT" />
+    <result column="STATUS" property="STATUS" jdbcType="CHAR" />
+    <result column="CREATOR" property="CREATOR" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="CREATE_TIME" jdbcType="TIMESTAMP" />
+    <result column="UPDATOR" property="UPDATOR" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="UPDATE_TIME" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DEPTID, NAME, DESCN, PARENTID, THESORT, STATUS, CREATOR, CREATE_TIME, UPDATOR, UPDATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ST_DEPT
+    where DEPTID = #{DEPTID,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.zxd.report.model.StDept" >
+    insert into ST_DEPT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="DEPTID != null" >
+        DEPTID,
+      </if>
+      <if test="NAME != null" >
+        NAME,
+      </if>
+      <if test="DESCN != null" >
+        DESCN,
+      </if>
+      <if test="PARENTID != null" >
+        PARENTID,
+      </if>
+        THESORT,
+      <if test="STATUS != null" >
+        STATUS,
+      </if>
+      <if test="CREATOR != null" >
+        CREATOR,
+      </if>
+      <if test="CREATE_TIME != null" >
+        CREATE_TIME,
+      </if>
+      <if test="UPDATOR != null" >
+        UPDATOR,
+      </if>
+      <if test="UPDATE_TIME != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="DEPTID != null" >
+        #{DEPTID,jdbcType=VARCHAR},
+      </if>
+      <if test="NAME != null" >
+        #{NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DESCN != null" >
+        #{DESCN,jdbcType=VARCHAR},
+      </if>
+      <if test="PARENTID != null" >
+        #{PARENTID,jdbcType=VARCHAR},
+      </if>
+      (SELECT * from (select (CASE WHEN MAX(THESORT) is null THEN 0 else MAX(THESORT) END)+1 from ST_DEPT where PARENTID=#{PARENTID,jdbcType=VARCHAR})t),
+      <if test="STATUS != null" >
+        #{STATUS,jdbcType=CHAR},
+      </if>
+      <if test="CREATOR != null" >
+        #{CREATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATE_TIME != null" >
+        #{CREATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="UPDATOR != null" >
+        #{UPDATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="UPDATE_TIME != null" >
+        #{UPDATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxd.report.model.StDept" >
+    update ST_DEPT
+    <set >
+      <if test="NAME != null" >
+        NAME = #{NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="DESCN != null" >
+        DESCN = #{DESCN,jdbcType=VARCHAR},
+      </if>
+      <if test="PARENTID != null" >
+        PARENTID = #{PARENTID,jdbcType=VARCHAR},
+      </if>
+      <if test="THESORT != null" >
+        THESORT = #{THESORT,jdbcType=BIGINT},
+      </if>
+      <if test="STATUS != null" >
+        STATUS = #{STATUS,jdbcType=CHAR},
+      </if>
+      <if test="CREATOR != null" >
+        CREATOR = #{CREATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="CREATE_TIME != null" >
+        CREATE_TIME = #{CREATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+      <if test="UPDATOR != null" >
+        UPDATOR = #{UPDATOR,jdbcType=VARCHAR},
+      </if>
+      <if test="UPDATE_TIME != null" >
+        UPDATE_TIME = #{UPDATE_TIME,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where DEPTID = #{DEPTID,jdbcType=VARCHAR}
+  </update>
+  <select id="selectDepttree" resultType="java.util.Map">
+    SELECT DEPTID id,PARENTID pId,NAME name,true isParent,STATUS ENABLED FROM ST_DEPT
+    <where>
+      <if test="id==null or id==''">
+        FIND_IN_SET(DEPTID,#{deptid})
+      </if>
+      <if test="id!=null and id!=''">
+        AND PARENTID=#{id}
+      </if>
+    </where>
+    ORDER  BY THESORT
+  </select>
+  <select id="getdeptbyid" resultType="java.util.Map">
+    select (select `NAME` from ST_DEPT b where b.DEPTID=a.PARENTID) PARENTNAME,
+    <include refid="Base_Column_List" />
+    from ST_DEPT a
+    where DEPTID = #{id}
+  </select>
+  <select id="selectbyfatherId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ST_DEPT WHERE PARENTID=#{pId} order by THESORT
+  </select>
+  <select id="seldeptByper" resultType="String">
+    <if test="permission=='BANK01'">
+      SELECT DEPTID from ST_DEPT where PARENTID='0'
+    </if>
+    <if test="permission=='BANK02'">
+      SELECT group_concat(DEPTID) from ST_DEPT where PARENTID=(select DEPTID from ST_DEPT where PARENTID=0) and DEPTID like CONCAT(SUBSTR(#{deptid} FROM 1 FOR 2),'0000%')
+    </if>
+    <if test="permission=='BANK03'">
+      select group_concat(DEPTID) from ST_DEPT where PARENTID in(
+      SELECT DEPTID from ST_DEPT where PARENTID=(select DEPTID from ST_DEPT where PARENTID=0) and DEPTID like CONCAT(SUBSTR(#{deptid} FROM 1 FOR 2),'0000%')
+      ) and DEPTID like CONCAT(SUBSTR(#{deptid} FROM 1 FOR 6),'%')
+    </if>
+    <if test="permission=='BANK04'">
+      SELECT DEPTID from ST_DEPT where DEPTID=#{deptid}
+    </if>
+  </select>
+</mapper>
