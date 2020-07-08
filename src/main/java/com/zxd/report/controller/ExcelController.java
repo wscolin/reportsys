@@ -6,17 +6,24 @@ import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import com.zxd.log.SystemControllerLog;
 import com.zxd.report.mapper.StExcelMapper;
 import com.zxd.report.model.ImIcome;
 import com.zxd.report.model.Min_11;
 import com.zxd.report.model.TongBao_13;
 import com.zxd.report.service.ExcelService;
 import com.zxd.report.service.StUserService;
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +57,21 @@ public class ExcelController {
     public String excelIm(Map<String,String> map){
         return  "excel/excelimport";
     }
+
+    @RequestMapping(value = "/dwloadmb", method = RequestMethod.GET)
+    @SystemControllerLog(description = "excel收入-支出模板下载",params = 0)
+    public ResponseEntity<byte[]> dwloadmb(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 下载文件名
+        String fileName = "收入-支出表导入模板.xlsx";
+        // 页面下载设置
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("gbk"),"iso-8859-1"));
+        // 项目路径
+        String path = request.getRealPath("/");
+        ResponseEntity<byte[]> bEntity=new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(path+"plugins/templateImport/收入-支出表导入模板.xlsx")),headers, HttpStatus.OK);
+        return bEntity;
+    }
     /**
      * 导入excel
      * @param request
@@ -61,13 +83,20 @@ public class ExcelController {
     @RequiresPermissions("st_user_import")
    // @SystemControllerLog(description = "excel导入",params = 0)
     public Object importfile(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file){
+        String date = request.getParameter("date");
+        //删除对应时间的收入-支出数据
+        stExcelMapper.deleteincome(date);
+        stExcelMapper.deletedisburse(date);
         try {
+            //新增收入表
             ImportParams in_param = new ImportParams();
             in_param.setSheetNum(1);
+            in_param.setStartSheetIndex(0);
             in_param.setTitleRows(1);
             List<ImIcome> income_list = ExcelImportUtil.importExcel(file.getInputStream(), ImIcome.class, in_param);
             String type = "";
             for(ImIcome imIcome:income_list){
+                imIcome.setYEAR(date);
                 if(imIcome.getKMMC() != null ) {
                     if (imIcome.getKMMC().contains("一般公共预算收入合计")) {
                         type = "1";
@@ -84,13 +113,14 @@ public class ExcelController {
 
             }
             stExcelMapper.insertSelective_batch_income(income_list);
+            //新增支出表
             ImportParams zc_param = new ImportParams();
             String zc_type = "";
             zc_param.setStartSheetIndex(1);
             zc_param.setTitleRows(1);
             List<ImIcome> zc_list = ExcelImportUtil.importExcel(file.getInputStream(), ImIcome.class, zc_param);
             for(ImIcome zcIcome:zc_list){
-               //
+                zcIcome.setYEAR(date);
                 if(zcIcome.getKMMC() != null ){
                     if(zcIcome.getKMMC().contains("一般公共预算支出合计")){
                         zc_type="1";
@@ -103,8 +133,6 @@ public class ExcelController {
                         zc_type="4";
                     }
                 }
-
-
                 zcIcome.setTYPE(zc_type);
                 //stExcelMapper.insertSelective(zcIcome);
             }
@@ -171,65 +199,11 @@ public class ExcelController {
      */
     @RequestMapping("/excelExportByTemplate")
     public String excelExportByTemplate(HttpServletRequest request,HttpServletResponse response)throws Exception{
-     /*    List<Min_11> reportBodyList =new ArrayList<>();
-       reportBodyList = excelService.exportExcel(null);
-      for(int i = 0 ;i < 2; i++){
-           Map<String,Object> values = new HashMap<String,Object>();
-           values.put("kmmc","sss");
-           values.put("kmbm","1111");
-           values.put("a1","总计");
-           values.put("a2",10+i);
-           values.put("a3",5+i);
-           values.put("a4",8);
-           values.put("a5",5);
-           values.put("a6",8);
-           values.put("a7",6);
-           values.put("a8",32+i);
-           reportBodyList.add(values);
-       }*/
-
-       /*  Min_11 values = new Min_11();
-        values.setKmmc("单独");
-        values.setKmbm(11);
-        values.setA1("12");
-        values.setA2("13");
-        values.setA3("14");
-        values.setA4("15");
-        values.setA5("15");
-        values.setA6("15");
-        Min_11 values1 = new Min_11();
-        values1.setKmmc("民生工程");
-        values1.setKmbm(22);
-        values1.setA1("11212");
-        values1.setA2("12");
-        values1.setA3("1112");
-        values1.setA4("2");
-        values1.setA5("1");
-        values1.setA6("-78%");
-
-        TemplateExportParams params = new TemplateExportParams();
-        // 标题开始行
-        params.setHeadingStartRow(0);
-        // 标题行数
-        params.setHeadingRows(2);
-        // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
-        params.setSheetName("11民生");
-        params.setTemplateUrl("C:\\Users\\Administrator\\Desktop\\报表\\templateExport\\11民生_模板.xlsx");
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("list",reportBodyList);
-        Workbook workbook = ExcelExportUtil.exportExcel(params, data);
-        File savefile = new File("D:/excel/");
-        if (!savefile.exists()) {
-            savefile.mkdirs();
-        }
-        FileOutputStream fos = new FileOutputStream("D:/excel/11民生.xlsx");
-        workbook.write(fos);
-        fos.close();*/
+        String date = request.getParameter("date");
         /**
          * 11民
          */
-        String year = request.getParameter("year");
-        List<Map> min_11List  = excelService.exportExcel_Min11(year);
+        List<Map> min_11List  = excelService.exportExcel_Min11(date);
         String filename = "11民生";
         TemplateExportParams min_11_params = new TemplateExportParams();
         // 标题开始行
@@ -246,7 +220,7 @@ public class ExcelController {
         /**
          * 13通报
          */
-        List<Map> tongBao_13List  = excelService.exportExcel_Tb13(year);
+        List<Map> tongBao_13List  = excelService.exportExcel_Tb13(date);
         filename = "13通报";
         TemplateExportParams tongBao_13_params = new TemplateExportParams();
         // 标题开始行
@@ -280,4 +254,7 @@ public class ExcelController {
         fos.close();
         workbook.close();
     }
+
+
+
 }

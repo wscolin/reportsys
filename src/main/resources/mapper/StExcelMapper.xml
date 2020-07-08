@@ -219,4 +219,17 @@
     ${sql}
   </select>
 
+  <delete id="deleteincome" parameterType="string">
+    delete from t_income where
+    <if test="date!=null">
+      year= #{date}
+    </if>
+  </delete>
+  <delete id="deletedisburse"  parameterType="string">
+    delete from t_disburse where
+    <if test="date!=null">
+      year= #{date}
+    </if>
+  </delete>
+
 </mapper>

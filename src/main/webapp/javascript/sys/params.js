@@ -148,27 +148,27 @@ $("#itemForm").validate({
 		PARM_KEY : {
 			required : true,
 			maxlength : 50
-		},
+		}/*,
 		PARM_VALUE : {
 			required : true,
 			maxlength : 100
 		},
 		REMARKS:{
 			maxlength : 100
-		}
+		}*/
 	},
 	messages : {
 		PARM_KEY : {
 			required : "请输入参数编码.",
 			maxlength : "内容过长"
-		},
+		}/*,
 		PARM_VALUE : {
 			required : "请输入参数值.",
 			maxlength : "内容过长"
 		},
 		REMARKS:{
 			maxlength : "内容过长"
-		}
+		}*/
 	},
 	highlight : function(element) {
 		$(element).closest('div').addClass('has-error');

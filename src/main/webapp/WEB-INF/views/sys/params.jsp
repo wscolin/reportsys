@@ -58,20 +58,20 @@
 				    	<div class="form-group">
 							<div class="col-md-12 col-lg-12">
 								<label class="control-label col-md-2 col-lg-2 align-label">
-									参数值：
+									参数说明：
 								</label>
 								<div class="col-md-10 col-lg-10 paddingRight0">
-									<input type="text" name="PARM_VALUE" class="form-control" placeholder="请输入参数值">
+									<input type="text" name="REMARKS" class="form-control" placeholder="请输入参数值">
 								</div>
 							</div>
 				       	</div>					       	       	
 					 	<div class="form-group">
 							<div class="col-md-12 col-lg-12">
 								<label class="control-label col-md-2 col-lg-2 align-label">
-									参数说明：
+									参数值：
 								</label>
 								<div class="col-md-10 col-lg-10 paddingRight0">
-									<textarea name="REMARKS" class="form-control" rows="10" ></textarea>
+									<textarea name="PARM_VALUE" class="form-control" rows="10" ></textarea>
 								</div>
 							</div>
 					   	</div>

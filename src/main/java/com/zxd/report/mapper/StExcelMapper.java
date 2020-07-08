@@ -15,6 +15,10 @@ public interface StExcelMapper {
     int insertSelective(ImIcome imIcome);
     int insertSelective_batch_income(List<ImIcome> list);
     int insertSelective_batch_disburse(List<ImIcome> list);
+    //删除收入数据
+    int deleteincome(@Param(value = "date") String date);
+    //删除支出数据
+    int deletedisburse(@Param(value = "date") String date);
     List<Min_11> querybysql(@Param(value = "sql") String sql);
     List<Map> selectBysql(@Param(value = "sql") String sql);
 }
