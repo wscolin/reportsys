@@ -171,9 +171,9 @@ public class ExcelServiceImpl implements ExcelService {
         String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
         String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
 
-        String sql = stParamsService.getParamConf("11minsheng").replaceAll("\\$\\(this_year_this_month\\)",year).
-                replaceAll("\\$\\(this_year_last_month\\)",year).replaceAll("\\$\\(last_year_this_month\\)",year).
-                replaceAll("\\$\\(last_year_last_month\\)",year);
+        String sql = stParamsService.getParamConf("11minsheng").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
+                replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
+                replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month);
         List<Map> list = stExcelMapper.selectBysql(sql);
 
         return list;
@@ -184,12 +184,9 @@ public class ExcelServiceImpl implements ExcelService {
     public List<Map> exportExcel_Tb13(String year) {
         Date date = DateUtil.getStr2date(year,"yyyy-MM");
         String this_year_this_month = DateUtil.getDate2str(date,"yyyy-MM");
-        String this_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(date,-1,"MONTH"),"yyyy-MM");
         String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
-        String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
-
-        String sql = stParamsService.getParamConf("tongbao13").replaceAll("\\$\\(this_year_this_month\\)",year).
-                     replaceAll("\\$\\(last_year_this_month\\)",year);
+        String sql = stParamsService.getParamConf("tongbao13").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
+                     replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month);
         List<Map> list = stExcelMapper.selectBysql(sql);
         return list;
     }

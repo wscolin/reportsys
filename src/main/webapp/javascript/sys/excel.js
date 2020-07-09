@@ -46,9 +46,11 @@ function btn_export_click() {
 }
 function btn_export_confrim (){
 	var date = $("#KSRQ_exprot").val();
-    $.ajax({
+    $('#fileModal_exprot').modal('hide');
+    window.location.href=ctx+"/excel/excelExportByTemplate?date="+date;
+/*    $.ajax({
         url:ctx+ "/excel/excelExportByTemplate?date="+date,
-        type : "POST",
+        type : "GET",
         data : null,
         cache: false,
         contentType: false,
@@ -60,8 +62,9 @@ function btn_export_confrim (){
             }else if(data.responseText=="error") {
                 window.parent.toastr[MES_WARN]("导出成功失败！！");
             }
+            $('#fileModal_exprot').modal('hide');
         }
-    });
+    });*/
 }
 function btn_dwload_mb() {
 	window.location.href=ctx+"/excel/dwloadmb";

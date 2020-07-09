@@ -13,6 +13,7 @@ import com.zxd.report.model.Min_11;
 import com.zxd.report.model.TongBao_13;
 import com.zxd.report.service.ExcelService;
 import com.zxd.report.service.StUserService;
+import com.zxd.util.Constant;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -30,9 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,12 +153,9 @@ public class ExcelController {
      */
     @RequestMapping("/exportExcel")
     public String exportExcel(HttpServletRequest request, HttpServletResponse response){
+        String date = request.getParameter("date");
         try {
-            List<Min_11> min_11List_list = excelService.exportExcel(null);
-       /*     Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("表十二：抚州市2019年1-5月民生工程支出表","11民生"),
-                    Min_11.class, min_11List_list);*/
-
-
+            List<Min_11> min_11List_list = excelService.exportExcel(date);
             ExportParams exportParams1 = new ExportParams();
             // 设置sheet得名称
             exportParams1.setTitle("表十二：抚州市2019年1-5月民生工程支出表");
@@ -191,70 +188,96 @@ public class ExcelController {
         return null;
     }
 
+
+    /**
+     *
+     */
+
+
+
     /**
      * 根据模板导出
      * @param request
      * @param response
      * @return
      */
-    @RequestMapping("/excelExportByTemplate")
-    public String excelExportByTemplate(HttpServletRequest request,HttpServletResponse response)throws Exception{
-        String date = request.getParameter("date");
-        /**
-         * 11民
-         */
-        List<Map> min_11List  = excelService.exportExcel_Min11(date);
-        String filename = "11民生";
-        TemplateExportParams min_11_params = new TemplateExportParams();
-        // 标题开始行
-        min_11_params.setHeadingStartRow(0);
-        // 标题行数
-        min_11_params.setHeadingRows(2);
-        // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
-        min_11_params.setSheetName(filename);
-        min_11_params.setTemplateUrl("C:\\Users\\Administrator\\Desktop\\报表\\templateExport\\"+filename+"_模板.xlsx");
-        Map<String, Object> min_11_map = new HashMap<String, Object>();
-        min_11_map.put("list",min_11List);
-        excelExport(min_11_params,min_11_map,filename);
+    @RequestMapping(value ="/excelExportByTemplate", method = RequestMethod.GET)
+    public  ResponseEntity<byte[]>  excelExportByTemplate(HttpServletRequest request,HttpServletResponse response)throws Exception{
+        try {
+            //2019年5月报全市公式版
+            String path =  request.getServletContext().getRealPath("/");
+            String date = request.getParameter("date");
+            String fileName = date+"月报全市报表";
+            /**
+             * 11民
+             */
+            List<Map> min_11List  = excelService.exportExcel_Min11(date);
+            /**
+             * 13通报
+             */
+            List<Map> tongBao_13List  = excelService.exportExcel_Tb13(date);
+            HashMap map =  new HashMap();
+            map.put("list_11min",min_11List);
+            map.put("list_13tongbao",tongBao_13List);
+            return excelExport(map,path,fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-        /**
-         * 13通报
-         */
-        List<Map> tongBao_13List  = excelService.exportExcel_Tb13(date);
-        filename = "13通报";
-        TemplateExportParams tongBao_13_params = new TemplateExportParams();
-        // 标题开始行
-        tongBao_13_params.setHeadingStartRow(0);
-        // 标题行数
-        tongBao_13_params.setHeadingRows(2);
-        // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
-        tongBao_13_params.setSheetName(filename);
-        tongBao_13_params.setTemplateUrl("C:\\Users\\Administrator\\Desktop\\报表\\templateExport\\"+filename+"_模板.xlsx");
-        Map<String, Object> map_tongbao13 = new HashMap<String, Object>();
-        map_tongbao13.put("list",tongBao_13List);
-        excelExport(tongBao_13_params,map_tongbao13,filename);
-        return  null;
+    @RequestMapping(value = "/downexcel", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downexcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 下载文件名
+        String fileName = "11民生.xlsx";
+        // 页面下载设置
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("gbk"),"iso-8859-1"));
+        // 项目路径
+        String path = request.getRealPath("/");
+        ResponseEntity<byte[]> bEntity=new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(path+"excelExport/11民生.xlsx")),headers, HttpStatus.OK);
+        return bEntity;
     }
 
     /**
      *  导出excel
-     * @param params
      * @param map
-     * @param fileName
+     *
      * @throws IOException
      */
-    private void excelExport(TemplateExportParams params,Map map,String fileName) throws IOException {
-        Workbook workbook = ExcelExportUtil.exportExcel(params, map);
-        File savefile = new File("D:/excel/");
-        if (!savefile.exists()) {
-            savefile.mkdirs();
-        }
-        FileOutputStream fos = new FileOutputStream("D:/excel/"+fileName+".xlsx");
+    private  ResponseEntity<byte[]>  excelExport(Map map,String path,String fileName) throws IOException {
+        TemplateExportParams templateExportParams = new TemplateExportParams();
+        templateExportParams.setScanAllsheet(true);
+        // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
+        templateExportParams.setTemplateUrl(path+"/templateExport/导出_模板.xlsx");
+        String[] sheetNameArray = {"11民生","13通报"};
+        templateExportParams.setSheetName(sheetNameArray);
+        Workbook workbook = ExcelExportUtil.exportExcel(templateExportParams,map);
+        File savefile = new File(path+"/excelExport/"+fileName+".xlsx");
+        FileOutputStream fos = new FileOutputStream(savefile);
         workbook.write(fos);
         fos.close();
         workbook.close();
+        return   download(savefile);
     }
 
+    /**
+     * 下载
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public ResponseEntity<byte[]> download(File file) throws IOException {
+        // 需要下载的文件
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", new String(file.getName().getBytes("gbk"),"iso-8859-1"));
+        ResponseEntity<byte[]> entity=new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers, HttpStatus.OK);
+        file.delete();
+        return entity;
+
+    }
 
 
 }
