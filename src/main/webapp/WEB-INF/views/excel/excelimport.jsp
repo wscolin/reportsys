@@ -39,14 +39,44 @@
 <body class="page-content">
 	<div class="my-col-md">
 		<div class="portlet light">
-			<div class="portlet-title">
-				<div class="" style="padding: 5px;">
+			<div class="portlet-title" >
+				<form class="form-inline">
+					<div class="form-group" style="float:left">
+						<label class="control-label col-md-3 col-lg-3 col-sm-3 " for="querydate">查询日期</label>
+                        <div id="querydateDiv" class="col-md-8 col-lg-8 col-sm-8 input-group date dateDiv  pull-left paddingRight0">
+                            <input class="form-control borderRadiusRight0 borderRight0"  type="text" id="querydate" name="querydate" onchange="queryDate(this);">
+                            <span class="input-group-btn">
+								<button class="btn default date-set" type="button">
+									<i class="fa fa-calendar"></i>
+								</button>
+							</span>
+                        </div>
+					</div>
 					<shiro:hasPermission name="st_user_import">
 						<button class="btn btn-sm green-turquoise" id="btn_setresource" data-toggle="modal" onclick="btn_dwload_mb();"><i class="fa fa-download"></i>收入-支出表导入模板下载</button>
-						<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_import_click();"><i class="fa fa-upload"></i> 导入</button>
+						<button class="btn btn-sm btn-default " id="btn_setresource" data-toggle="modal" onclick="btn_import_click();"><i class="fa fa-upload"></i> 导入</button>
 						<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
 					</shiro:hasPermission>
-				</div>
+				</form>
+			</div>
+			<div class="portlet-body flip-scroll">
+				<ul class="nav nav-tabs">
+					<li role="presentation" class="active"><a href="#" data-toggle="tab" index="0">收入表</a></li>
+					<li role="presentation"><a href="#" data-toggle="tab" index="1">支出表</a></li>
+				</ul>
+				<table class="table table-striped table-bordered table-hover" id="itemTable">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>科目编码</th>
+							<th>科目名称</th>
+							<th>金额</th>
+							<th>市值</th>
+							<th>高薪区</th>
+							<th>临川区</th>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
    	</div> 

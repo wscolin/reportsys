@@ -1,4 +1,12 @@
 $(function () {
+    var today = new Date();
+    var year = today.getFullYear();
+    var moth = today.getMonth()+1;
+    $("li[role=\"presentation\"]").on("click",function () {
+        var index = $(this).find("a").attr("index");
+        var date  = $("#querydate").val();
+        initTable(date,index);
+    });
     $(".dateDiv").datepicker({
         format: 'yyyy-mm',
         weekStart: 1,
@@ -9,12 +17,96 @@ $(function () {
         forceParse: false,
         language: 'zh-CN'
     });
-    var today = new Date();
-    var year = today.getFullYear();
-    var moth = today.getMonth()+1;
+    $("#querydateDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv_export").datepicker('setDate',year+"-"+moth);
+    initTable($("#querydate").val());
 });
+
+function queryDate(_this) {
+    var date = $(_this).val();
+    var index =  $(".active a").attr("index");
+    initTable(date,index);
+    $(".datepicker-dropdown").hide();
+}
+//表格初始化
+function initTable(date,index) {
+    var table = $('#itemTable');
+    var oTable = table.dataTable({
+        dom:"<'row'<'search text-left'f>r>t<'row pageRow'<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
+        scrollY:true,
+        processing : true,
+        serverSide : true,
+        bSort : false,
+        searching : false,
+        pagingType : "full_numbers",
+        lengthChange : true,
+        deferRender: true,
+        bDestroy:true,
+        lengthMenu : [ 10, 25, 50 ],
+        ajax : {
+            url:ctx+"/excel/list?date="+date+"&index="+index,
+            type : "POST",
+            error: AjaxError
+        },
+        select : {
+            style : 'single'
+        },
+        columns : [
+            {
+                data:null,
+                sClass:"text-center",
+                fnCreatedCell:function (nTd,sData,oData,iRow,iCol) {
+                    var startnum=this.api().page()*(this.api().page.info().length);
+                    $(nTd).html(iRow+1+startnum);
+                }
+            },{
+                data : "kmbm",
+                width : "100px",
+                "defaultContent": "<i>Not set</i>"
+            },{
+                data : "kmmc",
+                width : "260px",
+                "defaultContent": ""
+            }, {
+                data : "amt",
+                width : "260px",
+                "defaultContent": ""
+
+            }, {
+                data : "sz",
+                "defaultContent": ""
+            }, {
+                data : "gxq",
+                width : "40px",
+                "defaultContent": ""
+            }, {
+                data : "lcq",
+                width : "40px",
+                "defaultContent": ""
+            }
+        ],
+     /*   aoColumnDefs : [
+            {
+                targets : 4,
+                data : "STATE",
+                render : function(data, type, full) { //返回自定义内容
+                    if (data == "0") {
+                        return "<span class='label label-sm label-primary'>正常</span>";
+                    } else {
+                        return "<span class='label label-sm label-danger'>注销</span>";
+                    }
+                }
+            }
+        ],*/
+        language : {
+            url:ctx+"/plugins/lang-zh_CN.json"
+        },initComplete:function () {
+            tableHeight();
+        }
+    });
+
+}
 //验证
 /*$("#fileForm").validate({
     rules : {
@@ -35,6 +127,16 @@ $(function () {
         $(label).remove();
     }
 });*/
+//异常错误提示
+function AjaxError( xhr, textStatus, error ) {
+    if ( textStatus === 'timeout' ) {
+        window.parent.toastr[MES_ERROR]("服务器没有响应！");
+    }
+    else {
+        window.parent.toastr[MES_ERROR]("服务器出错,请重试！");
+    }
+    $("#itemTable").dataTable().fnProcessingIndicator(false );
+}
 function btn_import_click() {
     $("h4").text("导入-收入-支出表");
 	$('#fileModal').modal('show');
