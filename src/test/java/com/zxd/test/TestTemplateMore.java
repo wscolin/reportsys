@@ -6,11 +6,15 @@ import com.zxd.report.model.Min_11;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.ApplicationHome;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +65,27 @@ public class TestTemplateMore {
         } catch (Exception e){
 
         }
+
+    }
+    @Test
+    public void testPath()throws Exception{
+        //第一种
+        File path = new File(ResourceUtils.getURL("classpath:").getPath());
+        if(!path.exists()) path = new File("");
+        System.out.println(path.getAbsolutePath());
+        //第二种
+        System.out.println(System.getProperty("user.dir"));
+        //第三种
+        String path1 = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        System.out.println(URLDecoder.decode(path1, "utf-8"));
+        //第四种
+        String path2 = ResourceUtils.getURL("classpath:").getPath();
+        System.out.println(path2);
+        //第五种
+        ApplicationHome h = new ApplicationHome(getClass());
+        File jarF = h.getSource();
+        System.out.println(jarF.getParentFile().toString());
+        System.out.println( ResourceUtils.getFile("classpath:").getPath());;
     }
 
 }

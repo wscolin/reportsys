@@ -231,5 +231,110 @@
       year= #{date}
     </if>
   </delete>
+  <select id="selectByList" resultType="java.util.Map" parameterType="java.util.Map">
+    select
+    kmmc,kmbm,amt,sz,gxq,lcq
+    from t_income where year=#{map.date} limit #{page.start},#{page.length}
+  </select>
+  <select id="selectdisburseByList" resultType="java.util.Map" parameterType="java.util.Map">
+    select
+    kmmc,kmbm,amt,sz,gxq,lcq
+    from t_disburse where year=#{map.date} limit #{page.start},#{page.length}
+  </select>
+  <insert id="insertSelective_batch_income_map" parameterType="java.util.List" >
+    insert into t_income
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      KMBM,
+      KMMC,
+      AMT,
+      SZ,
+      GXQ,
+      LCQ,
+      DXQ,
+      NCX,
+      NFX,
+      LCX,
+      CRX,
+      YHX,
+      LAX,
+      JXX,
+      ZXX,
+      GCX,
+      TYPE,
+      YEAR,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.kmbm},
+      #{income.kmmc},
+      #{income.amt},
+      #{income.sz},
+      #{income.gxq},
+      #{income.lcq},
+      #{income.dxq},
+      #{income.ncx},
+      #{income.nfx},
+      #{income.lcx},
+      #{income.crx},
+      #{income.yhx},
+      #{income.lax},
+      #{income.jxx},
+      #{income.zxx},
+      #{income.gcx},
+      #{income.type},
+      #{income.year}
+      )
+    </foreach>
 
+
+  </insert>
+  <insert id="insertSelective_batch_disburse_map" parameterType="java.util.List" >
+    insert into t_disburse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      KMBM,
+      KMMC,
+      AMT,
+      SZ,
+      GXQ,
+      LCQ,
+      DXQ,
+      NCX,
+      NFX,
+      LCX,
+      CRX,
+      YHX,
+      LAX,
+      JXX,
+      ZXX,
+      GCX,
+      TYPE,
+      YEAR,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.kmbm},
+      #{income.kmmc},
+      #{income.amt},
+      #{income.sz},
+      #{income.gxq},
+      #{income.lcq},
+      #{income.dxq},
+      #{income.ncx},
+      #{income.nfx},
+      #{income.lcx},
+      #{income.crx},
+      #{income.yhx},
+      #{income.lax},
+      #{income.jxx},
+      #{income.zxx},
+      #{income.gcx},
+      #{income.type},
+      #{income.year}
+      )
+    </foreach>
+
+
+  </insert>
 </mapper>

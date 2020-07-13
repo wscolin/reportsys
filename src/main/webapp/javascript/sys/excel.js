@@ -6,6 +6,7 @@ $(function () {
         var index = $(this).find("a").attr("index");
         var date  = $("#querydate").val();
         initTable(date,index);
+        tzdiv_tableheight();
     });
     $(".dateDiv").datepicker({
         format: 'yyyy-mm',
@@ -21,13 +22,21 @@ $(function () {
     $("#kssjDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv_export").datepicker('setDate',year+"-"+moth);
     initTable($("#querydate").val());
+    tzdiv_tableheight();
 });
+
+function tzdiv_tableheight() {
+    var height = $(".dataTables_scrollHead").css("height");
+    var nav_tab_height = $(".nav-tabs").css("height");
+    $(".dataTables_scrollHead").css("height",height-nav_tab_height);
+}
 
 function queryDate(_this) {
     var date = $(_this).val();
     var index =  $(".active a").attr("index");
     initTable(date,index);
     $(".datepicker-dropdown").hide();
+    tzdiv_tableheight();
 }
 //表格初始化
 function initTable(date,index) {
@@ -35,6 +44,7 @@ function initTable(date,index) {
     var oTable = table.dataTable({
         dom:"<'row'<'search text-left'f>r>t<'row pageRow'<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
         scrollY:true,
+        sScrollY:"300px",
         processing : true,
         serverSide : true,
         bSort : false,
@@ -55,6 +65,7 @@ function initTable(date,index) {
         columns : [
             {
                 data:null,
+                width:"50px",
                 sClass:"text-center",
                 fnCreatedCell:function (nTd,sData,oData,iRow,iCol) {
                     var startnum=this.api().page()*(this.api().page.info().length);
@@ -62,19 +73,20 @@ function initTable(date,index) {
                 }
             },{
                 data : "kmbm",
-                width : "100px",
-                "defaultContent": "<i>Not set</i>"
+                width : "50px",
+                "defaultContent": ""
             },{
                 data : "kmmc",
                 width : "260px",
                 "defaultContent": ""
             }, {
                 data : "amt",
-                width : "260px",
+                width : "100px",
                 "defaultContent": ""
 
             }, {
                 data : "sz",
+                width : "40px",
                 "defaultContent": ""
             }, {
                 data : "gxq",
@@ -180,7 +192,7 @@ function btn_savefile_click() {
 	if($("#fileUpload").val()){
 		var formData=new FormData($("#fileForm")[0]);
 		$.ajax({
-			url:ctx+ "/excel/importfile?date="+date,
+			url:ctx+ "/excel/importfileBypoi?date="+date,
 			type : "POST",
 			data : formData,
 			cache: false,

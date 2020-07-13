@@ -35,14 +35,14 @@ public class RedisTest {
         // 标题行数
        // params.setHeadingRows();
         // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
-        params.setSheetName("数据统计");
+       // params.setSheetName("数据统计");
         TemplateExportParams params1 = new TemplateExportParams();
         // 标题开始行
         params.setHeadingStartRow(0);
         // 标题行数
         // params.setHeadingRows();
         // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
-        params.setSheetName("数据统计");
+        //params.setSheetName("数据统计");
         // 获取报表内容
         // 因为表数据是根据存储过程来实现的，不同的报表有不同的配置，
         // 所以使用Map<String,Object>格式来接收

@@ -6,23 +6,29 @@ import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import com.zxd.commonmodel.Page;
 import com.zxd.log.SystemControllerLog;
 import com.zxd.report.mapper.StExcelMapper;
 import com.zxd.report.model.ImIcome;
 import com.zxd.report.model.Min_11;
+import com.zxd.report.model.StIpConfing;
 import com.zxd.report.model.TongBao_13;
 import com.zxd.report.service.ExcelService;
 import com.zxd.report.service.StUserService;
 import com.zxd.util.Constant;
+import com.zxd.util.POIUtil;
+import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +53,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/excel")
 public class ExcelController {
+    @Autowired
+    private Environment environment;
     @Autowired
     private StUserService stUserService;
     @Autowired
@@ -78,11 +86,68 @@ public class ExcelController {
      * @param file 模板文件
      * @return
      */
-    @RequestMapping("/importfile")
+    @RequestMapping("/importfileBypoi")
     @ResponseBody
     @RequiresPermissions("st_user_import")
    // @SystemControllerLog(description = "excel导入",params = 0)
-    public Object importfile(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file){
+    public Object importfileBypoi(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
+        List<Map>  income_list = POIUtil.readExcel(file,"收入");
+        List<Map>  zc_list = POIUtil.readExcel(file,"支出");
+        String date = request.getParameter("date");
+        stExcelMapper.deleteincome(date);
+        stExcelMapper.deletedisburse(date);
+        try {
+            String type = "";
+            for(Map map:income_list){
+                map.put("year",date);
+                if(map.get("kmmc") != null ) {
+                    if (map.get("kmmc").toString().contains("一般公共预算收入合计")) {
+                        type = "1";
+                    } else if (map.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
+                        type = "2";
+                    } else if (map.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
+                        type = "3";
+                    } else if (map.get("kmmc").toString().contains("社会保险基金预算收入合计")) {
+                        type = "4";
+                    }
+                }
+                map.put("type",type);
+            }
+            stExcelMapper.insertSelective_batch_income_map(income_list);
+            //新增支出表
+            for(Map zcIcome:zc_list){
+                zcIcome.put("year",date);
+                if(zcIcome.get("kmmc") != null ) {
+                    if (zcIcome.get("kmmc").toString().contains("一般公共预算收入合计")) {
+                        type = "1";
+                    } else if (zcIcome.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
+                        type = "2";
+                    } else if (zcIcome.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
+                        type = "3";
+                    } else if (zcIcome.get("kmmc").toString().contains("社会保险基金预算收入合计")) {
+                        type = "4";
+                    }
+                }
+                zcIcome.put("type",type);
+            }
+            stExcelMapper.insertSelective_batch_disburse_map(zc_list);
+           return "success";
+        }catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+    /**
+     * 导入excel
+     * @param request
+     * @param file 模板文件
+     * @return
+     */
+    @RequestMapping("/importfile")
+    @ResponseBody
+    @RequiresPermissions("st_user_import")
+    // @SystemControllerLog(description = "excel导入",params = 0)
+    public Object importfile(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
         String date = request.getParameter("date");
         //删除对应时间的收入-支出数据
         stExcelMapper.deleteincome(date);
@@ -109,7 +174,6 @@ public class ExcelController {
                     }
                 }
                 imIcome.setTYPE(type);
-                //stExcelMapper.insertSelective(imIcome);
 
             }
             stExcelMapper.insertSelective_batch_income(income_list);
@@ -138,7 +202,7 @@ public class ExcelController {
             }
 
             stExcelMapper.insertSelective_batch_disburse(zc_list);
-           return "success";
+            return "success";
         }catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -254,6 +318,7 @@ public class ExcelController {
         String[] sheetNameArray = {"11民生","13通报"};
         templateExportParams.setSheetName(sheetNameArray);
         Workbook workbook = ExcelExportUtil.exportExcel(templateExportParams,map);
+        //System.out.println("path:======="+path+"/excelExport/"+fileName+".xlsx");
         File savefile = new File(path+"/excelExport/"+fileName+".xlsx");
         FileOutputStream fos = new FileOutputStream(savefile);
         workbook.write(fos);
@@ -278,6 +343,31 @@ public class ExcelController {
         return entity;
 
     }
+    //列表
+    @RequestMapping(value = "/list", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String dataList(Page page, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String date = request.getParameter("date");
+        String index = request.getParameter("index");
+        Map map =  new HashMap();
+        map.put("date",date);
+        List<Map> record = new ArrayList<Map>();
+        int totalCount = 0;
+        if("0".equals(index)){
+            List<Map> list = stExcelMapper.selectBysql("select count(1) num from t_income where year='"+date+"'");
+            totalCount = new Integer(list.get(0).get("num").toString());
+            record = stExcelMapper.selectByList(page,map);
+        }else{
+            List<Map> list = stExcelMapper.selectBysql("select kmbm, kmmc,sz,amt,gxq,lcq from t_disburse where year='"+date+"'");
+            totalCount = list.size();
+            record = stExcelMapper.selectdisburseByList(page,map);
+        }
 
+        String result = "{\"recordsTotal\":" + totalCount;
+        result += ",\"recordsFiltered\":" + totalCount;
+        result += ",\"data\":" + JSONArray.fromObject(record) + "}";
+
+        return result;
+    }
 
 }
