@@ -190,4 +190,23 @@ public class ExcelServiceImpl implements ExcelService {
         List<Map> list = stExcelMapper.selectBysql(sql);
         return list;
     }
+    @Override
+    /**
+     * 查询1总报表数据
+     * @param year
+     * @return
+     */
+   public List<Map> exportExcel_1zong(String year){
+        Date date = DateUtil.getStr2date(year,"yyyy-MM");
+        String this_year_this_month = DateUtil.getDate2str(date,"yyyy-MM");
+        String this_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(date,-1,"MONTH"),"yyyy-MM");
+        String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
+        String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
+
+        String sql = stParamsService.getParamConf("1zong").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
+                replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
+                replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month);
+        List<Map> list = stExcelMapper.selectBysql(sql);
+        return list;
+    }
 }

@@ -6,8 +6,8 @@
 
     <groupId>com.zxd</groupId>
     <artifactId>report</artifactId>
-    <packaging>war</packaging>
-    <version>1.0</version>
+    <packaging>jar</packaging>
+    <version>1.0.1</version>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -236,21 +236,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-
-
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.14</version>
+<!--        <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi</artifactId>
+          <version>3.14</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.14</version>
-        </dependency>
+        </dependency>-->
 
         <!--shrio与thymeleaf整合 如果和jsp整合，必须注释此依赖-->
 <!--        <dependency>
@@ -268,7 +264,7 @@
         </dependency>-->
 
     </dependencies>
-    <!--<build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -297,15 +293,15 @@
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
-                &lt;!&ndash;此处必须加上&ndash;&gt;
+                <!--此处必须加上-->
                 <targetPath>META-INF/resources</targetPath>
                 <includes>
                     <include>**/**</include>
                 </includes>
             </resource>
         </resources>
-    </build>-->
-    <build>
+    </build>
+   <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -321,6 +317,6 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
 </project>

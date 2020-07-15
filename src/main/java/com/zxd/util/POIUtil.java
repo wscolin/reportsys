@@ -9,14 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.google.common.base.CharMatcher;
 import com.zxd.report.model.ImIcome;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 /**
@@ -72,12 +69,18 @@ public class POIUtil {
 
                         String[] keys = {"kmbm","kmmc","amt","sz","gxq","lcq","dxq","ncx","nfx","lcx","crx","yhx","lax","jxx","zxx","gcx"};
                         for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
-                            Cell cell = row.getCell(cellNum);
-                            cells[cellNum] = getCellValue(cell);
                             if(cellNum>=16){
-                               continue;
+                                break;
                             }
-                            map.put(keys[cellNum],cells[cellNum]);
+                            Cell cell = row.getCell(cellNum);
+                            if(cell !=null){
+                                cell.setCellType(CellType.STRING);
+                                cells[cellNum] = getCellValue(cell);
+                                if(null!=cells[cellNum]){
+                                    cells[cellNum] = replaceBlank(cells[cellNum]);
+                                }
+                                map.put(keys[cellNum],cells[cellNum]);
+                            }
                         }
                         list.add(map);
                     }
@@ -129,30 +132,29 @@ public class POIUtil {
         if(cell == null){
             return cellValue;
         }
-        //把数字当成String来读，避免出现1读成1.0的情况
-        if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-        }
+
+
         //判断数据的类型
-        switch (cell.getCellType()){
-            case Cell.CELL_TYPE_NUMERIC: //数字
+        cellValue = String.valueOf(cell.getStringCellValue());
+        switch (cell.getCellTypeEnum()){
+                case NUMERIC: //数字
                 cellValue = String.valueOf(cell.getNumericCellValue());
                 break;
-            case Cell.CELL_TYPE_STRING: //字符串
+            case STRING: //字符串
                 cellValue = String.valueOf(cell.getStringCellValue());
                 break;
-            case Cell.CELL_TYPE_BOOLEAN: //Boolean
+            case BOOLEAN: //Boolean
                 cellValue = String.valueOf(cell.getBooleanCellValue());
                 break;
-            case Cell.CELL_TYPE_FORMULA: //公式
+            case FORMULA: //公式
                 //判断cell是否为日期格式
-                cell.setCellType(Cell.CELL_TYPE_STRING);
+                cell.setCellType(CellType.STRING);
                 cellValue = String.valueOf(cell.getStringCellValue());
                 break;
-            case Cell.CELL_TYPE_BLANK: //空值
+            case BLANK: //空值
                 cellValue = "";
                 break;
-            case Cell.CELL_TYPE_ERROR: //故障
+            case ERROR: //故障
                 cellValue = "非法字符";
                 break;
             default:
@@ -161,5 +163,12 @@ public class POIUtil {
         }
         return cellValue;
     }
-
+    public static String replaceBlank(String str) {
+        if(null != str) {
+            // String phone = "‭15800000000"; 该字符串实际的字符长度是 12, 其中15前面有一个看不见的字符, 既不是中文空格也不是英文空格.
+            // System.out.println(TrimUtils.trimAnyBlank(phone).length());
+            return CharMatcher.anyOf("\r\n\t \u00A0　‭").trimFrom(str);
+        }
+        return str;
+    }
 }

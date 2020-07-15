@@ -115,20 +115,21 @@ public class ExcelController {
             }
             stExcelMapper.insertSelective_batch_income_map(income_list);
             //新增支出表
+            String zctype = null;
             for(Map zcIcome:zc_list){
                 zcIcome.put("year",date);
                 if(zcIcome.get("kmmc") != null ) {
-                    if (zcIcome.get("kmmc").toString().contains("一般公共预算收入合计")) {
-                        type = "1";
-                    } else if (zcIcome.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
-                        type = "2";
-                    } else if (zcIcome.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
-                        type = "3";
-                    } else if (zcIcome.get("kmmc").toString().contains("社会保险基金预算收入合计")) {
-                        type = "4";
+                    if (zcIcome.get("kmmc").toString().contains("一般公共预算支出合计")) {
+                        zctype = "1";
+                    } else if (zcIcome.get("kmmc").toString().contains("政府性基金预算支出合计")) {
+                        zctype = "2";
+                    } else if (zcIcome.get("kmmc").toString().contains("国有资本经营预算支出合计")) {
+                        zctype = "3";
+                    } else if (zcIcome.get("kmmc").toString().contains("社会保险基金预算支出合计")) {
+                        zctype = "4";
                     }
                 }
-                zcIcome.put("type",type);
+                zcIcome.put("type",zctype);
             }
             stExcelMapper.insertSelective_batch_disburse_map(zc_list);
            return "success";
@@ -202,6 +203,11 @@ public class ExcelController {
             }
 
             stExcelMapper.insertSelective_batch_disburse(zc_list);
+            //自定义科目编码更新
+            String sql= "update t_income a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm=''";
+            stExcelMapper.excutesql(sql);
+            sql= "update t_disburse a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm=''";
+            stExcelMapper.excutesql(sql);
             return "success";
         }catch (Exception e) {
             e.printStackTrace();
@@ -269,9 +275,14 @@ public class ExcelController {
     public  ResponseEntity<byte[]>  excelExportByTemplate(HttpServletRequest request,HttpServletResponse response)throws Exception{
         try {
             //2019年5月报全市公式版
-            String path =  request.getServletContext().getRealPath("/");
+            //String path =  request.getServletContext().getRealPath("/");
+            String path = System.getProperty("user.dir")+File.separator+"templateExport";
             String date = request.getParameter("date");
             String fileName = date+"月报全市报表";
+            /**
+             * 1总
+             */
+            List<Map>zong1_List  = excelService.exportExcel_1zong(date);
             /**
              * 11民
              */
@@ -280,7 +291,9 @@ public class ExcelController {
              * 13通报
              */
             List<Map> tongBao_13List  = excelService.exportExcel_Tb13(date);
+
             HashMap map =  new HashMap();
+            map.put("list_1zong",zong1_List);
             map.put("list_11min",min_11List);
             map.put("list_13tongbao",tongBao_13List);
             return excelExport(map,path,fileName);
@@ -314,12 +327,13 @@ public class ExcelController {
         TemplateExportParams templateExportParams = new TemplateExportParams();
         templateExportParams.setScanAllsheet(true);
         // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
-        templateExportParams.setTemplateUrl(path+"/templateExport/导出_模板.xlsx");
-        String[] sheetNameArray = {"11民生","13通报"};
+        String templatepath = System.getProperty("user.dir")+File.separator+"templateExport"+File.separator+"导出_模板.xlsx";
+        templateExportParams.setTemplateUrl(templatepath);
+        String[] sheetNameArray = {"1总","11民生","13通报"};
         templateExportParams.setSheetName(sheetNameArray);
         Workbook workbook = ExcelExportUtil.exportExcel(templateExportParams,map);
         //System.out.println("path:======="+path+"/excelExport/"+fileName+".xlsx");
-        File savefile = new File(path+"/excelExport/"+fileName+".xlsx");
+        File savefile = new File(System.getProperty("user.dir")+File.separator+"excelExport"+File.separator+fileName+".xlsx");
         FileOutputStream fos = new FileOutputStream(savefile);
         workbook.write(fos);
         fos.close();

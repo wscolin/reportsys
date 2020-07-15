@@ -27,5 +27,9 @@ public interface StExcelMapper {
     List<Map> selectBysql(@Param(value = "sql") String sql);
     List<Map> selectByList(@Param("page") Page page,@Param("map") Map map);
     List<Map> selectdisburseByList(@Param("page") Page page,@Param("map") Map map);
+    /**
+     * 执行sql
+     */
+    void excutesql(@Param("sql") String sql);
 
 }

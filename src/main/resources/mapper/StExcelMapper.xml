@@ -334,7 +334,8 @@
       #{income.year}
       )
     </foreach>
-
-
   </insert>
+  <select id="excutesql" parameterType="java.lang.String">
+        ${sql}
+  </select>
 </mapper>

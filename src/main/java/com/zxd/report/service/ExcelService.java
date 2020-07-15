@@ -13,4 +13,11 @@ public interface ExcelService {
     List<Min_11> exportExcel(String year);
     List<Map> exportExcel_Min11(String year);
     List<Map> exportExcel_Tb13(String year);
+
+    /**
+     * 查询1总报表数据
+     * @param year
+     * @return
+     */
+    List<Map> exportExcel_1zong(String year);
 }

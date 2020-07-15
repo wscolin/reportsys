@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,13 @@ public class HelloController {
     @Autowired
     public InfoService infoService;
     @RequestMapping("/hello")
-    public String  Hello() {
+    public String  Hello()throws Exception {
+        File file = new File("./log");
+        System.out.println( file.getCanonicalPath());
+        System.out.println(System.getProperty("user.dir"));
+        File file1 = new File(System.getProperty("user.dir")+File.separator+"templateExport");
+        if(!file1.exists()) file1.mkdir();
+        System.out.println(file1.getCanonicalPath());
         log.debug("hello");
         return "hello";
     }
