@@ -64,7 +64,16 @@ public class PageController implements ErrorController{
     public String error404(HttpServletRequest request) {
         String statusCode = request.getAttribute("javax.servlet.error.status_code").toString();
         if(statusCode == null) {
-            statusCode= "500";
+            if(statusCode == "400"){
+                return "400";
+            }else if(statusCode == "403"){
+                return "403";
+            }else if(statusCode == "404"){
+                return "404";
+            }else{
+                return "500";
+            }
+
         }
         return statusCode;
     }

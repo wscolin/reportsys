@@ -89,8 +89,8 @@ function btn_edit_click() {
 	}
 	$("#itemForm input[name=ID]").val("edit");
 	$("#itemForm input[name=PARM_KEY]").val(row[0].PARM_KEY);
-	$("#itemForm input[name=PARM_VALUE]").val(row[0].PARM_VALUE);
-	$("#itemForm textarea[name=REMARKS]").val(row[0].REMARKS);
+	$("#itemForm textarea[name=PARM_VALUE]").val(row[0].PARM_VALUE);
+	$("#itemForm input[name=REMARKS]").val(row[0].REMARKS);
 
 	$("h4").text("修改");
 	$('#itemModal').modal('show');

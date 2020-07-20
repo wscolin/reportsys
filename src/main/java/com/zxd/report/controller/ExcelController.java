@@ -11,11 +11,9 @@ import com.zxd.log.SystemControllerLog;
 import com.zxd.report.mapper.StExcelMapper;
 import com.zxd.report.model.ImIcome;
 import com.zxd.report.model.Min_11;
-import com.zxd.report.model.StIpConfing;
 import com.zxd.report.model.TongBao_13;
 import com.zxd.report.service.ExcelService;
 import com.zxd.report.service.StUserService;
-import com.zxd.util.Constant;
 import com.zxd.util.POIUtil;
 import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
@@ -28,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,11 +35,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 /**
  * @program: gas_bank
@@ -96,6 +90,8 @@ public class ExcelController {
         String date = request.getParameter("date");
         stExcelMapper.deleteincome(date);
         stExcelMapper.deletedisburse(date);
+        stExcelMapper.deleteincome_area(date);
+        stExcelMapper.deletedisburse_area(date);
         try {
             String type = "";
             for(Map map:income_list){
@@ -103,7 +99,7 @@ public class ExcelController {
                 if(map.get("kmmc") != null ) {
                     if (map.get("kmmc").toString().contains("一般公共预算收入合计")) {
                         type = "1";
-                    } else if (map.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
+                    } else if (map.get("kmmc").toString().contains("政府性基金预算收入合计")) {
                         type = "2";
                     } else if (map.get("kmmc").toString().contains("国有资本经营预算收入合计")) {
                         type = "3";
@@ -114,6 +110,14 @@ public class ExcelController {
                 map.put("type",type);
             }
             stExcelMapper.insertSelective_batch_income_map(income_list);
+            //插入按地区收入表
+            List<Map> list_area = stExcelMapper.selectBysql("select area_code,area_name,simple_name from t_area ");
+            List<Map<String,String>> list_incode_area = new ArrayList<>();
+            for(Map area:list_area) {
+                getBasedateByArea(income_list, list_incode_area, area);
+            }
+            //新增地区基本收入数据
+            stExcelMapper.insertSelective_batch_incomearea_map(list_incode_area);
             //新增支出表
             String zctype = null;
             for(Map zcIcome:zc_list){
@@ -132,12 +136,53 @@ public class ExcelController {
                 zcIcome.put("type",zctype);
             }
             stExcelMapper.insertSelective_batch_disburse_map(zc_list);
+            List<Map<String,String>> list_zccode_area = new ArrayList<>();
+            for(Map area:list_area) {
+                getBasedateByArea(zc_list, list_zccode_area, area);
+            }
+            //新增地区基本支出数据
+            stExcelMapper.insertSelective_batch_disbursearea_map(list_zccode_area);
+            //自定义科目编码更新
+            String sql= "update t_income a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm='';";
+            stExcelMapper.excutesql(sql);
+            sql= "update t_disburse a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm=''";
+            stExcelMapper.excutesql(sql);
+            sql= "update t_incomebyarea a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm='';";
+            stExcelMapper.excutesql(sql);
+            sql= "update t_disbursebyarea a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm=''";
+            stExcelMapper.excutesql(sql);
            return "success";
         }catch (Exception e) {
             e.printStackTrace();
             return "error";
         }
     }
+
+    public void getBasedateByArea(List<Map> income_list, List<Map<String, String>> list_incode_area, Map area) {
+        for (Map m : income_list) {
+            Iterator<Map.Entry<String,String>> iterator =(Iterator<Map.Entry<String,String>> ) m.entrySet().iterator();
+            while (iterator.hasNext()){
+               Map.Entry entry =  iterator.next();
+               String key =(String) entry.getKey();
+               String value = (String) entry.getValue();
+               if(value.equals("财政等部门组织收入")){
+                   System.out.println(value);
+               }
+               if(key.equals(area.get("simple_name"))){
+                   Map<String,String> map_area_kmbm = new HashMap();
+                   map_area_kmbm.put("area_name", area.get("area_name").toString());
+                   map_area_kmbm.put("area_code", area.get("area_code").toString());
+                   map_area_kmbm.put("amt",value);
+                   map_area_kmbm.put("kmbm",m.get("kmbm")==null?null:m.get("kmbm").toString());
+                   map_area_kmbm.put("kmmc",m.get("kmmc")==null?null:m.get("kmmc").toString());
+                   map_area_kmbm.put("type",m.get("type")==null?null:m.get("type").toString());
+                   map_area_kmbm.put("year",m.get("year")==null?null:m.get("year").toString());
+                   list_incode_area.add(map_area_kmbm);
+               }
+            }
+        }
+    }
+
     /**
      * 导入excel
      * @param request
@@ -177,6 +222,8 @@ public class ExcelController {
                 imIcome.setTYPE(type);
 
             }
+
+
             stExcelMapper.insertSelective_batch_income(income_list);
             //新增支出表
             ImportParams zc_param = new ImportParams();
@@ -284,6 +331,19 @@ public class ExcelController {
              */
             List<Map>zong1_List  = excelService.exportExcel_1zong(date);
             /**
+             * 02级
+             */
+            List<Map>ji02_list  = excelService.exportExcel_02ji(date);
+            /**
+             * 03部
+             */
+            List<Map>bu03_list  = excelService.exportExcel_03bu(date);
+            /**
+             * 04级
+             */
+            List<Map>jijin04_list  = excelService.exportExcel_04jijin(date);
+
+            /**
              * 11民
              */
             List<Map> min_11List  = excelService.exportExcel_Min11(date);
@@ -294,6 +354,9 @@ public class ExcelController {
 
             HashMap map =  new HashMap();
             map.put("list_1zong",zong1_List);
+            map.put("list_2ji",ji02_list);
+            map.put("list_3bu",bu03_list);
+            map.put("list_4jijin",jijin04_list);
             map.put("list_11min",min_11List);
             map.put("list_13tongbao",tongBao_13List);
             return excelExport(map,path,fileName);
@@ -329,7 +392,7 @@ public class ExcelController {
         // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
         String templatepath = System.getProperty("user.dir")+File.separator+"templateExport"+File.separator+"导出_模板.xlsx";
         templateExportParams.setTemplateUrl(templatepath);
-        String[] sheetNameArray = {"1总","11民生","13通报"};
+        String[] sheetNameArray = {"01总","02级","03部","04基金分级收支","11民生","13通报"};
         templateExportParams.setSheetName(sheetNameArray);
         Workbook workbook = ExcelExportUtil.exportExcel(templateExportParams,map);
         //System.out.println("path:======="+path+"/excelExport/"+fileName+".xlsx");
@@ -368,12 +431,10 @@ public class ExcelController {
         List<Map> record = new ArrayList<Map>();
         int totalCount = 0;
         if("0".equals(index)){
-            List<Map> list = stExcelMapper.selectBysql("select count(1) num from t_income where year='"+date+"'");
-            totalCount = new Integer(list.get(0).get("num").toString());
+            totalCount = stExcelMapper.selectByList_count(map);
             record = stExcelMapper.selectByList(page,map);
         }else{
-            List<Map> list = stExcelMapper.selectBysql("select kmbm, kmmc,sz,amt,gxq,lcq from t_disburse where year='"+date+"'");
-            totalCount = list.size();
+            totalCount = stExcelMapper.selectdisburseByList_count(map);
             record = stExcelMapper.selectdisburseByList(page,map);
         }
 

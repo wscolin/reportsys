@@ -77,6 +77,17 @@
 							<th>市值</th>
 							<th>高薪区</th>
 							<th>临川区</th>
+							<th>东乡区</th>
+							<th>南城县</th>
+							<th>南丰县</th>
+							<th>黎川县</th>
+							<th>崇仁县</th>
+							<th>宜黄县</th>
+							<th>乐安县</th>
+							<th>金溪县</th>
+							<th>资溪县</th>
+							<th>广昌县</th>
+							<th>年份</th>
 						</tr>
 					</thead>
 				</table>
@@ -124,7 +135,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-primary" onclick="btn_savefile_click();"><i class="fa fa-save"></i> 导入</button>
+				<button class="btn btn-primary" onclick="btn_savefile_click(this);"><i class="fa fa-save"></i> 导入</button>
 				<button class="btn btn-default" data-dismiss="modal" onclick="btn_close_click();"><i class="fa fa-remove"></i> 取消</button>
 			</div>
 		</div>

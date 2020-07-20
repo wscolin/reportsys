@@ -148,9 +148,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/plugins/**","anon");
         //暴露接口
         filterChainDefinitionMap.put("/files/**","anon");//下载请求文件
-        filterChainDefinitionMap.put("/request_query/**","anon");//查询数据
-        filterChainDefinitionMap.put("/request_ckext/**","anon");//请求接口
-        filterChainDefinitionMap.put("/feedback_ckext/**","anon");//反馈接口
         filterChainDefinitionMap.put("/WEB-INF/views/loginByName.jsp","anon");//反馈接口
         //系统controller过滤
         filterChainDefinitionMap.put("/logout","logout");

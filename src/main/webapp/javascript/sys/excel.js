@@ -1,3 +1,4 @@
+table = $("#table_role_list").DataTable();
 $(function () {
     var today = new Date();
     var year = today.getFullYear();
@@ -18,10 +19,10 @@ $(function () {
         forceParse: false,
         language: 'zh-CN'
     });
-    $("#querydateDiv").datepicker('setDate',year+"-"+moth);
+    //$("#querydateDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv_export").datepicker('setDate',year+"-"+moth);
-    initTable($("#querydate").val());
+    initTable($("#querydate").val(),'0');
     tzdiv_tableheight();
 });
 
@@ -44,9 +45,10 @@ function initTable(date,index) {
     var oTable = table.dataTable({
         dom:"<'row'<'search text-left'f>r>t<'row pageRow'<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
         scrollY:true,
-        sScrollY:"300px",
+        sScrollY:"450px",
         processing : true,
         serverSide : true,
+        bAutoWidth:true,
         bSort : false,
         searching : false,
         pagingType : "full_numbers",
@@ -65,7 +67,7 @@ function initTable(date,index) {
         columns : [
             {
                 data:null,
-                width:"50px",
+                width:"20px",
                 sClass:"text-center",
                 fnCreatedCell:function (nTd,sData,oData,iRow,iCol) {
                     var startnum=this.api().page()*(this.api().page.info().length);
@@ -81,20 +83,64 @@ function initTable(date,index) {
                 "defaultContent": ""
             }, {
                 data : "amt",
-                width : "100px",
+                width : "50px",
                 "defaultContent": ""
 
             }, {
                 data : "sz",
-                width : "40px",
+                width : "30px",
                 "defaultContent": ""
             }, {
                 data : "gxq",
-                width : "40px",
+                width : "30px",
                 "defaultContent": ""
             }, {
                 data : "lcq",
-                width : "40px",
+                width : "30px",
+                "defaultContent": ""
+            }, {
+                data : "dxq",
+                width : "30px",
+                "defaultContent": ""
+            }, {
+                data : "ncx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "nfx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "lcx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "crx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "yhx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "lax",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "jxx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "zxx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "gcx",
+                width : "20px",
+                "defaultContent": ""
+            }, {
+                data : "year",
+                width : "20px",
                 "defaultContent": ""
             }
         ],
@@ -115,6 +161,9 @@ function initTable(date,index) {
             url:ctx+"/plugins/lang-zh_CN.json"
         },initComplete:function () {
             tableHeight();
+        },
+        "fnInitComplete": function (setings) {
+            this.fnAdjustColumnSizing(true);
         }
     });
 
@@ -150,6 +199,7 @@ function AjaxError( xhr, textStatus, error ) {
     $("#itemTable").dataTable().fnProcessingIndicator(false );
 }
 function btn_import_click() {
+    $(".btn-primary").attr("disabled",false);
     $("h4").text("导入-收入-支出表");
 	$('#fileModal').modal('show');
 }
@@ -183,7 +233,8 @@ function btn_export_confrim (){
 function btn_dwload_mb() {
 	window.location.href=ctx+"/excel/dwloadmb";
 }
-function btn_savefile_click() {
+function btn_savefile_click(_this) {
+    $(_this).attr("disabled","disabled");
     var date = $("#KSRQ").val();
     if(date==null||date==""||date=="undefined"){
         window.parent.toastr[MES_ERROR]("日期不能空！！");

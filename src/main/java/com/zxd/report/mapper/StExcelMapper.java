@@ -18,14 +18,22 @@ public interface StExcelMapper {
     int insertSelective_batch_income(List<ImIcome> list);
     int insertSelective_batch_disburse(List<ImIcome> list);
     int insertSelective_batch_income_map(List<Map> list);
+    int insertSelective_batch_incomearea_map(List<Map<String,String>> list);
+    int insertSelective_batch_disbursearea_map(List<Map<String,String>> list);
     int insertSelective_batch_disburse_map(List<Map> list);
     //删除收入数据
     int deleteincome(@Param(value = "date") String date);
     //删除支出数据
+    int deletedisburse_area(@Param(value = "date") String date);
+    //删除收入数据
+    int deleteincome_area(@Param(value = "date") String date);
+    //删除支出数据
     int deletedisburse(@Param(value = "date") String date);
     List<Min_11> querybysql(@Param(value = "sql") String sql);
     List<Map> selectBysql(@Param(value = "sql") String sql);
+    int selectByList_count(@Param("map") Map map);
     List<Map> selectByList(@Param("page") Page page,@Param("map") Map map);
+    int selectdisburseByList_count(@Param("map") Map map);
     List<Map> selectdisburseByList(@Param("page") Page page,@Param("map") Map map);
     /**
      * 执行sql

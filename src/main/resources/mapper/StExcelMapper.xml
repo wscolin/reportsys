@@ -215,7 +215,7 @@
   <select id="querybysql" parameterType="String" resultType="com.zxd.report.model.Min_11">
      ${sql}
   </select>
-  <select id="selectBysql" parameterType="String" resultType="map">
+  <select id="selectBysql" parameterType="String" resultType="java.util.Map" >
     ${sql}
   </select>
 
@@ -231,15 +231,56 @@
       year= #{date}
     </if>
   </delete>
+  <delete id="deleteincome_area" parameterType="string">
+    delete from t_incomebyarea where
+    <if test="date!=null">
+      year= #{date}
+    </if>
+  </delete>
+  <delete id="deletedisburse_area"  parameterType="string">
+    delete from t_disbursebyarea where
+    <if test="date!=null">
+      year= #{date}
+    </if>
+  </delete>
   <select id="selectByList" resultType="java.util.Map" parameterType="java.util.Map">
     select
-    kmmc,kmbm,amt,sz,gxq,lcq
-    from t_income where year=#{map.date} limit #{page.start},#{page.length}
+    *
+    from t_income
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="map.date !=null and map.date !=''">
+         year=#{map.date}
+      </if>
+   </trim>
+    limit #{page.start},#{page.length}
+  </select>
+  <select id="selectByList_count" resultType="int">
+    select count(1)
+    from t_income
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="map.date !=null and map.date !=''">
+        year=#{map.date}
+      </if>
+    </trim>
+  </select>
+  <select id="selectdisburseByList_count" resultType="int">
+    select count(1) from t_disburse
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="map.date !=null and map.date!=''">
+        year=#{map.date}
+      </if>
+    </trim>
   </select>
   <select id="selectdisburseByList" resultType="java.util.Map" parameterType="java.util.Map">
     select
-    kmmc,kmbm,amt,sz,gxq,lcq
-    from t_disburse where year=#{map.date} limit #{page.start},#{page.length}
+    *
+    from t_disburse
+    <trim prefix="where" prefixOverrides="and|or">
+        <if test="map.date !=null and map.date!=''">
+           year=#{map.date}
+        </if>
+    </trim>
+    limit #{page.start},#{page.length}
   </select>
   <insert id="insertSelective_batch_income_map" parameterType="java.util.List" >
     insert into t_income
@@ -289,6 +330,33 @@
 
 
   </insert>
+  <insert id="insertSelective_batch_incomearea_map" parameterType="java.util.List" >
+    insert into t_incomebyarea
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      area_name,
+      area_code,
+      AMT,
+      kmbm,
+      kmmc,
+      type,
+      year,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.area_name},
+      #{income.area_code},
+      #{income.amt},
+      #{income.kmbm},
+      #{income.kmmc},
+      #{income.type},
+      #{income.year}
+      )
+    </foreach>
+
+
+  </insert>
+
   <insert id="insertSelective_batch_disburse_map" parameterType="java.util.List" >
     insert into t_disburse
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -334,6 +402,31 @@
       #{income.year}
       )
     </foreach>
+  </insert>
+  <insert id="insertSelective_batch_disbursearea_map" parameterType="java.util.List" >
+    insert into t_disbursebyarea
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      area_name,
+      area_code,
+      AMT,
+      kmbm,
+      kmmc,
+      type,
+      year,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.area_name},
+      #{income.area_code},
+      #{income.amt},
+      #{income.kmbm},
+      #{income.kmmc},
+      #{income.type},
+      #{income.year}
+      )
+    </foreach>
+
   </insert>
   <select id="excutesql" parameterType="java.lang.String">
         ${sql}
