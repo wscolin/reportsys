@@ -18,10 +18,17 @@
                     <p> 
                         <br/> </p>
                     <p>
-                        <a href="${ctx}/" class="btn red btn-outline"> 返回首页  </a>
+                        <a href="#" class="btn red btn-outline" onclick="back()"> 返回首页  </a>
                         <br> </p>
                 </div>
             </div>
         </div> 
 </body>
+<script type="text/javascript">
+
+        function back() {
+            document.frames['admin'].history.back();
+            return false;
+        }
+</script>
 </html>

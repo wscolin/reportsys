@@ -41,5 +41,30 @@ public interface ExcelService {
      * @return
      */
     List<Map>   exportExcel_03bu(String year);
+    /**
+     * 查询05税报表数据
+     * @param year
+     * @return
+     */
+    List<Map>   exportExcel_05shui(String year);
+
+    /**
+     * 查询06税报表数据
+     * @param year
+     * @return
+     */
+    List<Map>   exportExcel_06cai(String year);
+    /**
+     * 查询07税比报表数据
+     * @param year
+     * @return
+     */
+    List<Map>   exportExcel_07shuibi(String year);
+    /**
+     * 查询10支出报表数据
+     * @param year
+     * @return
+     */
+    List<Map>   exportExcel_10zhichu(String year);
 
 }

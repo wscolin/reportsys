@@ -5,6 +5,14 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title></title>
 </head>
+<style>
+	.auto{
+		min-width: 200px;
+		min-height: 50px;
+		overflow-y: scroll;
+		overflow-x: scroll;
+	}
+</style>
 <body class="page-content">
 
 	<div class="my-col-md">

@@ -113,25 +113,6 @@
 		_gas_analysis.addTabs(item);//添加tab（默认添加的一行放不下会放两行）
 		$(window).resize();//手动触发窗体resize时间  触发tabdrop
 	}
-	function fk() {
-		var xml="<QUERY_XML><ITEMS><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707145254.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707150048.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707150824.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707153636.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707153816.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707163205.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707165230.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707165412.zip</ITEM><ITEM>http://localhost:14080/gas_bank_web/files/430000E002H1011101010014300028620170707165615.zip</ITEM></ITEMS></QUERY_XML>";
-		$.ajax({
-			url:ctx+"/feedback_ckext",
-			cache : false,
-			type : "POST",
-			data : {
-				YHJGDM : "E002H101110101001",
-				TOKEN:"RTAwMkgxMDExMTAxMDEwMDEyMDE3MDcyMQ==",
-				QUERY_XML:xml
-			},
-			success : function(result) {
-				alert(result)
-			},
-			error : function(error) {
-				alert(result+'121212')
-			}
-		});
-	}
 </script>
 <%--<a href="logout">logout</a>--%>
 </body>

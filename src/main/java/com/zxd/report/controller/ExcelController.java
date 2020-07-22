@@ -17,6 +17,7 @@ import com.zxd.report.service.StUserService;
 import com.zxd.util.POIUtil;
 import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -342,7 +343,22 @@ public class ExcelController {
              * 04级
              */
             List<Map>jijin04_list  = excelService.exportExcel_04jijin(date);
-
+            /**
+             * 05税
+             */
+            List<Map>shui05_list  = excelService.exportExcel_05shui(date);
+            /**
+             * 06财
+             */
+            List<Map>cai06_list  = excelService.exportExcel_06cai(date);
+            /**
+             * 07税比
+             */
+            List<Map>shuibi07_list  = excelService.exportExcel_07shuibi(date);
+            /**
+             * 10支出
+             */
+            List<Map> zhichu10_list  = excelService.exportExcel_10zhichu(date);
             /**
              * 11民
              */
@@ -357,6 +373,10 @@ public class ExcelController {
             map.put("list_2ji",ji02_list);
             map.put("list_3bu",bu03_list);
             map.put("list_4jijin",jijin04_list);
+            map.put("list_5shui",shui05_list);
+            map.put("list_6cai",cai06_list);
+            map.put("list_7shuibi",shuibi07_list);
+            map.put("list_10zhichu",zhichu10_list);
             map.put("list_11min",min_11List);
             map.put("list_13tongbao",tongBao_13List);
             return excelExport(map,path,fileName);
@@ -392,7 +412,7 @@ public class ExcelController {
         // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
         String templatepath = System.getProperty("user.dir")+File.separator+"templateExport"+File.separator+"导出_模板.xlsx";
         templateExportParams.setTemplateUrl(templatepath);
-        String[] sheetNameArray = {"01总","02级","03部","04基金分级收支","11民生","13通报"};
+        String[] sheetNameArray = {"01总","02级","03部","04基金分级收支","05税","06财","07税比","10支出","11民生","13通报"};
         templateExportParams.setSheetName(sheetNameArray);
         Workbook workbook = ExcelExportUtil.exportExcel(templateExportParams,map);
         //System.out.println("path:======="+path+"/excelExport/"+fileName+".xlsx");

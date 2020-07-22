@@ -1,3 +1,4 @@
+var searchValue = null;
 $(document).ready(function() {
 	initTable();
 });
@@ -11,7 +12,7 @@ function initTable() {
 		processing : true,
 		serverSide : true,
 		bSort : false,
-		searching : false,
+		searching : true,
 		pagingType : "full_numbers",
 		lengthChange : true,
 		deferRender: true,
@@ -19,6 +20,9 @@ function initTable() {
 		lengthMenu : [ 10, 25, 50 ],
 		ajax : {
 			url:ctx+"/params/list",
+            data:{
+                searchValue:$("#itemTable_filter input").val()
+            },
 			type : "POST",
 			error: AjaxError
 		},
@@ -37,11 +41,15 @@ function initTable() {
 			},{
 				data : "PARM_KEY"
 			}, {
-				data : "PARM_VALUE"
+				data : "PARM_VALUE",
+                className:"auto"
 			}, {
 				data : "REMARKS"
 			}
 		],
+        createdRow: function( row, data, dataIndex ) {
+            var value = $(row).eq(2);
+        },
 		aoColumnDefs : [
 		{		
 
@@ -49,8 +57,24 @@ function initTable() {
 		],		
 		language : {
 			url:ctx+"/plugins/lang-zh_CN.json"
-		},initComplete:function () {
+		},
+		initComplete:function () {
 			tableHeight();
+            $("#itemTable_filter input").attr("placeholder","参数编码");
+            $("#itemTable_filter input").val(searchValue);
+            $("#itemTable_filter input").focus();
+            $("#itemTable_filter").append('<i id="btn-search-i" class="fa fa-search" style="cursor:pointer;margin:6px 0px 1px 1px;"></i>');
+            $("#itemTable_filter").addClass("input-icon right");
+            $("#itemTable_filter input").unbind();
+            $("#itemTable_filter input").on("keypress",function(e){
+                if(e.keyCode!=13)return;
+                searchValue=$(this).val();
+                initTable();
+            });
+            $("#itemTable_filter i").on("click",function(e){
+                searchValue=$("#itemTable_filter input").val();
+                initTable();
+            });
 		}
 	});
   

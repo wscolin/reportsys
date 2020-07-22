@@ -30,7 +30,7 @@ public interface StParamsMapper {
 
     int updateByPrimaryKey(StParams record);
 
-    List<StParams> selectByList(Page page);
+    List<StParams> selectByList(@Param("model")Page page);
 
     int selectByCount();
     List<StParams> selectForKey(@Param("pkey") String pkey);

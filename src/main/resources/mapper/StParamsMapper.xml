@@ -150,7 +150,12 @@
     select
     <include refid="Base_Column_List" />
     from ST_PARAMS
-    order by PARM_KEY limit #{start},#{length}
+    <trim prefix="where" prefixOverrides="and">
+      <if test="model.searchValue!=null and model.searchValue!=''">
+        AND  PARM_KEY like CONCAT('%',#{model.searchValue},'%' )
+      </if>
+    </trim>
+    order by PARM_KEY limit #{model.start},#{model.length}
   </select>
   <select id="selectForKey" resultMap="BaseResultMap">
     select

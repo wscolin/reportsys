@@ -39,12 +39,11 @@ public class ParamsController {
 	//列表
 	@RequestMapping(value = "/list", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	@SystemControllerLog(description = "参数管理列表",params = 0)
+	//@SystemControllerLog(description = "参数管理列表",params = 0)
 	public String dataList(Page page, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		List<StParams> record = new ArrayList<StParams>();
 	    int totalCount = (int) itemService.selectByCount();
-	    
 		record = itemService.selectByList(page);
 		String result = "{\"recordsTotal\":" + totalCount;
 		result += ",\"recordsFiltered\":" + totalCount;
