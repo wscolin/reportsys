@@ -31,6 +31,7 @@ public interface StExcelMapper {
     int deletedisburse(@Param(value = "date") String date);
     List<Min_11> querybysql(@Param(value = "sql") String sql);
     List<Map> selectBysql(@Param(value = "sql") String sql);
+    List<Map<String,String>> selectBysql2(@Param(value = "sql") String sql);
     int selectByList_count(@Param("map") Map map);
     List<Map> selectByList(@Param("page") Page page,@Param("map") Map map);
     int selectdisburseByList_count(@Param("map") Map map);

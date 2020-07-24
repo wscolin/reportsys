@@ -71,6 +71,7 @@
 					<thead>
 						<tr>
 							<th>序号</th>
+							<th>年份</th>
 							<th>科目编码</th>
 							<th>科目名称</th>
 							<th>金额</th>
@@ -87,7 +88,6 @@
 							<th>金溪县</th>
 							<th>资溪县</th>
 							<th>广昌县</th>
-							<th>年份</th>
 						</tr>
 					</thead>
 				</table>
@@ -122,7 +122,7 @@
 								</div>
 							</div>
 						</div>
-						<label class="control-label col-md-3">日期:</label>
+						<label class="control-label col-md-3">导入日期:</label>
 						<div id="kssjDiv" class="col-md-5 col-lg-5 col-sm-5 input-group date dateDiv  pull-left paddingRight0">
 							<input class="form-control borderRadiusRight0 borderRight0"  type="text" id="KSRQ" name="KSRQ">
 							<span class="input-group-btn">
@@ -152,7 +152,7 @@
 				<div class="modal-body">
 					<form class="form-horizontal" role="form" id="fileForm_exprot" enctype="multipart/form-data">
 						<div class="form-group">
-							<label class="control-label col-md-3">日期:</label>
+							<label class="control-label col-md-3">导出日期:</label>
 							<div id="kssjDiv_export" class="col-md-5 col-lg-5 col-sm-5 input-group date dateDiv  pull-left paddingRight0">
 								<input class="form-control borderRadiusRight0 borderRight0"  type="text" id="KSRQ_exprot" >
 								<span class="input-group-btn">

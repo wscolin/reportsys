@@ -218,6 +218,9 @@
   <select id="selectBysql" parameterType="String" resultType="java.util.Map" >
     ${sql}
   </select>
+  <select id="selectBysql2" parameterType="String" resultType="java.util.Map" >
+    ${sql}
+  </select>
 
   <delete id="deleteincome" parameterType="string">
     delete from t_income where

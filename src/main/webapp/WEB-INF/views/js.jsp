@@ -53,7 +53,7 @@
 <script src="${ctx}/plugins/assets/global/plugins/jquery.cookie.js" type="text/javascript"></script>
 <script src="${ctx}/javascript/analysisMenu.js" type="text/javascript"></script>
 <script src="${ctx}/javascript/layout.js" type="text/javascript"></script>
-<%--<script src="${ctx}/javascript/main.js" type="text/javascript"></script>--%>
+<script src="${ctx}/javascript/main.js" type="text/javascript"></script>
 <script src="${ctx}/javascript/common.js" type="text/javascript"></script>
 <script type="text/ecmascript" src="<%=basePath%>/js/jquery.jqGrid.min.js"></script>
 <script type="text/ecmascript" src="<%=basePath%>/js/grid.locale-cn.js"></script>

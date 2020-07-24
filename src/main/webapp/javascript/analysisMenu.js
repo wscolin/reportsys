@@ -201,7 +201,7 @@ var _gas_analysis = {
         }
         $('#tab_' + id).addClass('active');
         $('#tab_content_' + id).addClass('active');
-
+        $(window).resize();
     },
     closeTab: function (id) {
         //if($('li .active').attr('id')=='tab_'+id){

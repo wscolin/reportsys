@@ -14,13 +14,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * 版权声明 中科金审（北京）有限公司 版权所有 违者必究
- * <br> Company：中科金审
- * <br> @author 杜波
- * <br> 2016/8/18
- * <br> @version 1.0
- */
+
 @Service
 public class StParamsServiceImpl implements StParamsService {
 
@@ -51,6 +45,8 @@ public class StParamsServiceImpl implements StParamsService {
 
     @Override
     public int updateByPrimaryKey(StParams stparams) {
+        String applyConfKey = "CACHE:PARAM";
+        redisTemplate.opsForHash().put(applyConfKey,stparams.getPARM_KEY(),stparams.getPARM_VALUE());
         return itemMapper.updateByPrimaryKeySelective(stparams);
     }
 

@@ -76,7 +76,19 @@
 
 	<!-- BEGIN CONTENT -->
 	<div class="page-content-wrapper">
+
 		<div class="page-content">
+			<%--<div  style="margin-left: 1610px">
+				<div class="row-fluid">
+					<div class="span12">
+
+					</div>
+				</div>
+			</div>--%>
+				<div class="row">
+					<div class="col-md-12" ><button class="btn btn-danger" type="button" onclick="logout()" style="float: right;border-radius: 5%!important;">退出</button></div>
+                    <div style="clear: both"></div>
+				</div>
 			<div class="tabbable"><!-- tabbable-custom 有外边距 谷歌会出滚动条 -->
 				<ul class="nav nav-tabs">
 
@@ -93,11 +105,10 @@
 	$(function () {
 		$(".nav-tabs").tabdrop();
 		menuclick();
-		//fk();
 	});
 	function  menuclick(obj) {
 		var item = {};
-		item.frameHeight = $(document).height() - 70;
+		item.frameHeight = $(document).height() - 70-parseInt($(".btn-danger").css("height"));
 		item.id = "home";
 		item.url = ctx + "/home";
 		item.title = "首页";

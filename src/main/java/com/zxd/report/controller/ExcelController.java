@@ -49,10 +49,6 @@ import java.util.*;
 @RequestMapping(value = "/excel")
 public class ExcelController {
     @Autowired
-    private Environment environment;
-    @Autowired
-    private StUserService stUserService;
-    @Autowired
     private ExcelService excelService;
     @Autowired
     private StExcelMapper stExcelMapper;
@@ -166,9 +162,6 @@ public class ExcelController {
                Map.Entry entry =  iterator.next();
                String key =(String) entry.getKey();
                String value = (String) entry.getValue();
-               if(value.equals("财政等部门组织收入")){
-                   System.out.println(value);
-               }
                if(key.equals(area.get("simple_name"))){
                    Map<String,String> map_area_kmbm = new HashMap();
                    map_area_kmbm.put("area_name", area.get("area_name").toString());
@@ -367,7 +360,8 @@ public class ExcelController {
              * 13通报
              */
             List<Map> tongBao_13List  = excelService.exportExcel_Tb13(date);
-
+            String year = date.split("-")[0];
+            String month = date.split("-")[1];
             HashMap map =  new HashMap();
             map.put("list_1zong",zong1_List);
             map.put("list_2ji",ji02_list);
@@ -379,6 +373,8 @@ public class ExcelController {
             map.put("list_10zhichu",zhichu10_list);
             map.put("list_11min",min_11List);
             map.put("list_13tongbao",tongBao_13List);
+            map.put("year",year);
+            map.put("month",month);
             return excelExport(map,path,fileName);
         } catch (IOException e) {
             e.printStackTrace();

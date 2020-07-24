@@ -3,6 +3,9 @@ package com.zxd.test;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import com.zxd.report.mapper.StExcelMapper;
+import com.zxd.report.service.ExcelService;
+import com.zxd.report.service.StParamsService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +26,8 @@ import java.util.Map;
 public class RedisTest {
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private ExcelService excelService;
     @Test
     public void testSet(){
         this.redisTemplate.opsForValue().set("key", "陈国飞");
@@ -88,5 +93,17 @@ public class RedisTest {
 
         fos.close();
         workbook.close();
+    }
+    @Test
+    public  void testMapper(){
+        List<Map> list = excelService.exportExcel_Tb13("2020-05");
+    }
+
+    public static void main(String[] args) {
+        Double d = new Double(20.1);
+        String convertedString = String.format("%.0f",d);
+        Map<String,String> map =  new HashMap<>();
+
+
     }
 }

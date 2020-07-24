@@ -45,7 +45,7 @@ function initTable(date,index) {
     var oTable = table.dataTable({
         dom:"<'row'<'search text-left'f>r>t<'row pageRow'<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
         scrollY:true,
-        sScrollY:"450px",
+        sScrollY:"400px",
         processing : true,
         serverSide : true,
         bAutoWidth:true,
@@ -67,13 +67,19 @@ function initTable(date,index) {
         columns : [
             {
                 data:null,
-                width:"20px",
+                width:"22px",
                 sClass:"text-center",
                 fnCreatedCell:function (nTd,sData,oData,iRow,iCol) {
                     var startnum=this.api().page()*(this.api().page.info().length);
                     $(nTd).html(iRow+1+startnum);
                 }
-            },{
+            },
+            {
+                data : "year",
+                width : "18px",
+                "defaultContent": ""
+            },
+            {
                 data : "kmbm",
                 width : "50px",
                 "defaultContent": ""
@@ -138,10 +144,6 @@ function initTable(date,index) {
                 data : "gcx",
                 width : "20px",
                 "defaultContent": ""
-            }, {
-                data : "year",
-                width : "20px",
-                "defaultContent": ""
             }
         ],
      /*   aoColumnDefs : [
@@ -200,6 +202,7 @@ function AjaxError( xhr, textStatus, error ) {
 }
 function btn_import_click() {
     $(".btn-primary").attr("disabled",false);
+    $("#KSRQ").val("");
     $("h4").text("导入-收入-支出表");
 	$('#fileModal').modal('show');
 }
@@ -238,6 +241,7 @@ function btn_savefile_click(_this) {
     var date = $("#KSRQ").val();
     if(date==null||date==""||date=="undefined"){
         window.parent.toastr[MES_ERROR]("日期不能空！！");
+        $(_this).attr("disabled",false);
         return ;
 	}
 	if($("#fileUpload").val()){

@@ -5,8 +5,8 @@ $(document).ready(function() {
 	//loadFirstURL(firstURL);
 	// 禁止右键
 	document.oncontextmenu=function(e){
-		return false;
-	}; 
+		return true;
+	};
 });
 
 function loadFirstURL(url) {

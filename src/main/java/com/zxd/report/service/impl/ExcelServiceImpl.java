@@ -2,7 +2,6 @@ package com.zxd.report.service.impl;
 
 import com.zxd.report.mapper.StExcelMapper;
 import com.zxd.report.model.Min_11;
-import com.zxd.report.model.TongBao_13;
 import com.zxd.report.service.ExcelService;
 import com.zxd.report.service.StParamsService;
 import com.zxd.util.DateUtil;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -182,11 +182,12 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public List<Map> exportExcel_Tb13(String year) {
+        String thisyear = year.split("-")[0];
         Date date = DateUtil.getStr2date(year,"yyyy-MM");
         String this_year_this_month = DateUtil.getDate2str(date,"yyyy-MM");
         String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
         String sql = stParamsService.getParamConf("tongbao13").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
-                     replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month);
+                     replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).replaceAll("\\$\\{year\\}",thisyear);
         List<Map> list = stExcelMapper.selectBysql(sql);
         return list;
     }

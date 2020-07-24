@@ -94,7 +94,8 @@ public class UserController {
 		record.setCREATETIME(new Date());
 		record.setUPDATOR(userVO.getUSERID());
 		record.setUPDATETIME(new Date());
-		record.setPASSWORD("670b14728ad9902aecba32e22fa4f6bd");
+		//670b14728ad9902aecba32e22fa4f6bd 000000
+		record.setPASSWORD("cfcd208495d565ef66e7dff9f98764da");
 		stUserService.insertuser(record);
 		return "success";
 	}

@@ -41,8 +41,7 @@ function initTable() {
 			},{
 				data : "PARM_KEY"
 			}, {
-				data : "PARM_VALUE",
-                className:"auto"
+				data : "PARM_VALUE"
 			}, {
 				data : "REMARKS"
 			}
