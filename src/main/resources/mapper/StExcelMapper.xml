@@ -285,6 +285,16 @@
     </trim>
     limit #{page.start},#{page.length}
   </select>
+
+  <select id="selectByYear_ydr" resultType="java.util.Map" parameterType="java.util.Map">
+    select year from t_income a group by year order by year desc
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="map.date !=null and map.date!=''">
+        year=#{map.date}
+      </if>
+    </trim>
+
+  </select>
   <insert id="insertSelective_batch_income_map" parameterType="java.util.List" >
     insert into t_income
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -1,5 +1,11 @@
 table = $("#table_role_list").DataTable();
 $(function () {
+    var yearTable = $('#yearTable').DataTable();
+    $('#yearTable tbody').on('click', 'tr', function (nTd,sData,oData,iRow,iCol) {
+        var date= this.innerText;
+        var index =  $("#itemdiv .active a").attr("index");
+        initTable(date,index);
+    });
     var today = new Date();
     var year = today.getFullYear();
     var moth = today.getMonth()+1;
@@ -22,6 +28,7 @@ $(function () {
     //$("#querydateDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv_export").datepicker('setDate',year+"-"+moth);
+    inityearTable();
     initTable($("#querydate").val(),'0');
     tzdiv_tableheight();
 });
@@ -34,18 +41,68 @@ function tzdiv_tableheight() {
 
 function queryDate(_this) {
     var date = $(_this).val();
-    var index =  $(".active a").attr("index");
+    var index =  $("itemdiv .active a").attr("index");
     initTable(date,index);
     $(".datepicker-dropdown").hide();
     tzdiv_tableheight();
 }
+//表格也导入表格初始化
+function inityearTable() {
+    $('#yearTable').dataTable({
+        dom:"<'row'<'search text-left'f>r>t<'row '<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
+        scrollY:true,
+       /* sScrollY:"400px",*/
+        processing : true,
+        serverSide : true,
+        bAutoWidth:true,
+        paging:false,
+        bSort : false,
+        searching : false,
+        pagingType : "full_numbers",
+        lengthChange : true,
+        deferRender: true,
+        bDestroy:true,
+        lengthMenu : [ 10, 25, 50 ],
+        ajax : {
+            url:ctx+"/excel/ydryear",
+            type : "POST",
+            error: AjaxError
+        },
+        select : {
+            style : 'single'
+        },
+        columns : [
+          /*  {data:null,width:"22px",sClass:"text-center",fnCreatedCell:function (nTd,sData,oData,iRow,iCol) {
+                    var startnum=this.api().page()*(this.api().page.info().length);
+                    $(nTd).html(iRow+1+startnum);
+                }
+            },*/
+            {
+                data : "year",
+                width : "18px",
+                "defaultContent": ""
+            }
+        ],
+        language : {
+            url:ctx+"/plugins/lang-zh_CN.json"
+        },initComplete:function () {
+            tableHeight();
+        },
+        "fnInitComplete": function (setings) {
+            this.fnAdjustColumnSizing(true);
+        }
+    });
+
+}
+
+
 //表格初始化
 function initTable(date,index) {
     var table = $('#itemTable');
     var oTable = table.dataTable({
         dom:"<'row'<'search text-left'f>r>t<'row pageRow'<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
         scrollY:true,
-        sScrollY:"400px",
+        /*sScrollY:"400px",*/
         processing : true,
         serverSide : true,
         bAutoWidth:true,
@@ -210,6 +267,23 @@ function btn_export_click() {
     $("h4").text("导出-收入-支出表");
     $('#fileModal_exprot').modal('show');
 
+}
+function clear_date_click() {
+    $.ajax({
+        url:ctx+ "/excel/cleardate",
+        type : "POST",
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType : "json",
+        success: function (data){
+            if(data.responseText=="success"){
+                window.parent.toastr[MES_SUCCESS]("清除成功！！");
+            }else {
+                window.parent.toastr[MES_ERROR]("清除失败！！");
+            }
+        }
+    });
 }
 function btn_export_confrim (){
 	var date = $("#KSRQ_exprot").val();

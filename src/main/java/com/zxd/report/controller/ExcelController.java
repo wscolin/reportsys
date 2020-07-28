@@ -298,14 +298,6 @@ public class ExcelController {
         }
         return null;
     }
-
-
-    /**
-     *
-     */
-
-
-
     /**
      * 根据模板导出
      * @param request
@@ -461,4 +453,38 @@ public class ExcelController {
         return result;
     }
 
+    @RequestMapping("/ydryear")
+    @ResponseBody
+    public String ydryear(Page page, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //String date = request.getParameter("date");
+        Map map =  new HashMap();
+        //map.put("date",date);
+        List<Map> record = new ArrayList<Map>();
+        int totalCount = 0;
+        String sql = "select year from t_income a group by year";
+        List<Map> list = stExcelMapper.selectBysql(sql);
+        if(null != list){
+            totalCount = list.size();
+        }
+        record = stExcelMapper.selectByYear_ydr(page,map);
+        String result = "{\"recordsTotal\":" + totalCount;
+        result += ",\"recordsFiltered\":" + totalCount;
+        result += ",\"data\":" + JSONArray.fromObject(record) + "}";
+
+        return result;
+    }
+
+
+    /**
+     * 清除导入数据
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/cleardate")
+    @ResponseBody
+    public String cleardate(HttpServletRequest request, HttpServletResponse response){
+        System.out.println("11111111");
+        return "success";
+    }
 }

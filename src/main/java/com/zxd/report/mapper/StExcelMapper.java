@@ -36,6 +36,14 @@ public interface StExcelMapper {
     List<Map> selectByList(@Param("page") Page page,@Param("map") Map map);
     int selectdisburseByList_count(@Param("map") Map map);
     List<Map> selectdisburseByList(@Param("page") Page page,@Param("map") Map map);
+
+    /**
+     * 已导入的年份列表
+     * @param page
+     * @param map
+     * @return
+     */
+    List<Map> selectByYear_ydr(@Param("page") Page page,@Param("map") Map map);
     /**
      * 执行sql
      */

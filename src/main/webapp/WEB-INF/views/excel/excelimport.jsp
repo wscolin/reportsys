@@ -42,20 +42,23 @@
 			<div class="portlet-title" >
 				<%--<form class="form-inline">--%>
 					<div class="form-group" style="float:left">
-						<label class="control-label col-md-1col-lg-1 col-sm-1 " for="querydate">查询日期</label>
-                        <div id="querydateDiv" class="col-md-2 col-lg-2 col-sm-2 input-group date dateDiv  pull-left paddingRight0">
-                            <input class="form-control borderRadiusRight0 borderRight0"  type="text" id="querydate" name="querydate" onchange="queryDate(this);">
-                            <span class="input-group-btn">
-								<button class="btn default date-set" type="button">
-									<i class="fa fa-calendar"></i>
-								</button>
-							</span>
-                        </div>
-						<div class="col-md-4 col-lg-4 col-sm-4">
+						<div class="col-md-8 col-lg-8 col-sm-8" style="display: none">
+							<label class="control-label col-md-1col-lg-1 col-sm-1 " for="querydate">查询日期</label>
+							<div id="querydateDiv" class="col-md-2 col-lg-2 col-sm-2 input-group date dateDiv  pull-left paddingRight0">
+								<input class="form-control borderRadiusRight0 borderRight0"  type="text" id="querydate" name="querydate" onchange="queryDate(this);">
+								<span class="input-group-btn">
+									<button class="btn default date-set" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+						<div class="col-md-12 col-lg-12col-sm-12">
 							<shiro:hasPermission name="st_user_import">
 								<%--<button class="btn btn-sm green-turquoise" id="btn_setresource" data-toggle="modal" onclick="btn_dwload_mb();"><i class="fa fa-download"></i>收入-支出表导入模板下载</button>--%>
 								<button class="btn btn-sm btn-default " id="btn_setresource" data-toggle="modal" onclick="btn_import_click();"><i class="fa fa-upload"></i> 导入</button>
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
+								<%--<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="clear_date_click();"><i class="fa fa-download"></i> 清除数据</button>--%>
 							</shiro:hasPermission>
 						</div>
 					</div>
@@ -63,34 +66,52 @@
 				<%--</form>--%>
 			</div>
 			<div class="portlet-body flip-scroll">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a href="#" data-toggle="tab" index="0">收入表</a></li>
-					<li role="presentation"><a href="#" data-toggle="tab" index="1">支出表</a></li>
-				</ul>
-				<table class="table table-striped table-bordered table-hover" id="itemTable">
-					<thead>
-						<tr>
-							<th>序号</th>
-							<th>年份</th>
-							<th>科目编码</th>
-							<th>科目名称</th>
-							<th>金额</th>
-							<th>市值</th>
-							<th>高薪区</th>
-							<th>临川区</th>
-							<th>东乡区</th>
-							<th>南城县</th>
-							<th>南丰县</th>
-							<th>黎川县</th>
-							<th>崇仁县</th>
-							<th>宜黄县</th>
-							<th>乐安县</th>
-							<th>金溪县</th>
-							<th>资溪县</th>
-							<th>广昌县</th>
-						</tr>
-					</thead>
-				</table>
+				<div class="row">
+					<div class="col-md-2 col-lg-2 col-sm-2" id="yeardiv">
+						<ul class="nav nav-tabs">
+							<li  class="active"><a href="javascript:void(0)" index="0">已导入</a></li>
+						</ul>
+						<table class="table table-striped table-bordered table-hover" id="yearTable">
+							<thead>
+							<tr>
+								<%--<th>序号</th>--%>
+								<th>年份</th>
+							</tr>
+							</thead>
+						</table>
+				    </div>
+					<div class="col-md-10 col-lg-10 col-sm-10" id="itemdiv">
+						<ul class="nav nav-tabs">
+							<li role="presentation" class="active"><a href="#" data-toggle="tab" index="0">收入表</a></li>
+							<li role="presentation"><a href="#" data-toggle="tab" index="1">支出表</a></li>
+						</ul>
+						<table class="table table-striped table-bordered table-hover" id="itemTable">
+							<thead>
+							<tr>
+								<th>序号</th>
+								<th>年份</th>
+								<th>科目编码</th>
+								<th>科目名称</th>
+								<th>金额</th>
+								<th>市值</th>
+								<th>高薪区</th>
+								<th>临川区</th>
+								<th>东乡区</th>
+								<th>南城县</th>
+								<th>南丰县</th>
+								<th>黎川县</th>
+								<th>崇仁县</th>
+								<th>宜黄县</th>
+								<th>乐安县</th>
+								<th>金溪县</th>
+								<th>资溪县</th>
+								<th>广昌县</th>
+							</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+
 			</div>
 		</div>
    	</div> 
