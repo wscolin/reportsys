@@ -33,8 +33,9 @@
 		height: auto;
 	}
 	.pageRow{
-		width: 75%;
+		width: 80%;
 	}
+	.datess{text-align: center;cursor:pointer}
 </style>
 <body class="page-content">
 	<div class="my-col-md">
@@ -58,7 +59,9 @@
 								<%--<button class="btn btn-sm green-turquoise" id="btn_setresource" data-toggle="modal" onclick="btn_dwload_mb();"><i class="fa fa-download"></i>收入-支出表导入模板下载</button>--%>
 								<button class="btn btn-sm btn-default " id="btn_setresource" data-toggle="modal" onclick="btn_import_click();"><i class="fa fa-upload"></i> 导入</button>
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
-								<%--<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="clear_date_click();"><i class="fa fa-download"></i> 清除数据</button>--%>
+							</shiro:hasPermission>
+							<shiro:hasPermission name="cleardata">
+								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="clear_date_click();"><i class="fa fa-trash-o"></i> 清除数据</button>
 							</shiro:hasPermission>
 						</div>
 					</div>
@@ -74,7 +77,7 @@
 						<table class="table table-striped table-bordered table-hover" id="yearTable">
 							<thead>
 							<tr>
-								<%--<th>序号</th>--%>
+								<th>序号</th>
 								<th>年份</th>
 							</tr>
 							</thead>

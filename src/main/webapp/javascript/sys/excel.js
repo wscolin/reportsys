@@ -2,7 +2,7 @@ table = $("#table_role_list").DataTable();
 $(function () {
     var yearTable = $('#yearTable').DataTable();
     $('#yearTable tbody').on('click', 'tr', function (nTd,sData,oData,iRow,iCol) {
-        var date= this.innerText;
+        var date= $(this).find("td").eq(1).html()
         var index =  $("#itemdiv .active a").attr("index");
         initTable(date,index);
     });
@@ -30,7 +30,7 @@ $(function () {
     $("#kssjDiv_export").datepicker('setDate',year+"-"+moth);
     inityearTable();
     initTable($("#querydate").val(),'0');
-    tzdiv_tableheight();
+    //tzdiv_tableheight();
 });
 
 function tzdiv_tableheight() {
@@ -49,9 +49,9 @@ function queryDate(_this) {
 //表格也导入表格初始化
 function inityearTable() {
     $('#yearTable').dataTable({
-        dom:"<'row'<'search text-left'f>r>t<'row '<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
-        scrollY:true,
-       /* sScrollY:"400px",*/
+        dom:"<'row'<'search text-left'f>r>t",
+        /*scrollY:true,*/
+        sScrollY:"400px",
         processing : true,
         serverSide : true,
         bAutoWidth:true,
@@ -72,15 +72,17 @@ function inityearTable() {
             style : 'single'
         },
         columns : [
-          /*  {data:null,width:"22px",sClass:"text-center",fnCreatedCell:function (nTd,sData,oData,iRow,iCol) {
+            {data:null,width:"22px",sClass:"text-center",fnCreatedCell:function (nTd,sData,oData,iRow,iCol) {
                     var startnum=this.api().page()*(this.api().page.info().length);
                     $(nTd).html(iRow+1+startnum);
                 }
-            },*/
+            },
             {
                 data : "year",
-                width : "18px",
-                "defaultContent": ""
+                width : "10px",
+                "defaultContent": "",
+                className:"datess",
+                visible:true
             }
         ],
         language : {
@@ -89,7 +91,11 @@ function inityearTable() {
             tableHeight();
         },
         "fnInitComplete": function (setings) {
+            $(".dataTables_scrollHead").eq(0).find("thead th:first").removeClass("sorting_asc")
             this.fnAdjustColumnSizing(true);
+        },
+        "fnDrawCallback": function( oSettings ) {
+
         }
     });
 
@@ -102,7 +108,7 @@ function initTable(date,index) {
     var oTable = table.dataTable({
         dom:"<'row'<'search text-left'f>r>t<'row pageRow'<'col-sm-3 col-md-3 col-lg-3 data_len'l><'col-sm-3 col-md-3 col-lg-3'i><'col-sm-6 col-md-6 col-lg-6'p>>",
         scrollY:true,
-        /*sScrollY:"400px",*/
+        sScrollY:"400px",
         processing : true,
         serverSide : true,
         bAutoWidth:true,
@@ -112,7 +118,7 @@ function initTable(date,index) {
         lengthChange : true,
         deferRender: true,
         bDestroy:true,
-        lengthMenu : [ 10, 25, 50 ],
+        lengthMenu : [ 15, 30, 50 ],
         ajax : {
             url:ctx+"/excel/list?date="+date+"&index="+index,
             type : "POST",
@@ -142,7 +148,7 @@ function initTable(date,index) {
                 "defaultContent": ""
             },{
                 data : "kmmc",
-                width : "260px",
+                width : "100px",
                 "defaultContent": ""
             }, {
                 data : "amt",
@@ -269,21 +275,38 @@ function btn_export_click() {
 
 }
 function clear_date_click() {
-    $.ajax({
-        url:ctx+ "/excel/cleardate",
-        type : "POST",
-        cache: false,
-        contentType: false,
-        processData: false,
-        dataType : "json",
-        success: function (data){
-            if(data.responseText=="success"){
-                window.parent.toastr[MES_SUCCESS]("清除成功！！");
-            }else {
-                window.parent.toastr[MES_ERROR]("清除失败！！");
+        bootbox.dialog({
+            message: "确定要清除所有导入数据吗？",
+            title: "提示",
+            buttons: {
+                cancel: {
+                    label: "取消",
+                    className: "btn btn-default"
+                },
+                ok: {
+                    label: "确认",
+                    className: "btn btn-primary",
+                    callback: function() {
+                        $.ajax({
+                            url:ctx+ "/excel/cleardata",
+                            type : "POST",
+                            dataType : "json",
+                            success: function (data){
+                                if(data.result=="success"){
+                                    window.parent.toastr[MES_SUCCESS]("清除成功！！");
+                                    inityearTable();
+                                    initTable($("#querydate").val(),'0');
+                                }else {
+                                    window.parent.toastr[MES_ERROR]("清除失败！！");
+                                }
+                            }
+                        });
+                    }
+                }
             }
-        }
-    });
+        });
+
+
 }
 function btn_export_confrim (){
 	var date = $("#KSRQ_exprot").val();
@@ -345,6 +368,7 @@ function btn_savefile_click(_this) {
 				}
 				if(data.responseText=="success"){
 					window.parent.toastr[MES_SUCCESS]("导入成功！！");
+                    inityearTable();
 				}else if(data.responseText=="error") {
 					window.parent.toastr[MES_WARN]("模板有误请重新选择！！");
 				}

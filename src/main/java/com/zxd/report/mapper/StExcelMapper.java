@@ -48,5 +48,9 @@ public interface StExcelMapper {
      * 执行sql
      */
     void excutesql(@Param("sql") String sql);
+    /**
+     * 清除导入数据
+     */
+    void cleardata();
 
 }

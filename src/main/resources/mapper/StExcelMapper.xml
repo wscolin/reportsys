@@ -444,4 +444,7 @@
   <select id="excutesql" parameterType="java.lang.String">
         ${sql}
   </select>
+  <select id="cleardata" parameterType="java.lang.String" statementType="CALLABLE">
+        {call cleardata()}
+  </select>
 </mapper>

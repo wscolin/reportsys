@@ -6,6 +6,7 @@ import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import com.google.gson.Gson;
 import com.zxd.commonmodel.Page;
 import com.zxd.log.SystemControllerLog;
 import com.zxd.report.mapper.StExcelMapper;
@@ -481,10 +482,20 @@ public class ExcelController {
      * @param response
      * @return
      */
-    @RequestMapping("/cleardate")
+    @RequestMapping("/cleardata")
     @ResponseBody
-    public String cleardate(HttpServletRequest request, HttpServletResponse response){
-        System.out.println("11111111");
-        return "success";
+    public String cleardata(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        Map resultMap = new HashMap();
+        Gson gson = new Gson();
+        String jsonresult = null;
+        try {
+            stExcelMapper.cleardata();
+            resultMap.put("result","success");
+        } catch (Exception e) {
+            resultMap.put("result","error");
+            e.printStackTrace();
+        }
+        jsonresult = gson.toJson(resultMap);
+        return jsonresult;
     }
 }
