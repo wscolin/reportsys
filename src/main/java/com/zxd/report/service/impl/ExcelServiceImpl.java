@@ -1,10 +1,13 @@
 package com.zxd.report.service.impl;
 
+import com.zxd.report.controller.ExcelController;
 import com.zxd.report.mapper.StExcelMapper;
 import com.zxd.report.model.Min_11;
 import com.zxd.report.service.ExcelService;
 import com.zxd.report.service.StParamsService;
 import com.zxd.util.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ import java.util.Map;
  **/
 @Service
 public class ExcelServiceImpl implements ExcelService {
+    private final static Logger logger= LoggerFactory.getLogger(ExcelServiceImpl.class);
+
     @Autowired
     private StExcelMapper stExcelMapper;
     @Autowired
@@ -175,7 +180,6 @@ public class ExcelServiceImpl implements ExcelService {
                 replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
                 replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month);
         List<Map> list = stExcelMapper.selectBysql(sql);
-
         return list;
     }
 
