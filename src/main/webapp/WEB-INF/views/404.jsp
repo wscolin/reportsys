@@ -7,7 +7,18 @@
 	<link href="${ctx}/plugins/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
    	<link href="${ctx}/plugins/assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
     <link href="${ctx}/plugins/css/error.min.css" rel="stylesheet" type="text/css" />
-<title>404</title>
+    <title>404</title>
+    <script type="text/javascript">
+        df={
+            load:function () {
+                if(window!=top){
+                    top.location.href = "${ctx}";
+                }else {
+                    window.location.href = "${ctx}";
+                }
+            }
+        }
+    </script>
 </head>
     <body class=" page-404-full-page">
         <div class="row">
@@ -18,7 +29,7 @@
                     <p> 
                         <br/> </p>
                     <p>
-                        <a href="${ctx}/" class="btn red btn-outline"> 返回首页  </a>
+                        <a href="javascript:void(0);" class="btn red btn-outline" onclick="df.load();"> 返回首页  </a>
                         <br> </p>
                 </div>
             </div>

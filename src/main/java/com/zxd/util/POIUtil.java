@@ -28,7 +28,7 @@ public class POIUtil {
      * @param file
      * @throws IOException
      */
-    public static List<Map> readExcel(MultipartFile file,String sheetName) throws IOException{
+    public static List<Map> readExcel(MultipartFile file,String sheetName,String[] keys) throws IOException{
         //检查文件
         checkFile(file);
         //获得Workbook工作薄对象
@@ -43,11 +43,6 @@ public class POIUtil {
                     continue;
                 }
                 if(sheetName.equals(sheet.getSheetName())){
-                    Field[] fields =ImIcome.class.getDeclaredFields();
-                    List<String> properties = new ArrayList<String>();
-                    for (Field field:fields){
-                        properties.add(field.getName());
-                    }
                     //获得当前sheet的开始行
                     int firstRowNum  = sheet.getFirstRowNum();
                     //获得当前sheet的结束行
@@ -67,7 +62,7 @@ public class POIUtil {
                         //循环当前行
                         Map map = new HashMap();
 
-                        String[] keys = {"kmbm","kmmc","amt","sz","gxq","lcq","dxq","ncx","nfx","lcx","crx","yhx","lax","jxx","zxx","gcx"};
+
                         for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
                             if(cellNum>=16){
                                 break;

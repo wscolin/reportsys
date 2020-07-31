@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @program: gas_bank
+ *
  * @description:
  * @author:
  * @create: 2020-07-02 15:35
@@ -346,6 +346,20 @@ public class ExcelServiceImpl implements ExcelService {
         String sql = stParamsService.getParamConf("10zhichu").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
                 replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
                 replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month).replaceAll("\\$\\{year\\}",thisyear);
+        List<Map> list = stExcelMapper.selectBysql(sql);
+        return list;
+    }
+
+    @Override
+    public List<Map> exportExcel_sheng12(String year) {
+        Date date = DateUtil.getStr2date(year,"yyyy-MM");
+        String this_year_this_month = DateUtil.getDate2str(date,"yyyy-MM");
+        String this_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(date,-1,"MONTH"),"yyyy-MM");
+        String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
+        String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
+        String sql = stParamsService.getParamConf("12sheng").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
+                replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
+                replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month);
         List<Map> list = stExcelMapper.selectBysql(sql);
         return list;
     }

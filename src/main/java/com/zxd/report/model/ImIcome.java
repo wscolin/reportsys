@@ -3,7 +3,7 @@ package com.zxd.report.model;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
 /**
- * @program: gas_bank
+ *
  * @description:
  * @author:
  * @create: 2020-06-24 16:06

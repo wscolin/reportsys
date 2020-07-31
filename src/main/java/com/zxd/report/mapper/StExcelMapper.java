@@ -18,7 +18,21 @@ public interface StExcelMapper {
     int insertSelective_batch_income(List<ImIcome> list);
     int insertSelective_batch_disburse(List<ImIcome> list);
     int insertSelective_batch_income_map(List<Map> list);
+
+    /**
+     * 批量插入省级基础数据
+     * @param list
+     * @return
+     */
+    int insertSelective_batch_incomeBypro_map(List<Map> list);
     int insertSelective_batch_incomearea_map(List<Map<String,String>> list);
+
+    /**
+     * 根据地区批量插入省级基础数据
+     * @param list
+     * @return
+     */
+    int insertSelective_batch_incomeByproarea_map(List<Map<String,String>> list);
     int insertSelective_batch_disbursearea_map(List<Map<String,String>> list);
     int insertSelective_batch_disburse_map(List<Map> list);
     //删除收入数据

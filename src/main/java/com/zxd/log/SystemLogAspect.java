@@ -61,8 +61,8 @@ public class SystemLogAspect {
     public void doBefore(JoinPoint joinPoint){
         long beginTime = System.currentTimeMillis();
         startTime.set(beginTime);
-        System.out.println("方法名:"+joinPoint.getSignature());
-        System.out.println("执行开始时间："+beginTime);
+       // System.out.println("方法名:"+joinPoint.getSignature());
+       // System.out.println("执行开始时间："+beginTime);
     }
 
     /**
@@ -94,7 +94,7 @@ public class SystemLogAspect {
             e.printStackTrace();
         }
 
-        System.out.println("执行结束时间："+System.currentTimeMillis());
+       // System.out.println("执行结束时间："+System.currentTimeMillis());
         StLogWithBLOBs stLogWithBLOBs = new StLogWithBLOBs();
         stLogWithBLOBs.setUSERID(USERID);
         stLogWithBLOBs.setUSERNAME(userVO.getOPERATORNAME());

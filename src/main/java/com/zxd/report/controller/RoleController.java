@@ -36,7 +36,7 @@ public class RoleController {
 
 	@RequestMapping(value = "/index",method = RequestMethod.GET)
 	@RequiresPermissions("st_role_index")
-	@SystemControllerLog(description = "角色管理页面",params = 0)
+	//@SystemControllerLog(description = "角色管理页面",params = 0)
 	public String index(ModelMap map) {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -58,7 +58,7 @@ public class RoleController {
 	//列表
 	@RequestMapping(value = "/list", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	@SystemControllerLog(description = "角色管理列表",params = 0)
+	//@SystemControllerLog(description = "角色管理列表",params = 0)
 	public String dataList(Page page, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -76,7 +76,7 @@ public class RoleController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_role_add")
-	@SystemControllerLog(description = "角色管理新增",params = 0)
+	//@SystemControllerLog(description = "角色管理新增",params = 0)
 	public String insert(StRole record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();		
@@ -96,7 +96,7 @@ public class RoleController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_role_edit")
-	@SystemControllerLog(description = "角色管理修改",params = 0)
+	//@SystemControllerLog(description = "角色管理修改",params = 0)
 	public String update(StRole record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();	
@@ -114,7 +114,7 @@ public class RoleController {
 	@RequestMapping(value = "/set", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_role_set")
-	@SystemControllerLog(description = "角色管理设置状态",params = 0)
+	//@SystemControllerLog(description = "角色管理设置状态",params = 0)
 	public String updateByState(String ROLEID) throws Exception {
 		roleService.updateByEnabled(ROLEID);
 		return "success";
@@ -122,7 +122,7 @@ public class RoleController {
 	//选中节点
 	@RequestMapping(value = "/getresource", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "角色管理查询角色资源数据",params = 0)
+	//@SystemControllerLog(description = "角色管理查询角色资源数据",params = 0)
 	public List<Map> getresource(String roleid) throws Exception {
 		return resourceservice.selectbyappid(roleid);
 	}
@@ -130,7 +130,7 @@ public class RoleController {
 	@RequestMapping(value = "/saveresource", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_role_saveresource")
-	@SystemControllerLog(description = "角色管理页面保存角色资源数据",params = 0)
+	//@SystemControllerLog(description = "角色管理页面保存角色资源数据",params = 0)
 	public String saveresource(String StRoleResources,String roleid) {
 		JSONArray array =JSONArray.fromObject(StRoleResources);
 		Collection<StRoleResource> list = JSONArray.toCollection(array,StRoleResource.class);

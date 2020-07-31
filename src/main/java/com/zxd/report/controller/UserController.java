@@ -52,7 +52,7 @@ public class UserController {
 	private DictService dictService;
 	@RequestMapping(value = "/index",method = RequestMethod.GET)
 	@RequiresPermissions("st_user_index")
-	@SystemControllerLog(description = "用户管理首页",params = 0)
+	//@SystemControllerLog(description = "用户管理首页",params = 0)
 	public String index(ModelMap map) {
 		map.addAttribute("ZW", JSONArray.fromObject(dictService.getDictionary("ZW")));
 		return "/sys/user";
@@ -61,7 +61,7 @@ public class UserController {
 	//列表
 	@RequestMapping(value = "/list", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	@SystemControllerLog(description = "用户管理列表",params = 0)
+	//@SystemControllerLog(description = "用户管理列表",params = 0)
 	public String dataList(Page page, HttpServletRequest request, HttpServletResponse response, String deptid) throws Exception {
 		List<Map> record = new ArrayList<Map>();
 		if(deptid==null){
@@ -86,7 +86,7 @@ public class UserController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_user_add")
-	@SystemControllerLog(description = "用户管理新增",params = 0)
+	//@SystemControllerLog(description = "用户管理新增",params = 0)
 	public String insert(StUser record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -108,7 +108,7 @@ public class UserController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_user_edit")
-	@SystemControllerLog(description = "用户管理修改",params = 0)
+	//@SystemControllerLog(description = "用户管理修改",params = 0)
 	public String update(StUser record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -122,7 +122,7 @@ public class UserController {
 	@RequestMapping(value = "/set", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_user_set")
-	@SystemControllerLog(description = "用户管理用户状态",params = 0)
+	//@SystemControllerLog(description = "用户管理用户状态",params = 0)
 	public String updateByState(Long operatorid,String status) throws Exception {
 		StUser stUser = new StUser();stUser.setOPERATORID(operatorid);
 		stUser.setSTATUS(status.equals("0")?"1":"0");
@@ -132,7 +132,7 @@ public class UserController {
 	//获取用户权限
 	@RequestMapping(value = "/getuserrole", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "用户管理用户权限",params = 0)
+	//@SystemControllerLog(description = "用户管理用户权限",params = 0)
 	public List<Map> getuserrole(String operatorid) throws Exception {
 		String bm=operatorid;
 		Subject subject = SecurityUtils.getSubject();
@@ -146,7 +146,7 @@ public class UserController {
 	@RequestMapping(value = "/saveuserrole", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_user_setrole")
-	@SystemControllerLog(description = "用户管理保存权限",params = 0)
+	//@SystemControllerLog(description = "用户管理保存权限",params = 0)
 	public String saveuserrole(String operatorid,String Roles,String deptusers) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -167,7 +167,7 @@ public class UserController {
 	//用户唯一
 	@RequestMapping(value = "/useridisone", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "用户管理用户唯一",params = 0)
+	//@SystemControllerLog(description = "用户管理用户唯一",params = 0)
 	public String useridisone(String USERID,String IDENTITY) throws Exception {
 		int jhycz = stUserService.useridisone(USERID);
 		int sfzycz = stUserService.useridisone(IDENTITY);
@@ -183,7 +183,7 @@ public class UserController {
 	@RequestMapping("/importfile")
 	@ResponseBody
 	@RequiresPermissions("st_user_import")
-	@SystemControllerLog(description = "用户管理导入用户",params = 0)
+	//@SystemControllerLog(description = "用户管理导入用户",params = 0)
 	public Object importfile(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file){
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -208,7 +208,7 @@ public class UserController {
 	@RequestMapping("/exportExcel")
 	@ResponseBody
 	@RequiresPermissions("st_user_import")
-	@SystemControllerLog(description = "Excel导出",params = 0)
+	//@SystemControllerLog(description = "Excel导出",params = 0)
 	public Object exportExcel(HttpServletRequest request, HttpServletResponse response){
 		StudentEntity studentEntity = new StudentEntity() ;
 		studentEntity.setId("1");
@@ -248,7 +248,7 @@ public class UserController {
 
 
 	@RequestMapping(value = "/dwloadmb", method = RequestMethod.GET)
-	@SystemControllerLog(description = "用户信息导入模板下载",params = 0)
+	//@SystemControllerLog(description = "用户信息导入模板下载",params = 0)
 	public ResponseEntity<byte[]> dwloadmb(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 下载文件名
 		String fileName = "模板.xlsx";

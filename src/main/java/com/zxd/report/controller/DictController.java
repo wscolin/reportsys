@@ -28,7 +28,7 @@ public class DictController {
 
 	@RequestMapping(value = "/index",method = RequestMethod.GET)
 	@RequiresPermissions("st_dict_index")
-	@SystemControllerLog(description = "字典管理页面",params = 0)
+	//@SystemControllerLog(description = "字典管理页面",params = 0)
 	public String index() {
 		return "/sys/dict";
 	}
@@ -36,7 +36,7 @@ public class DictController {
 	//列表
 	@RequestMapping(value = "/list", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	@SystemControllerLog(description = "字典管理数据列表",params = 0)
+	//@SystemControllerLog(description = "字典管理数据列表",params = 0)
 	public String dataList(Page page, HttpServletRequest request, HttpServletResponse response, String pId, String FLAG) throws Exception {
 		Map map = new HashMap<>();
 		map.put("FLAG",FLAG==null?"0":FLAG);
@@ -52,7 +52,7 @@ public class DictController {
 
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "字典管理部门树",params = 0)
+	//@SystemControllerLog(description = "字典管理部门树",params = 0)
 	public List<Map> tree() throws Exception {
 		return itemService.selectDepttree();
 	}
@@ -60,7 +60,7 @@ public class DictController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_dict_add")
-	@SystemControllerLog(description = "字典管理新增",params = 0)
+	//@SystemControllerLog(description = "字典管理新增",params = 0)
 	public String insert(StDictionary record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();

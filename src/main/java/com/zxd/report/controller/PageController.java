@@ -31,7 +31,7 @@ public class PageController implements ErrorController{
         return "welcome";
     }
     @RequestMapping("/home")
-    @SystemControllerLog(description = "首页",params = 0)
+    //@SystemControllerLog(description = "首页",params = 0)
     public String gohome(Model model) {
         Subject subject = SecurityUtils.getSubject();
         UserVO userVO = (UserVO) subject.getPrincipal();

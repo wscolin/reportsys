@@ -1,8 +1,6 @@
 package com.zxd.commonmodel;
 
-/**
- * Created by Think on 2016/7/29.
- */
+
 public class MenuNode {
 
     private String ID;

@@ -28,14 +28,14 @@ public class DeptController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     @RequiresPermissions("st_dept_index")
-    @SystemControllerLog(description = "部门管理页面",params = 0)
+    //@SystemControllerLog(description = "部门管理页面",params = 0)
     public String index(ModelMap map) {
         return "/sys/dept";
     }
 
     @RequestMapping(value = "/tree", method = RequestMethod.POST)
     @ResponseBody
-    @SystemControllerLog(description = "部门管理树",params = 0)
+    //@SystemControllerLog(description = "部门管理树",params = 0)
     public List<Map> tree(String id) throws Exception {
         Subject subject = SecurityUtils.getSubject();
         UserVO userVO = (UserVO) subject.getPrincipal();
@@ -44,7 +44,7 @@ public class DeptController {
 
     @RequestMapping(value = "/getdeptbyid", method = RequestMethod.POST)
     @ResponseBody
-    @SystemControllerLog(description = "部门管理查询部门信息 返回map包含父部门名称 PARENTNAME",params = 0)
+    //@SystemControllerLog(description = "部门管理查询部门信息 返回map包含父部门名称 PARENTNAME",params = 0)
     public Map getdeptbyid(String id) throws Exception {
         return itemService.getdeptbyid(id);
     }

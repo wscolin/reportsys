@@ -92,7 +92,7 @@ public class ShiroServiceImpl implements ShiroService {
 
         MenuNode tmpNode = new MenuNode();
         tmpNode.setID("0");
-        tmpNode.setNAME("gas_bank");
+        tmpNode.setNAME("reportsys");
         tmpNode.setPARENTID("");
         nodeList.put("0",tmpNode);
         Set entrySet = nodeList.entrySet();
@@ -147,7 +147,7 @@ public class ShiroServiceImpl implements ShiroService {
 
         PowerNode tmpNode = new PowerNode();
         tmpNode.setID("0");
-        tmpNode.setNAME("gas_bank");
+        tmpNode.setNAME("reportsys");
         tmpNode.setPARENTID("");
         nodeList.put(tmpNode.getID(),tmpNode);
 

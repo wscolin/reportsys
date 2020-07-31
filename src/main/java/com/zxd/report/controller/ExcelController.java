@@ -18,9 +18,12 @@ import com.zxd.report.service.StUserService;
 import com.zxd.util.POIUtil;
 import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpResponse;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
@@ -40,15 +43,11 @@ import java.io.*;
 
 import java.util.*;
 
-/**
- * @program: gas_bank
- * @description:
- * @author:
- * @create: 2020-06-21 17:46
- **/
 @Controller
 @RequestMapping(value = "/excel")
 public class ExcelController {
+    private final static Logger logger= LoggerFactory.getLogger(ExcelController.class);
+
     @Autowired
     private ExcelService excelService;
     @Autowired
@@ -83,8 +82,9 @@ public class ExcelController {
     @RequiresPermissions("st_user_import")
    // @SystemControllerLog(description = "excel导入",params = 0)
     public Object importfileBypoi(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
-        List<Map>  income_list = POIUtil.readExcel(file,"收入");
-        List<Map>  zc_list = POIUtil.readExcel(file,"支出");
+        String[] keys = {"kmbm","kmmc","amt","sz","gxq","lcq","dxq","ncx","nfx","lcx","crx","yhx","lax","jxx","zxx","gcx"};
+        List<Map>  income_list = POIUtil.readExcel(file,"收入",keys);
+        List<Map>  zc_list = POIUtil.readExcel(file,"支出",keys);
         String date = request.getParameter("date");
         stExcelMapper.deleteincome(date);
         stExcelMapper.deletedisburse(date);
@@ -350,6 +350,11 @@ public class ExcelController {
              */
             List<Map> min_11List  = excelService.exportExcel_Min11(date);
             /**
+             * 12省
+             */
+
+            List<Map> sheng_12List  = excelService.exportExcel_sheng12(date);
+            /**
              * 13通报
              */
             List<Map> tongBao_13List  = excelService.exportExcel_Tb13(date);
@@ -365,6 +370,7 @@ public class ExcelController {
             map.put("list_7shuibi",shuibi07_list);
             map.put("list_10zhichu",zhichu10_list);
             map.put("list_11min",min_11List);
+            map.put("list_12sheng",sheng_12List);
             map.put("list_13tongbao",tongBao_13List);
             map.put("year",year);
             map.put("month",month);
@@ -401,7 +407,7 @@ public class ExcelController {
         // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
         String templatepath = System.getProperty("user.dir")+File.separator+"templateExport"+File.separator+"导出_模板.xlsx";
         templateExportParams.setTemplateUrl(templatepath);
-        String[] sheetNameArray = {"01总","02级","03部","04基金分级收支","05税","06财","07税比","10支出","11民生","13通报"};
+        String[] sheetNameArray = {"01总","02级","03部","04基金分级收支","05税","06财","07税比","10支出","11民生","12省","13通报"};
         templateExportParams.setSheetName(sheetNameArray);
         Workbook workbook = ExcelExportUtil.exportExcel(templateExportParams,map);
         //System.out.println("path:======="+path+"/excelExport/"+fileName+".xlsx");
@@ -498,4 +504,44 @@ public class ExcelController {
         jsonresult = gson.toJson(resultMap);
         return jsonresult;
     }
+    @RequestMapping("/import_pro")
+    public String import_pro(){
+        return "excel/excel_pro";
+    }
+
+    /**
+     * 导入省级数据excel
+     * @param
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/import_prodataBypoi")
+    public String import_prodataBypoi(HttpServletRequest request, HttpResponse response ,@RequestParam(value = "file", required = false) MultipartFile file)throws Exception{
+        String[] keys = {"kmbm","kmmc","amt","sbj","ncs","jdzs","pxs","jjs","xys","yts","gzs","ycs","srs","jas","wzs"};
+        List<Map>  income_list = POIUtil.readExcel(file,"省级",keys);
+        String date = request.getParameter("date");
+        try {
+            String type = "";
+            for(Map map:income_list){
+                map.put("year",date);
+                map.put("type",type);
+            }
+            stExcelMapper.insertSelective_batch_incomeBypro_map(income_list);
+            //插入按地区收入表
+            List<Map> list_area = stExcelMapper.selectBysql("select area_code,area_name,simple_name from t_area where level='1'");
+            List<Map<String,String>> list_incode_area = new ArrayList<>();
+            for(Map area:list_area) {
+                getBasedateByArea(income_list, list_incode_area, area);
+            }
+            //新增省级地区基本收入数据
+            stExcelMapper.insertSelective_batch_incomeByproarea_map(list_incode_area);
+            return "success";
+        }catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+
+    }
+
 }

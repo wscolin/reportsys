@@ -31,7 +31,7 @@ public class IpconfigController {
 
 	@RequestMapping(value = "/index",method = RequestMethod.GET)
 	@RequiresPermissions("st_ipconfig_index")
-	@SystemControllerLog(description = "IP管理页面",params = 0)
+	//@SystemControllerLog(description = "IP管理页面",params = 0)
 	public String index() {
 		return "/sys/ipconfig";
 	}	
@@ -39,7 +39,7 @@ public class IpconfigController {
 	//列表
 	@RequestMapping(value = "/list", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	@SystemControllerLog(description = "IP管理列表数据",params = 0)
+	//@SystemControllerLog(description = "IP管理列表数据",params = 0)
 	public String dataList(Page page, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		List<StIpConfing> record = new ArrayList<StIpConfing>();
@@ -57,7 +57,7 @@ public class IpconfigController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_ipconfig_add")
-	@SystemControllerLog(description = "IP管理新增",params = 0)
+	//@SystemControllerLog(description = "IP管理新增",params = 0)
 	public String insert(StIpConfing record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -77,7 +77,7 @@ public class IpconfigController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_ipconfig_edit")
-	@SystemControllerLog(description = "IP管理修改",params = 0)
+	//@SystemControllerLog(description = "IP管理修改",params = 0)
 	public String update(StIpConfing record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();	
@@ -95,7 +95,7 @@ public class IpconfigController {
 	@RequestMapping(value = "/set", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_ipconfig_set")
-	@SystemControllerLog(description = "IP管理状态设置",params = 0)
+	//@SystemControllerLog(description = "IP管理状态设置",params = 0)
 	public String updateByState(String ID) throws Exception {
 		itemService.updateByEnabled(ID);
 		return "success";

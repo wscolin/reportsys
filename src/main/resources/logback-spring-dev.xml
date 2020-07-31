@@ -103,6 +103,7 @@
     </root>-->
     <springProfile name="dev">
         <logger name="com.zxd.report.mapper" level="debug"/>
+        <logger name="com.zxd.log" level="info"/>
     </springProfile>
     <root level="info">
         <appender-ref ref="CONSOLE" />

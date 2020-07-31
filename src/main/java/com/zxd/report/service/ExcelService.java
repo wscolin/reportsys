@@ -66,5 +66,8 @@ public interface ExcelService {
      * @return
      */
     List<Map>   exportExcel_10zhichu(String year);
-
+    /**
+     * 查询12省数据
+     */
+    List<Map>   exportExcel_sheng12(String year);
 }

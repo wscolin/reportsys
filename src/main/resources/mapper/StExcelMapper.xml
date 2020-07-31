@@ -296,26 +296,57 @@
 
   </select>
   <insert id="insertSelective_batch_income_map" parameterType="java.util.List" >
-    insert into t_income
+  insert into t_income
+  <trim prefix="(" suffix=")" suffixOverrides="," >
+    KMBM,
+    KMMC,
+    AMT,
+    SZ,
+    GXQ,
+    LCQ,
+    DXQ,
+    NCX,
+    NFX,
+    LCX,
+    CRX,
+    YHX,
+    LAX,
+    JXX,
+    ZXX,
+    GCX,
+    TYPE,
+    YEAR,
+  </trim>
+  VALUES
+  <foreach collection="list" item="income" index="index"  separator=",">
+    (
+    #{income.kmbm},
+    #{income.kmmc},
+    #{income.amt},
+    #{income.sz},
+    #{income.gxq},
+    #{income.lcq},
+    #{income.dxq},
+    #{income.ncx},
+    #{income.nfx},
+    #{income.lcx},
+    #{income.crx},
+    #{income.yhx},
+    #{income.lax},
+    #{income.jxx},
+    #{income.zxx},
+    #{income.gcx},
+    #{income.type},
+    #{income.year}
+    )
+  </foreach>
+
+
+</insert>
+  <insert id="insertSelective_batch_incomeBypro_map" parameterType="java.util.List" >
+    insert into t_income_pro
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      KMBM,
-      KMMC,
-      AMT,
-      SZ,
-      GXQ,
-      LCQ,
-      DXQ,
-      NCX,
-      NFX,
-      LCX,
-      CRX,
-      YHX,
-      LAX,
-      JXX,
-      ZXX,
-      GCX,
-      TYPE,
-      YEAR,
+      kmbm,kmmc,amt,sbj,ncs,jdzs,pxs,jjs,xys,yts,gzs,ycs,srs,jas,wzs,type,year,
     </trim>
     VALUES
     <foreach collection="list" item="income" index="index"  separator=",">
@@ -323,25 +354,22 @@
       #{income.kmbm},
       #{income.kmmc},
       #{income.amt},
-      #{income.sz},
-      #{income.gxq},
-      #{income.lcq},
-      #{income.dxq},
-      #{income.ncx},
-      #{income.nfx},
-      #{income.lcx},
-      #{income.crx},
-      #{income.yhx},
-      #{income.lax},
-      #{income.jxx},
-      #{income.zxx},
-      #{income.gcx},
+      #{income.sbj},
+      #{income.ncs},
+      #{income.jdzs},
+      #{income.pxs},
+      #{income.jjs},
+      #{income.xys},
+      #{income.yts},
+      #{income.gzs},
+      #{income.ycs},
+      #{income.srs},
+      #{income.jas},
+      #{income.wzs},
       #{income.type},
       #{income.year}
       )
     </foreach>
-
-
   </insert>
   <insert id="insertSelective_batch_incomearea_map" parameterType="java.util.List" >
     insert into t_incomebyarea
@@ -369,7 +397,32 @@
 
 
   </insert>
+  <insert id="insertSelective_batch_incomeByproarea_map" parameterType="java.util.List" >
+    insert into t_incomebyarea_pro
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      area_name,
+      area_code,
+      AMT,
+      kmbm,
+      kmmc,
+      type,
+      year,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.area_name},
+      #{income.area_code},
+      #{income.amt},
+      #{income.kmbm},
+      #{income.kmmc},
+      #{income.type},
+      #{income.year}
+      )
+    </foreach>
 
+
+  </insert>
   <insert id="insertSelective_batch_disburse_map" parameterType="java.util.List" >
     insert into t_disburse
     <trim prefix="(" suffix=")" suffixOverrides="," >

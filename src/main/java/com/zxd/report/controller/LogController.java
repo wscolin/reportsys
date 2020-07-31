@@ -29,14 +29,14 @@ public class LogController {
 	private StParamsService stParamsService;
 	@RequiresPermissions("st_log_index")
 	@RequestMapping(value = "/index",method = RequestMethod.GET)
-	@SystemControllerLog(description = "日志查询页面",params = 0)
+	//@SystemControllerLog(description = "日志查询页面",params = 0)
 	public String index(boolean portal, ModelMap modelMap) {
 		return "/sys/log";
 	}	
 
 	@RequestMapping(value = "/list", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	@SystemControllerLog(description = "日志查询列表",params = 0)
+	//@SystemControllerLog(description = "日志查询列表",params = 0)
 	public String dataList(HttpServletRequest request, Page page, @RequestParam Map map) throws Exception {
 		map.put("search_end",map.get("search_end")+" 23:59:59");
 		String orderColumn = "0";
@@ -60,7 +60,7 @@ public class LogController {
 	}
 	@RequiresPermissions("ck_log")
 	@RequestMapping(value = "/cklog",method = RequestMethod.GET)
-	@SystemControllerLog(description = "查控请求日志查询页面",params = 0)
+	//@SystemControllerLog(description = "查控请求日志查询页面",params = 0)
 	public String cklog(ModelMap modelMap) {
 		modelMap.addAttribute("danger_date",stParamsService.getParamConf("danger_date"));
 		return "/sys/cklog";

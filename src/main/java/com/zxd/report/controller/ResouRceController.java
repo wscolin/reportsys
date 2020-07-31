@@ -38,7 +38,7 @@ public class ResouRceController {
 	}
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "资源管理树",params = 0)
+	//@SystemControllerLog(description = "资源管理树",params = 0)
 	public List<Map> tree(String type,String enabled,HttpServletRequest request) throws Exception {
 		if(enabled==null){
 			enabled="1";
@@ -48,7 +48,7 @@ public class ResouRceController {
 	//新增
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "资源管理新增",params = 0)
+	//@SystemControllerLog(description = "资源管理新增",params = 0)
 	public String insert(StResource record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -69,7 +69,7 @@ public class ResouRceController {
 	//更新
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "资源管理修改",params = 0)
+	//@SystemControllerLog(description = "资源管理修改",params = 0)
 	public String update(StResource record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -86,7 +86,7 @@ public class ResouRceController {
 	}
 	@RequestMapping(value = "/sortup", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "资源管理排序上移",params = 0)
+	//@SystemControllerLog(description = "资源管理排序上移",params = 0)
 	public String sortup(String id,String pId,String appid) throws Exception {
 		String data="";
 		List<StResource> stdepts = resouRceService.selectbyfatherId(pId);
@@ -111,7 +111,7 @@ public class ResouRceController {
 	}
 	@RequestMapping(value = "/sortdown", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "资源管理排序下移",params = 0)
+	//@SystemControllerLog(description = "资源管理排序下移",params = 0)
 	public String sortdown(String id,String pId,String appid) throws Exception {
 		String data="";
 		List<StResource> stdepts = resouRceService.selectbyfatherId(pId);
@@ -136,7 +136,7 @@ public class ResouRceController {
 	}
 	@RequestMapping(value = "/set", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "资源管理设置状态",params = 0)
+	//@SystemControllerLog(description = "资源管理设置状态",params = 0)
 	public String set(Integer id,String enabled) throws Exception {
 		StResource temp = new StResource();temp.setRESOURCEID(id);temp.setENABLED(enabled.equals("1")?"0":"1");
 		resouRceService.updateByPrimaryKeySelective(temp);

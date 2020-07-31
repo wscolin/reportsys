@@ -56,7 +56,7 @@ public class ParamsController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_params_add")
-	@SystemControllerLog(description = "参数管理新增",params = 0)
+	//@SystemControllerLog(description = "参数管理新增",params = 0)
 	public String insert(StParams record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -78,7 +78,7 @@ public class ParamsController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("st_params_edit")
-	@SystemControllerLog(description = "参数管理修改",params = 0)
+	//@SystemControllerLog(description = "参数管理修改",params = 0)
 	public String update(StParams record) throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		UserVO userVO = (UserVO) subject.getPrincipal();
@@ -94,7 +94,7 @@ public class ParamsController {
 	}
 	@RequestMapping(value = "/isone", method = RequestMethod.POST)
 	@ResponseBody
-	@SystemControllerLog(description = "参数管理是否唯一",params = 0)
+	//@SystemControllerLog(description = "参数管理是否唯一",params = 0)
 	public String isone(String key) throws Exception {
 		StParams record = itemService.getParamsValue(key);
 		if (record!=null) {

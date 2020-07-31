@@ -7,7 +7,18 @@
 	<link href="${ctx}/plugins/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
    	<link href="${ctx}/plugins/assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
     <link href="${ctx}/plugins/css/error.min.css" rel="stylesheet" type="text/css" />
-<title>500</title>
+    <title>500</title>
+    <script type="text/javascript">
+        df={
+            load:function () {
+                if(window!=top){
+                    top.location.href = "${ctx}";
+                }else {
+                    window.location.href = "${ctx}";
+                }
+            }
+        }
+    </script>
 </head>
     <body class=" page-500-full-page">
         <div class="row">
@@ -18,17 +29,10 @@
                     <p> 
                         <br/> </p>
                     <p>
-                        <a href="#" class="btn red btn-outline" onclick="back()"> 返回首页  </a>
+                        <a href="#" class="btn red btn-outline" onclick="df.load();"> 返回首页  </a>
                         <br> </p>
                 </div>
             </div>
         </div> 
 </body>
-<script type="text/javascript">
-
-        function back() {
-            document.frames['admin'].history.back();
-            return false;
-        }
-</script>
 </html>
