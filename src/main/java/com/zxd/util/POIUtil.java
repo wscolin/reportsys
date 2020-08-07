@@ -166,4 +166,57 @@ public class POIUtil {
         }
         return str;
     }
+
+    /**
+     * 读取sheet中收入和支出
+     * @param sheet
+     * @param keys
+     * @param flag 1表示收入，2表示支出
+     * @return
+     * @throws IOException
+     */
+    public static List<Map<String,String>> readSheet(Sheet sheet,String[] keys,String flag) throws IOException{
+        List<Map<String,String>> list = new ArrayList<>();
+        //获得当前sheet的开始行
+        int firstRowNum  = sheet.getFirstRowNum();
+        //获得当前sheet的结束行
+        int lastRowNum = sheet.getLastRowNum();
+        //循环除了第一行的所有行
+
+        //获得当前行的开始列
+        int firstCellNum ;
+        //获得当前行的列数
+        int lastCellNum ;
+        if(flag.equals("1")){
+            firstCellNum = 0;
+            lastCellNum = 2;
+        }else {
+            firstCellNum = 3;
+            lastCellNum = 5;
+        }
+        for(int rowNum = firstRowNum+4;rowNum <= lastRowNum;rowNum++) {
+            //获得当前行
+            Row row = sheet.getRow(rowNum);
+            if (row == null) {
+                continue;
+            }
+            String[] cells = new String[6];
+            //循环当前行
+            Map map = new HashMap();
+            for (int cellNum = firstCellNum , i =0; cellNum <= lastCellNum; cellNum++) {
+                Cell cell = row.getCell(cellNum);
+                if (cell != null) {
+                    cell.setCellType(CellType.STRING);
+                    cells[cellNum] = getCellValue(cell);
+                    if (null != cells[cellNum]) {
+                        cells[cellNum] = replaceBlank(cells[cellNum]);
+                    }
+                    map.put(keys[i], cells[cellNum]);
+                    i++;
+                }
+            }
+            list.add(map);
+        }
+        return list;
+    }
 }

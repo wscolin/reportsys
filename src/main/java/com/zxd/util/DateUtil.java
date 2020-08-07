@@ -2,9 +2,12 @@ package com.zxd.util;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by panpengfei on 2017/8/8.
@@ -477,6 +480,7 @@ public class DateUtil {
         System.out.println(this_year_last_month);
         System.out.println(last_year_this_month);
         System.out.println(last_year_last_month);
+        System.out.println(getDateBystr("2020年1月基础信息表"));
     }
 
     public static Date getDateFormat(Date date,String format){
@@ -773,5 +777,20 @@ public class DateUtil {
         return getDate2str(calendar.getTime(),format);
     }
 
+    /**
+     * 截取制定字符串中时间
+     */
+    public static String getDateBystr(String str){
+        Pattern p = Pattern.compile("(\\d{4})|(\\d{1,2})");
+        Matcher matcher = p.matcher(str);
+        List<String> list =  new ArrayList();
+        while(matcher.find()){
+            list.add(matcher.group());
+        }
+        String year = list.get(0);
+        String month = Integer.parseInt(list.get(1))<10 &&list.get(1).length()==1 ?"0"+list.get(1):list.get(1);
+
+        return year+"-"+month;
+    }
 
 }

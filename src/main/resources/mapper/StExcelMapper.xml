@@ -257,6 +257,7 @@
    </trim>
     limit #{page.start},#{page.length}
   </select>
+
   <select id="selectByList_count" resultType="int">
     select count(1)
     from t_income
@@ -295,6 +296,16 @@
     </trim>
 
   </select>
+  <select id="selectByYear_ydr_13" resultType="java.util.Map" parameterType="java.util.Map">
+    select year from t_incomeByarea a group by year order by year desc
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="map.date !=null and map.date!=''">
+        year=#{map.date}
+      </if>
+    </trim>
+
+  </select>
+
   <insert id="insertSelective_batch_income_map" parameterType="java.util.List" >
   insert into t_income
   <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -499,5 +510,73 @@
   </select>
   <select id="cleardata" parameterType="java.lang.String" statementType="CALLABLE">
         {call cleardata()}
+  </select>
+  <!-- 查询13张收入表 -->
+  <select id="selectByList_13" resultType="java.util.Map" parameterType="java.util.Map">
+  select kmbm ,kmmc ,sum(case when year = #{map.date} and area_code='361000' then amt else 0 end) sbj,
+    sum(case when year =#{map.date} and area_code='36100X' then amt else 0 end) gxq,
+    sum(case when year = #{map.date} and area_code='361002' then amt else 0 end) lcq,
+    sum(case when year = #{map.date} and area_code='361029' then amt else 0 end) dxq,
+    sum(case when year = #{map.date} and area_code='361021' then amt else 0 end) ncx,
+    sum(case when year = #{map.date} and area_code='361023' then amt else 0 end) nfx,
+    sum(case when year = #{map.date} and area_code='361022' then amt else 0 end) lcx,
+    sum(case when year = #{map.date} and area_code='361024' then amt else 0 end) crx,
+    sum(case when year = #{map.date} and area_code='361026' then amt else 0 end) yhx,
+    sum(case when year = #{map.date} and area_code='361025' then amt else 0 end) lax,
+    sum(case when year = #{map.date} and area_code='361027' then amt else 0 end) jxx,
+    sum(case when year = #{map.date} and area_code='361028' then amt else 0 end) zxx,
+    sum(case when year = #{map.date} and area_code='361030' then amt else 0 end) gcx
+    from t_incomebyarea where area_code like '36%' GROUP BY kmbm order by id
+    limit #{page.start},#{page.length}
+  </select>
+  <select id="selectByList_count_13" resultType="int">
+    select count(1) count from (select kmbm ,kmmc ,sum(case when year = #{map.date} and area_code='361000' then amt else 0 end) sbj,
+    sum(case when year =#{map.date} and area_code='36100X' then amt else 0 end) gxq,
+    sum(case when year = #{map.date} and area_code='361002' then amt else 0 end) lcq,
+    sum(case when year = #{map.date} and area_code='361029' then amt else 0 end) dxq,
+    sum(case when year = #{map.date} and area_code='361021' then amt else 0 end) ncx,
+    sum(case when year = #{map.date} and area_code='361023' then amt else 0 end) nfx,
+    sum(case when year = #{map.date} and area_code='361022' then amt else 0 end) lcx,
+    sum(case when year = #{map.date} and area_code='361024' then amt else 0 end) crx,
+    sum(case when year = #{map.date} and area_code='361026' then amt else 0 end) yhx,
+    sum(case when year = #{map.date} and area_code='361025' then amt else 0 end) lax,
+    sum(case when year = #{map.date} and area_code='361027' then amt else 0 end) jxx,
+    sum(case when year = #{map.date} and area_code='361028' then amt else 0 end) zxx,
+    sum(case when year = #{map.date} and area_code='361030' then amt else 0 end) gcx
+    from t_incomebyarea where area_code like '36%' GROUP BY kmbm)p
+  </select>
+  <!-- 查询13张支出表 -->
+  <select id="selectdisburseByList_13" resultType="java.util.Map" parameterType="java.util.Map">
+  select kmbm ,kmmc ,sum(case when year = #{map.date} and area_code='361000' then amt else 0 end) sbj,
+    sum(case when year =#{map.date} and area_code='36100X' then amt else 0 end) gxq,
+    sum(case when year = #{map.date} and area_code='361002' then amt else 0 end) lcq,
+    sum(case when year = #{map.date} and area_code='361029' then amt else 0 end) dxq,
+    sum(case when year = #{map.date} and area_code='361021' then amt else 0 end) ncx,
+    sum(case when year = #{map.date} and area_code='361023' then amt else 0 end) nfx,
+    sum(case when year = #{map.date} and area_code='361022' then amt else 0 end) lcx,
+    sum(case when year = #{map.date} and area_code='361024' then amt else 0 end) crx,
+    sum(case when year = #{map.date} and area_code='361026' then amt else 0 end) yhx,
+    sum(case when year = #{map.date} and area_code='361025' then amt else 0 end) lax,
+    sum(case when year = #{map.date} and area_code='361027' then amt else 0 end) jxx,
+    sum(case when year = #{map.date} and area_code='361028' then amt else 0 end) zxx,
+    sum(case when year = #{map.date} and area_code='361030' then amt else 0 end) gcx
+    from t_disbursebyarea where area_code like '36%' GROUP BY kmbm order by id
+    limit #{page.start},#{page.length}
+  </select>
+  <select id="selectdisburseByList_count_13" resultType="int">
+    select count(1) count from (select kmbm ,kmmc ,sum(case when year = #{map.date} and area_code='361000' then amt else 0 end) sbj,
+    sum(case when year =#{map.date} and area_code='36100X' then amt else 0 end) gxq,
+    sum(case when year = #{map.date} and area_code='361002' then amt else 0 end) lcq,
+    sum(case when year = #{map.date} and area_code='361029' then amt else 0 end) dxq,
+    sum(case when year = #{map.date} and area_code='361021' then amt else 0 end) ncx,
+    sum(case when year = #{map.date} and area_code='361023' then amt else 0 end) nfx,
+    sum(case when year = #{map.date} and area_code='361022' then amt else 0 end) lcx,
+    sum(case when year = #{map.date} and area_code='361024' then amt else 0 end) crx,
+    sum(case when year = #{map.date} and area_code='361026' then amt else 0 end) yhx,
+    sum(case when year = #{map.date} and area_code='361025' then amt else 0 end) lax,
+    sum(case when year = #{map.date} and area_code='361027' then amt else 0 end) jxx,
+    sum(case when year = #{map.date} and area_code='361028' then amt else 0 end) zxx,
+    sum(case when year = #{map.date} and area_code='361030' then amt else 0 end) gcx
+    from t_disbursebyarea where area_code like '36%' GROUP BY kmbm)p
   </select>
 </mapper>

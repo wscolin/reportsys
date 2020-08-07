@@ -48,8 +48,12 @@ public interface StExcelMapper {
     List<Map<String,String>> selectBysql2(@Param(value = "sql") String sql);
     int selectByList_count(@Param("map") Map map);
     List<Map> selectByList(@Param("page") Page page,@Param("map") Map map);
+    int selectByList_count_13(@Param("map") Map map);
+    List<Map> selectByList_13(@Param("page") Page page,@Param("map") Map map);
     int selectdisburseByList_count(@Param("map") Map map);
     List<Map> selectdisburseByList(@Param("page") Page page,@Param("map") Map map);
+    int selectdisburseByList_count_13(@Param("map") Map map);
+    List<Map> selectdisburseByList_13(@Param("page") Page page,@Param("map") Map map);
 
     /**
      * 已导入的年份列表
@@ -58,6 +62,14 @@ public interface StExcelMapper {
      * @return
      */
     List<Map> selectByYear_ydr(@Param("page") Page page,@Param("map") Map map);
+
+    /**
+     * 已导入的年份列表13
+     * @param page
+     * @param map
+     * @return
+     */
+    List<Map> selectByYear_ydr_13(@Param("page") Page page,@Param("map") Map map);
     /**
      * 执行sql
      */

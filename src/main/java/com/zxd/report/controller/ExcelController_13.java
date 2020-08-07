@@ -14,13 +14,11 @@ import com.zxd.report.model.ImIcome;
 import com.zxd.report.model.Min_11;
 import com.zxd.report.model.TongBao_13;
 import com.zxd.report.service.ExcelService;
-import com.zxd.report.service.StUserService;
 import com.zxd.util.DateUtil;
 import com.zxd.util.POIUtil;
 import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -28,7 +26,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,16 +39,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.io.*;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 @Controller
-@RequestMapping(value = "/excel")
-public class ExcelController {
-    private final static Logger logger= LoggerFactory.getLogger(ExcelController.class);
+@RequestMapping(value = "/excel_13")
+public class ExcelController_13 {
+    private final static Logger logger= LoggerFactory.getLogger(ExcelController_13.class);
 
     @Autowired
     private ExcelService excelService;
@@ -59,7 +55,7 @@ public class ExcelController {
     private StExcelMapper stExcelMapper;
     @RequestMapping("/import")
     public String excelIm(Map<String,String> map){
-        return  "excel/excelimport";
+        return  "excel/excelimport_13";
     }
 
     @RequestMapping(value = "/dwloadmb", method = RequestMethod.GET)
@@ -183,127 +179,8 @@ public class ExcelController {
         }
     }
 
-    /**
-     * 导入excel
-     * @param request
-     * @param file 模板文件
-     * @return
-     */
-    @RequestMapping("/importfile")
-    @ResponseBody
-    @RequiresPermissions("st_user_import")
-    // @SystemControllerLog(description = "excel导入",params = 0)
-    public Object importfile(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
-        String date = request.getParameter("date");
-        //删除对应时间的收入-支出数据
-        stExcelMapper.deleteincome(date);
-        stExcelMapper.deletedisburse(date);
-        try {
-            //新增收入表
-            ImportParams in_param = new ImportParams();
-            in_param.setSheetNum(1);
-            in_param.setStartSheetIndex(0);
-            in_param.setTitleRows(1);
-            List<ImIcome> income_list = ExcelImportUtil.importExcel(file.getInputStream(), ImIcome.class, in_param);
-            String type = "";
-            for(ImIcome imIcome:income_list){
-                imIcome.setYEAR(date);
-                if(imIcome.getKMMC() != null ) {
-                    if (imIcome.getKMMC().contains("一般公共预算收入合计")) {
-                        type = "1";
-                    } else if (imIcome.getKMMC().contains("国有资本经营预算收入合计")) {
-                        type = "2";
-                    } else if (imIcome.getKMMC().contains("国有资本经营预算收入合计")) {
-                        type = "3";
-                    } else if (imIcome.getKMMC().contains("社会保险基金预算收入合计")) {
-                        type = "4";
-                    }
-                }
-                imIcome.setTYPE(type);
-
-            }
 
 
-            stExcelMapper.insertSelective_batch_income(income_list);
-            //新增支出表
-            ImportParams zc_param = new ImportParams();
-            String zc_type = "";
-            zc_param.setStartSheetIndex(1);
-            zc_param.setTitleRows(1);
-            List<ImIcome> zc_list = ExcelImportUtil.importExcel(file.getInputStream(), ImIcome.class, zc_param);
-            for(ImIcome zcIcome:zc_list){
-                zcIcome.setYEAR(date);
-                if(zcIcome.getKMMC() != null ){
-                    if(zcIcome.getKMMC().contains("一般公共预算支出合计")){
-                        zc_type="1";
-
-                    }else if(zcIcome.getKMMC().contains("政府性基金预算支出合计")){
-                        zc_type="2";
-                    }else if(zcIcome.getKMMC().contains("国有资本经营预算支出合计")){
-                        zc_type="3";
-                    }else if(zcIcome.getKMMC().contains("社会保险基金预算支出合计")){
-                        zc_type="4";
-                    }
-                }
-                zcIcome.setTYPE(zc_type);
-                //stExcelMapper.insertSelective(zcIcome);
-            }
-
-            stExcelMapper.insertSelective_batch_disburse(zc_list);
-            //自定义科目编码更新
-            String sql= "update t_income a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm=''";
-            stExcelMapper.excutesql(sql);
-            sql= "update t_disburse a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm=''";
-            stExcelMapper.excutesql(sql);
-            return "success";
-        }catch (Exception e) {
-            e.printStackTrace();
-            return "error";
-        }
-    }
-
-    /**
-     * 导入excel
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/exportExcel")
-    public String exportExcel(HttpServletRequest request, HttpServletResponse response){
-        String date = request.getParameter("date");
-        try {
-            List<Min_11> min_11List_list = excelService.exportExcel(date);
-            ExportParams exportParams1 = new ExportParams();
-            // 设置sheet得名称
-            exportParams1.setTitle("表十二：抚州市2019年1-5月民生工程支出表");
-            exportParams1.setSheetName("11民生");
-            ExportParams exportParams2 = new ExportParams();
-            exportParams2.setTitle("抚州市财政收入分县区执行情况及排名表（2020年5月）");
-            exportParams2.setSheetName("13通报");
-            // 创建sheet1使用得map
-            Map<String, Object> min_11_Map = new HashMap<>();
-            // title的参数为ExportParams类型
-            min_11_Map.put("title", exportParams1);
-            // 模版导出对应得实体类型
-            min_11_Map.put("entity", Min_11.class);
-            // sheet中要填充得数据
-            min_11_Map.put("data", min_11List_list);
-            // 创建sheet2使用得map
-            Map<String, Object> tongBao_13_Map = new HashMap<>();
-            tongBao_13_Map.put("title", exportParams2);
-            tongBao_13_Map.put("entity", TongBao_13.class);
-            List<Map<String, Object>> sheetsList = new ArrayList<>();
-            sheetsList.add(min_11_Map);
-            sheetsList.add(tongBao_13_Map);
-            Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF);
-            FileOutputStream fos = new FileOutputStream("f:\\emp.xls");
-            workbook.write(fos);
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
     /**
      * 根据模板导出
      * @param request
@@ -451,11 +328,11 @@ public class ExcelController {
         List<Map> record = new ArrayList<Map>();
         int totalCount = 0;
         if("0".equals(index)){
-            totalCount = stExcelMapper.selectByList_count(map);
-            record = stExcelMapper.selectByList(page,map);
+            totalCount = stExcelMapper.selectByList_count_13(map);
+            record = stExcelMapper.selectByList_13(page,map);
         }else{
-            totalCount = stExcelMapper.selectdisburseByList_count(map);
-            record = stExcelMapper.selectdisburseByList(page,map);
+            totalCount = stExcelMapper.selectdisburseByList_count_13(map);
+            record = stExcelMapper.selectdisburseByList_13(page,map);
         }
         String result = "{\"recordsTotal\":" + totalCount;
         result += ",\"recordsFiltered\":" + totalCount;
@@ -471,12 +348,12 @@ public class ExcelController {
         //map.put("date",date);
         List<Map> record = new ArrayList<Map>();
         int totalCount = 0;
-        String sql = "select year from t_income a group by year";
+        String sql = "select year from t_incomeByarea a group by year";
         List<Map> list = stExcelMapper.selectBysql(sql);
         if(null != list){
             totalCount = list.size();
         }
-        record = stExcelMapper.selectByYear_ydr(page,map);
+        record = stExcelMapper.selectByYear_ydr_13(page,map);
         String result = "{\"recordsTotal\":" + totalCount;
         result += ",\"recordsFiltered\":" + totalCount;
         result += ",\"data\":" + JSONArray.fromObject(record) + "}";

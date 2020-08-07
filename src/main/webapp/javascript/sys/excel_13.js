@@ -1,8 +1,10 @@
+
 table = $("#table_role_list").DataTable();
+var  date;
 $(function () {
     var yearTable = $('#yearTable').DataTable();
     $('#yearTable tbody').on('click', 'tr', function (nTd,sData,oData,iRow,iCol) {
-        var date= $(this).find("td").eq(1).html()
+        date= $(this).find("td").eq(1).html()
         var index =  $("#itemdiv .active a").attr("index");
         initTable(date,index);
     });
@@ -11,7 +13,6 @@ $(function () {
     var moth = today.getMonth()+1;
     $("li[role=\"presentation\"]").on("click",function () {
         var index = $(this).find("a").attr("index");
-        var date  = $("#querydate").val();
         initTable(date,index);
         tzdiv_tableheight();
     });
@@ -29,7 +30,7 @@ $(function () {
     $("#kssjDiv").datepicker('setDate',year+"-"+moth);
     $("#kssjDiv_export").datepicker('setDate',year+"-"+moth);
     inityearTable();
-    initTable($("#querydate").val(),'0');
+    //initTable($("#querydate").val(),'0');
     //tzdiv_tableheight();
 });
 
@@ -64,7 +65,7 @@ function inityearTable() {
         bDestroy:true,
         lengthMenu : [ 10, 25, 50 ],
         ajax : {
-            url:ctx+"/excel/ydryear",
+            url:ctx+"/excel_13/ydryear",
             type : "POST",
             error: AjaxError
         },
@@ -120,7 +121,7 @@ function initTable(date,index) {
         bDestroy:true,
         lengthMenu : [ 15, 30, 50 ],
         ajax : {
-            url:ctx+"/excel/list?date="+date+"&index="+index,
+            url:ctx+"/excel_13/list?date="+date+"&index="+index,
             type : "POST",
             error: AjaxError
         },
@@ -137,11 +138,11 @@ function initTable(date,index) {
                     $(nTd).html(iRow+1+startnum);
                 }
             },
-            {
+           /* {
                 data : "year",
                 width : "18px",
                 "defaultContent": ""
-            },
+            },*/
             {
                 data : "kmbm",
                 width : "50px",
@@ -150,13 +151,13 @@ function initTable(date,index) {
                 data : "kmmc",
                 width : "100px",
                 "defaultContent": ""
-            }, {
+            }/*, {
                 data : "amt",
                 width : "50px",
                 "defaultContent": ""
 
-            }, {
-                data : "sz",
+            }*/, {
+                data : "sbj",
                 width : "30px",
                 "defaultContent": ""
             }, {
@@ -386,6 +387,61 @@ function btn_savefile_click(_this) {
 		window.parent.toastr[MES_ERROR]("请选择文件！！");
 		return true;
 	}
+}
+
+var provice_data = {
+    btn_import_click:function () {
+        $(".btn-primary").attr("disabled",false);
+        $("#KSRQ").val("");
+        $("h4").text("导入省级数据");
+        $('#fileModal').modal('show');
+    },
+    btn_savefile_click:function (_this) {
+        $(_this).attr("disabled","disabled");
+        var date = $("#KSRQ").val();
+        if(date==null||date==""||date=="undefined"){
+            window.parent.toastr[MES_ERROR]("日期不能空！！");
+            $(_this).attr("disabled",false);
+            return ;
+        }
+        if($("#fileUpload").val()){
+            var formData=new FormData($("#fileForm")[0]);
+            $.ajax({
+                url:ctx+ "/excel/import_prodataBypoi?date="+date,
+                type : "POST",
+                data : formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType : "json",
+                success: function (data){
+                    $(".delfile").click();
+                    if(data.length>0){
+                        initerrorTable(data);
+                        $('#fileModal').modal('hide');
+                        $("h4").text("导入失败数据");
+                        $('#errorModal').modal('show');
+                    }
+                },
+                error: function (data){
+                    $(".delfile").click();
+                    if(data.responseText!="error"){
+                        $('#fileModal').modal('hide');
+                        $("#itemTable").dataTable().fnDraw(false);
+                    }
+                    if(data.responseText=="success"){
+                        window.parent.toastr[MES_SUCCESS]("导入成功！！");
+                        // inityearTable();
+                    }else if(data.responseText=="error") {
+                        window.parent.toastr[MES_WARN]("模板有误请重新选择！！");
+                    }
+                }
+            });
+        }else{
+            window.parent.toastr[MES_ERROR]("请选择文件！！");
+            return true;
+        }
+    }
 }
 
 

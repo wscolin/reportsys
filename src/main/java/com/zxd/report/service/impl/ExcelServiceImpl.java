@@ -363,4 +363,18 @@ public class ExcelServiceImpl implements ExcelService {
         List<Map> list = stExcelMapper.selectBysql(sql);
         return list;
     }
+
+
+    /**
+     * 查询新的13
+     * @param map
+     * @return
+     */
+    public int selectByList_count_13(Map map){
+        String sql = stParamsService.getParamConf("query").replaceAll("\\$\\{this_year_this_month\\}",map.get("date").toString());
+        List<Map> list = stExcelMapper.selectBysql(sql);
+        return Integer.parseInt(list.get(0).get("count").toString());
+    }
+
+
 }

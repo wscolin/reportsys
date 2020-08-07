@@ -91,15 +91,19 @@
 						<div class="col-md-12 col-lg-12col-sm-12">
 							<shiro:hasPermission name="st_user_import">
 								<%--<button class="btn btn-sm green-turquoise" id="btn_setresource" data-toggle="modal" onclick="btn_dwload_mb();"><i class="fa fa-download"></i>收入-支出表导入模板下载</button>--%>
-								<button class="btn btn-sm btn-default " id="btn_setresource" data-toggle="modal" onclick="btn_import_click();"><i class="fa fa-upload"></i> 导入</button>
-								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
+								<button class="btn btn-sm btn-default" style="display: none" id="btn_setresource" data-toggle="modal" onclick="btn_import_click();"><i class="fa fa-upload" ></i> 导入</button>
+								<button class="btn btn-sm btn-default" style="display: none" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
+							</shiro:hasPermission>
+							<shiro:hasPermission name="excel_import">
+								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_import_click_13();" data-target ="exampleModal"><i class="fa fa-upload"></i> 导入基础数据</button>
+							</shiro:hasPermission>
+							<shiro:hasPermission name="excel_import">
+								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="provice_data.btn_import_click();" data-target ="exampleModal"><i class="fa fa-upload"></i> 导入填写数据</button>
 							</shiro:hasPermission>
 							<shiro:hasPermission name="cleardata">
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="clear_date_click();"><i class="fa fa-trash-o"></i> 清除数据</button>
 							</shiro:hasPermission>
-							<shiro:hasPermission name="excel_import">
-								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_import_click_13();" data-target ="exampleModal"><i class="fa fa-upload"></i> 导入13</button>
-							</shiro:hasPermission>
+
 						</div>
 					</div>
 
@@ -129,11 +133,11 @@
 							<thead>
 							<tr>
 								<th>序号</th>
-								<th>年份</th>
+								<%--<th>年份</th>--%>
 								<th>科目编码</th>
 								<th>科目名称</th>
-								<th>金额</th>
-								<th>市值</th>
+								<%--<th>金额</th>--%>
+								<th>市本级</th>
 								<th>高薪区</th>
 								<th>临川区</th>
 								<th>东乡区</th>
@@ -214,9 +218,6 @@
 				</div>
 				<div class="modal-body">
 					<form enctype="multipart/form-data">
-						<!--  <div class="form-group center-block" style="width: 800px;" >
-                              <input id="modelInput" name="file" type="file" class="file" data-browse-on-zone-click="true">
-                          </div>-->
 						<div class="form-group center-block" style="width: 800px;" >
 							<input id="modelInput" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1"
 								   data-max-file-count="13" name="file" accept="/*" >
@@ -276,7 +277,7 @@
 <script src="${ctx}/plugins/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/assets/global/plugins/ajaxfileupload.js" type="text/javascript"></script>
-<script src="${ctx}/javascript/sys/excel.js" type="text/javascript"></script>
+<script src="${ctx}/javascript/sys/excel_13.js" type="text/javascript"></script>
 <script>
     initFileInput("modelInput","${ctx}excel/importfileBypoi_13");
 </script>

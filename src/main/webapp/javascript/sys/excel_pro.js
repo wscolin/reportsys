@@ -41,7 +41,7 @@ var provice_data = {
                     if(data.length>0){
                         initerrorTable(data);
                         $('#fileModal').modal('hide');
-                        $("h4").text("导入失败数据(失败原文可能为:用户名已存在)");
+                        $("h4").text("导入失败数据");
                         $('#errorModal').modal('show');
                     }
                 },
@@ -53,7 +53,7 @@ var provice_data = {
                     }
                     if(data.responseText=="success"){
                         window.parent.toastr[MES_SUCCESS]("导入成功！！");
-                        inityearTable();
+                       // inityearTable();
                     }else if(data.responseText=="error") {
                         window.parent.toastr[MES_WARN]("模板有误请重新选择！！");
                     }
