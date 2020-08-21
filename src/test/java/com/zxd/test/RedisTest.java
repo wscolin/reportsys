@@ -106,4 +106,8 @@ public class RedisTest {
 
 
     }
+    @Test
+    public void test_08chanye(){
+        excelService.exportExcel_08chanye("2020-05");
+    }
 }

@@ -45,12 +45,13 @@ function initFileInput(ctrlName,url) {
         }
         //fileuploaded此事件仅针对ajax上传触发，并在每个缩略图文件上传完成后触发。此事件仅针对ajax上传并在以下情况下触发：当点击每个预览缩略图中的上传图标并且文件上传成功时，或者当你有 uploadAsync设置为true您已触发批量上传。在这种情况下，fileuploaded每一个人选择的文件被上传成功后，触发事件。
     }).on('fileuploaded', function(event, data, previewId, index) {
-     alert("11111111111")
         // filebatchuploadcomplete此事件仅在ajax上传和完成同步或异步ajax批量上传后触发。
     }).on('filebatchuploadcomplete',function (event,data,files,extra) {
         setTimeout(function(){ //执行延时关闭
             $(".btn-secondary").click()
         },5000);
+        inityearTable();
+        initTable($("#yearTable tbody").find("tr").eq(0).find("td").eq(1).text(),'0');
     });
 }
 

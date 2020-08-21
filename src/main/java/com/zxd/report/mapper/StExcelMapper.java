@@ -33,8 +33,13 @@ public interface StExcelMapper {
      * @return
      */
     int insertSelective_batch_incomeByproarea_map(List<Map<String,String>> list);
+    int insertSelective_batch_importTax_map(List<Map<String,String>> list);
+    //插入行业数据
+    int insertSelective_batch_importHyType_map(List<Map<String,String>> list);
     int insertSelective_batch_disbursearea_map(List<Map<String,String>> list);
     int insertSelective_batch_disburse_map(List<Map> list);
+    //导入预期值
+    int insertSelective_expectgoal_map(List<Map> list);
     //删除收入数据
     int deleteincome(@Param(value = "date") String date);
     //删除支出数据

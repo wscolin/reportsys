@@ -11,31 +11,6 @@
 <link href="${ctx}/plugins/assets/global/plugins/jquery-multi-select/css/multi-select.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/plugins/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/plugins/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/theme.css" rel="stylesheet" type="text/css"/>
-<link href="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-<%--<script th:src="@{js/jquery-3.3.1.min.js}"></script>--%>
-<%--
-<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/js/jquery-3.3.1.js" type="text/javascript"></script>
---%>
-<%--<link rel="stylesheet" th:href="@{css/bootstrap.min.css}">--%>
-<link href="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/css/bootstrap.min.css" rel="stylesheet" >
-
-<%--<script th:src="@{js/bootstrap.min.js}"></script>--%>
-<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/js/bootstrap.min.js" type="text/javascript"></script>
-
-<%--<link rel="stylesheet" th:href="@{css/fileinput.css}">--%>
-<link href="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" >
-
-<%--<script th:src="@{js/fileinput.js}"></script>--%>
-<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/js/fileinput.js" type="text/javascript"></script>
-
-
-<%--<script th:src="@{js/theme.js}"></script>--%>
-<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/theme.js" type="text/javascript"></script>
-
-<%--<script th:src="@{js/zh.js}"></script>--%>
-<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/zh.js" type="text/javascript"></script>
-
 <style>
 	.ztree * {
 		font-size: 14px;
@@ -61,15 +36,6 @@
 		width: 80%;
 	}
 	.datess{text-align: center;cursor:pointer}
-	.file-preview {
-		border-radius: 5px;
-		border: 1px solid #ddd;
-		padding: 8px;
-		width: 100%;
-		margin-bottom: 5px;
-		height: 300px;
-		overflow-y: auto;
-	}
 </style>
 <body class="page-content">
 	<div class="my-col-md">
@@ -96,9 +62,6 @@
 							</shiro:hasPermission>
 							<shiro:hasPermission name="cleardata">
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="clear_date_click();"><i class="fa fa-trash-o"></i> 清除数据</button>
-							</shiro:hasPermission>
-							<shiro:hasPermission name="excel_import">
-								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_import_click_13();" data-target ="exampleModal"><i class="fa fa-upload"></i> 导入13</button>
 							</shiro:hasPermission>
 						</div>
 					</div>
@@ -154,7 +117,7 @@
 
 			</div>
 		</div>
-   	</div> 
+   	</div>
 <!-- 弹框-->
 <div id="fileModal" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
 	<div class="modal-dialog modal-md">
@@ -202,35 +165,6 @@
 		</div>
 	</div>
 </div>
-
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">上传文件</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form enctype="multipart/form-data">
-						<!--  <div class="form-group center-block" style="width: 800px;" >
-                              <input id="modelInput" name="file" type="file" class="file" data-browse-on-zone-click="true">
-                          </div>-->
-						<div class="form-group center-block" style="width: 800px;" >
-							<input id="modelInput" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1"
-								   data-max-file-count="13" name="file" accept="/*" >
-						</div>
-					</form>
-					<div id="kartik-file-errors"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-					<!-- <button type="button" class="btn btn-primary" title="Your custom upload logic">保存</button>-->
-				</div>
-			</div>
-		</div>
-	</div>
 	<!-- 弹框-->
 	<div id="fileModal_exprot" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
 		<div class="modal-dialog modal-md">
@@ -265,19 +199,14 @@
 <script src="${ctx}/plugins/assets/global/plugins/moment.min.js"></script>
 <script src="${ctx}/plugins/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
-<%--<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/fileinput.js" type="text/javascript"></script>
-<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/theme.js" type="text/javascript"></script>
-<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/zh.js" type="text/javascript"></script>--%>
-<script src="${ctx}/javascript/sys/initFileInput.js" type="text/javascript"></script>
-
 <script src="${ctx}/plugins/assets/global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/assets/global/plugins/ztree/jquery.ztree.all-3.5.min.js" type="text/javascript"></script>
+<script src="${ctx}/plugins/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/assets/global/plugins/jquery-multi-select/js/jquery.quicksearch.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 <script src="${ctx}/plugins/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
+
 <script src="${ctx}/plugins/assets/global/plugins/ajaxfileupload.js" type="text/javascript"></script>
 <script src="${ctx}/javascript/sys/excel.js" type="text/javascript"></script>
-<script>
-    initFileInput("modelInput","${ctx}excel/importfileBypoi_13");
-</script>
+
 </html>

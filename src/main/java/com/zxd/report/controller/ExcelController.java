@@ -88,8 +88,8 @@ public class ExcelController {
    // @SystemControllerLog(description = "excel导入",params = 0)
     public Object importfileBypoi(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
         String[] keys = {"kmbm","kmmc","amt","sz","gxq","lcq","dxq","ncx","nfx","lcx","crx","yhx","lax","jxx","zxx","gcx"};
-        List<Map>  income_list = POIUtil.readExcel(file,"收入",keys);
-        List<Map>  zc_list = POIUtil.readExcel(file,"支出",keys);
+        List<Map>  income_list = POIUtil.readExcel(file,"收入",keys,4);
+        List<Map>  zc_list = POIUtil.readExcel(file,"支出",keys,4);
         String date = request.getParameter("date");
         stExcelMapper.deleteincome(date);
         stExcelMapper.deletedisburse(date);
@@ -138,13 +138,15 @@ public class ExcelController {
                 }
                 zcIcome.put("type",zctype);
             }
-            stExcelMapper.insertSelective_batch_disburse_map(zc_list);
-            List<Map<String,String>> list_zccode_area = new ArrayList<>();
-            for(Map area:list_area) {
-                getBasedateByArea(zc_list, list_zccode_area, area);
+            if(zc_list.size()>0){
+                stExcelMapper.insertSelective_batch_disburse_map(zc_list);
+                List<Map<String,String>> list_zccode_area = new ArrayList<>();
+                for(Map area:list_area) {
+                    getBasedateByArea(zc_list, list_zccode_area, area);
+                }
+                //新增地区基本支出数据
+                stExcelMapper.insertSelective_batch_disbursearea_map(list_zccode_area);
             }
-            //新增地区基本支出数据
-            stExcelMapper.insertSelective_batch_disbursearea_map(list_zccode_area);
             //自定义科目编码更新
             String sql= "update t_income a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm='';";
             stExcelMapper.excutesql(sql);
@@ -154,7 +156,7 @@ public class ExcelController {
             stExcelMapper.excutesql(sql);
             sql= "update t_disbursebyarea a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm=''";
             stExcelMapper.excutesql(sql);
-           return "success";
+            return "success";
         }catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -534,7 +536,7 @@ public class ExcelController {
         /**
          * 删除导入数据结束
          */
-        List<Map>  income_list = POIUtil.readExcel(file,"省级",keys);
+        List<Map>  income_list = POIUtil.readExcel(file,"省级",keys,4);
         try {
             String type = "";
             for(Map map:income_list){
@@ -675,7 +677,6 @@ public class ExcelController {
         stExcelMapper.excutesql(sql);
         sql= "update t_disbursebyarea a,t_kmbmdiy b set a.kmbm = b.kmbm where a.kmmc=b.kmmc and a.kmbm='' and year ='"+date+"' and area_code='"+area_code+"'" ;
         stExcelMapper.excutesql(sql);
-
         workbook.close();
     }
 

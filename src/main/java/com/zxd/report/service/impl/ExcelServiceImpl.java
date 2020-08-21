@@ -6,6 +6,7 @@ import com.zxd.report.model.Min_11;
 import com.zxd.report.service.ExcelService;
 import com.zxd.report.service.StParamsService;
 import com.zxd.util.DateUtil;
+import com.zxd.util.StringAmountCalUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,6 +194,12 @@ public class ExcelServiceImpl implements ExcelService {
         String sql = stParamsService.getParamConf("tongbao13").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
                      replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).replaceAll("\\$\\{year\\}",thisyear);
         List<Map> list = stExcelMapper.selectBysql(sql);
+        if(null != list && list.size()>0){
+            for(Map map : list){
+                //去掉小数点
+               map.put("a2",map.get("a2")==null ? "":map.get("a2").toString().split("\\.")[0]);
+            }
+        }
         return list;
     }
     @Override
@@ -269,7 +276,7 @@ public class ExcelServiceImpl implements ExcelService {
         String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
         String sql = stParamsService.getParamConf("03bu").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
                 replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
-                replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month);
+                replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month).replaceAll("\\$\\{year\\}",thisyear);
         List<Map> list = stExcelMapper.selectBysql(sql);
         return list;
     }
@@ -325,6 +332,71 @@ public class ExcelServiceImpl implements ExcelService {
         String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
         String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
         String sql = stParamsService.getParamConf("07shuibi").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
+                replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
+                replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month).replaceAll("\\$\\{year\\}",thisyear);
+        List<Map> list = stExcelMapper.selectBysql(sql);
+        return list;
+    }
+
+    /**
+     * 查询08产业报表数据
+     * @param year
+     * @return
+     */
+    @Override
+    public List<Map>   exportExcel_08chanye(String year){
+        String thisyear = year.split("-")[0];
+        Date date = DateUtil.getStr2date(year,"yyyy-MM");
+        String this_year_this_month = DateUtil.getDate2str(date,"yyyy-MM");
+        String this_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(date,-1,"MONTH"),"yyyy-MM");
+        String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
+        String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
+        String sql = stParamsService.getParamConf("08chanye").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
+                replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
+                replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month).replaceAll("\\$\\{year\\}",thisyear);
+
+        List<Map> list = stExcelMapper.selectBysql(sql);
+        //处理特殊数据
+         double total = new Double(list.get(0).get("a2").toString());
+         double total_cz = new Double(list.get(0).get("a4").toString());
+         double tax= new Double(list.get(2).get("a2").toString());
+         for(int i = 0 ;i < list.size() ; i ++){
+             Map map = list.get(i);
+            if(i==0){
+                map.put("a6","");
+                map.put("a7","");
+                map.put("a8","");
+            }
+            if(i==1||i==2){
+                String a4 = map.get("a4").toString();
+                map.put("a6",StringAmountCalUtil.getPercent(new Double(a4),total_cz,1));
+                map.put("a7","");
+                map.put("a8","");
+            }
+            if(i>=3){
+                String a4 = map.get("a4").toString();
+                String a2= map.get("a2").toString();
+                map.put("a6",StringAmountCalUtil.getPercent(new Double(a4),total_cz,1));
+                map.put("a7",StringAmountCalUtil.getPercent(new Double(a2),total,1));
+                map.put("a8",StringAmountCalUtil.getPercent(new Double(a2),tax,1));
+            }
+         }
+        return list;
+    }
+    /**
+     * 查询09重点税收报表数据
+     * @param year
+     * @return
+     */
+    @Override
+    public List<Map> exportExcel_09zdtax(String year){
+        String thisyear = year.split("-")[0];
+        Date date = DateUtil.getStr2date(year,"yyyy-MM");
+        String this_year_this_month = DateUtil.getDate2str(date,"yyyy-MM");
+        String this_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(date,-1,"MONTH"),"yyyy-MM");
+        String  last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date,-1,"YEAR"),"yyyy-MM");
+        String  last_year_last_month = DateUtil.getDate2str(DateUtil.getAddTime(DateUtil.getStr2date(last_year_this_month,"yyyy-MM"),-1,"MONTH"),"yyyy-MM");
+        String sql = stParamsService.getParamConf("09zdtax").replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).
                 replaceAll("\\$\\{this_year_last_month\\}",this_year_last_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month).
                 replaceAll("\\$\\{last_year_last_month\\}",last_year_last_month).replaceAll("\\$\\{year\\}",thisyear);
         List<Map> list = stExcelMapper.selectBysql(sql);

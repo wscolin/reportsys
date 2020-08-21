@@ -84,8 +84,8 @@ public class ExcelController_13 {
    // @SystemControllerLog(description = "excel导入",params = 0)
     public Object importfileBypoi(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
         String[] keys = {"kmbm","kmmc","amt","sz","gxq","lcq","dxq","ncx","nfx","lcx","crx","yhx","lax","jxx","zxx","gcx"};
-        List<Map>  income_list = POIUtil.readExcel(file,"收入",keys);
-        List<Map>  zc_list = POIUtil.readExcel(file,"支出",keys);
+        List<Map>  income_list = POIUtil.readExcel(file,"收入",keys,4);
+        List<Map>  zc_list = POIUtil.readExcel(file,"支出",keys,4);
         String date = request.getParameter("date");
         stExcelMapper.deleteincome(date);
         stExcelMapper.deletedisburse(date);
@@ -181,6 +181,7 @@ public class ExcelController_13 {
 
 
 
+
     /**
      * 根据模板导出
      * @param request
@@ -196,7 +197,7 @@ public class ExcelController_13 {
             String date = request.getParameter("date");
             String fileName = date+"月报全市报表";
             /**
-             * 1总
+             * 01总
              */
             List<Map>zong1_List  = excelService.exportExcel_1zong(date);
             /**
@@ -222,7 +223,16 @@ public class ExcelController_13 {
             /**
              * 07税比
              */
-            List<Map>shuibi07_list  = excelService.exportExcel_07shuibi(date);
+            List<Map> shuibi07_list  = excelService.exportExcel_07shuibi(date);
+            /**
+             * 08产业
+             */
+            List<Map> chanye08_list  = excelService.exportExcel_08chanye(date);
+
+            /**
+             * 09分县区重点税收
+             */
+            List<Map> zdtax09_list  = excelService.exportExcel_09zdtax(date);
             /**
              * 10支出
              */
@@ -250,6 +260,8 @@ public class ExcelController_13 {
             map.put("list_5shui",shui05_list);
             map.put("list_6cai",cai06_list);
             map.put("list_7shuibi",shuibi07_list);
+            map.put("list_8chanye",chanye08_list);
+            map.put("list_9zdtax",zdtax09_list);
             map.put("list_10zhichu",zhichu10_list);
             map.put("list_11min",min_11List);
             map.put("list_12sheng",sheng_12List);
@@ -289,7 +301,7 @@ public class ExcelController_13 {
         // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
         String templatepath = System.getProperty("user.dir")+File.separator+"templateExport"+File.separator+"导出_模板.xlsx";
         templateExportParams.setTemplateUrl(templatepath);
-        String[] sheetNameArray = {"01总","02级","03部","04基金分级收支","05税","06财","07税比","10支出","11民生","12省","13通报"};
+        String[] sheetNameArray = {"01总","02级","03部","04基金分级收支","05税","06财","07税比","08产业","09分县区重点税收","10支出","11民生","12省","13通报"};
         templateExportParams.setSheetName(sheetNameArray);
         Workbook workbook = ExcelExportUtil.exportExcel(templateExportParams,map);
         //System.out.println("path:======="+path+"/excelExport/"+fileName+".xlsx");
@@ -411,7 +423,7 @@ public class ExcelController_13 {
         /**
          * 删除导入数据结束
          */
-        List<Map>  income_list = POIUtil.readExcel(file,"省级",keys);
+        List<Map>  income_list = POIUtil.readExcel(file,"省级",keys,4);
         try {
             String type = "";
             for(Map map:income_list){
@@ -441,9 +453,9 @@ public class ExcelController_13 {
      * @param files
      * @return
      */
-    @RequestMapping("/importfileBypoi_13")
+    @RequestMapping("/importfileBypoi_Base")
     @ResponseBody
-    public Object importfileBypoi_13(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile[] files) throws Exception{
+    public Object importfileBypoi_Base(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile[] files) throws Exception{
         Map resultMap = new HashMap();
         Gson gson = new Gson();
         String jsonresult = null;
@@ -554,6 +566,210 @@ public class ExcelController_13 {
         stExcelMapper.excutesql(sql);
 
         workbook.close();
+    }
+
+    /**
+     * 导入填写数据
+     * @param request
+     * @param file
+     * @return
+     */
+    @RequestMapping("/importfileBypoi_txdata")
+    @ResponseBody
+    public Object importfileBypoi_txdata(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
+        Map resultMap = new HashMap();
+        Gson gson = new Gson();
+        String jsonresult = null;
+
+            Map<String,String> dateMap = getDate(file);
+            //读取省级数据
+            import_prodata(file,dateMap.get("date_month"));
+            //导入预期数据
+            import_expectgoal(file,dateMap.get("year"));
+            //导入重点税收数据
+            import_zdtaxdata(file,dateMap.get("date_month"));
+            //导入产业税收数据
+            import_industrydata(file,dateMap.get("date_month"));
+            resultMap.put("msg","success");
+
+        jsonresult = gson.toJson(resultMap);
+        return jsonresult;
+
+    }
+
+    /**
+     * 获取手动导入的时间
+     * @param file
+     * @return
+     */
+    public Map<String,String> getDate(MultipartFile file){
+        Workbook workbook = POIUtil.getWorkBook(file);
+        Sheet sheet = workbook.getSheet("IB");
+        String datestr = sheet.getRow(1).getCell(0).getStringCellValue();
+        datestr = POIUtil.replaceBlank(datestr);
+        String date_month =  DateUtil.getDateBystr(datestr);
+        String year = date_month.split("-")[0];
+        Map<String,String > map  =  new HashMap<>();
+        map.put("date_month",date_month);
+        map.put("year",year);
+        return map;
+    }
+
+    /**
+     * 导入分县区重点税收数据
+     * @return
+     * @throws Exception
+     */
+    public String import_zdtaxdata(MultipartFile file,String date )throws Exception{
+        String[] keys = {"kmbm","kmmc","amt","sz","gxq","lcq","dxq","ncx","nfx","lcx","crx","yhx","lax","jxx","zxx","gcx"};
+        /**
+         * 删除导入数据开始
+         */
+        String desql = "delete from t_incomebyarea where year='"+date+"' and kmbm like 'H%'" ;
+        stExcelMapper.excutesql(desql);
+        /**
+         * 删除导入数据结束
+         */
+        List<Map>  income_list = POIUtil.readExcel(file,"分县区重点税收",keys,1);
+        try {
+            String type = "";
+            for(Map map:income_list){
+                map.put("year",date);
+                map.put("type",type);
+            }
+            //插入按地区收入表
+            List<Map> list_area = stExcelMapper.selectBysql("select area_code,area_name,simple_name from t_area where level='2'");
+            List<Map<String,String>> list_incode_area = new ArrayList<>();
+            for(Map area:list_area) {
+                getBasedateByArea(income_list, list_incode_area, area);
+            }
+            //新增重点税收数据
+            stExcelMapper.insertSelective_batch_incomearea_map(list_incode_area);
+            return "success";
+        }catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    /**
+     * 导入省级数据
+     * @return
+     * @throws Exception
+     */
+    public String import_prodata(MultipartFile file,String date )throws Exception{
+        String[] keys = {"kmbm","kmmc","amt","sbj","ncs","jdzs","pxs","jjs","xys","yts","gzs","ycs","srs","jas","wzs"};
+        /**
+         * 删除导入数据开始
+         */
+        String del_prodata = "delete from t_income_pro where year='"+date+"'";
+        String del_proareadata = "delete from t_incomebyarea_pro where year='"+date+"'";
+        stExcelMapper.excutesql(del_prodata);
+        stExcelMapper.excutesql(del_proareadata);
+        /**
+         * 删除导入数据结束
+         */
+        List<Map>  income_list = POIUtil.readExcel(file,"省级",keys,1);
+        String type = "";
+        for(Map map:income_list){
+            map.put("year",date);
+            map.put("type",type);
+        }
+        stExcelMapper.insertSelective_batch_incomeBypro_map(income_list);
+        //插入按地区收入表
+        List<Map> list_area = stExcelMapper.selectBysql("select area_code,area_name,simple_name from t_area where level='1'");
+        List<Map<String,String>> list_incode_area = new ArrayList<>();
+        for(Map area:list_area) {
+            getBasedateByArea(income_list, list_incode_area, area);
+        }
+        //新增省级地区基本收入数据
+        stExcelMapper.insertSelective_batch_incomeByproarea_map(list_incode_area);
+        return "success";
+
+    }
+
+    /**
+     * 导入预期数据
+     * @return
+     * @throws Exception
+     */
+    public String import_expectgoal(MultipartFile file,String date )throws Exception{
+        String[] keys = {"area","area_code","target_amt","taxdept_amt","financedept_amt","year"};
+        /**
+         * 删除导入数据开始
+         */
+        String del_prodata = "delete from t_expectgoal where year='"+date+"'";
+        stExcelMapper.excutesql(del_prodata);
+        /**
+         * 删除导入数据结束
+         */
+        List<Map> expectgoal_list =POIUtil.readExcel(file,"预期目标",keys,1);
+        //新增预期值数据
+        stExcelMapper.insertSelective_expectgoal_map(expectgoal_list);
+        return "success";
+
+    }
+
+
+    /**
+     * 导入产业税收数据
+     * @return
+     * @throws Exception
+     */
+    public String import_industrydata(MultipartFile file,String date )throws Exception{
+        String[] keys = {"kmbm","kmmc","tax","finance"};
+        /**
+         * 删除导入数据开始
+         */
+        String del_sql = "delete from t_industrytax where year='"+date+"'";
+        stExcelMapper.excutesql(del_sql);
+        /**
+         * 删除导入数据结束
+         */
+        List<Map>  income_list = POIUtil.readExcel(file,"产业",keys,1);
+        try {
+            for(Map map:income_list){
+                map.put("year",date);
+            }
+            //插入按地区收入表
+            List<Map<String,String>> list_incode_area = new ArrayList<>();
+            getBasedateByhyType(income_list, list_incode_area);
+            //新增行业基本收入数据
+            stExcelMapper.insertSelective_batch_importHyType_map(list_incode_area);
+            return "success";
+        }catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+    public void getBasedateByhyType(List<Map> income_list, List<Map<String, String>> list_incode_area) {
+        for (Map m : income_list) {
+            Iterator<Map.Entry<String,String>> iterator =(Iterator<Map.Entry<String,String>> ) m.entrySet().iterator();
+            while (iterator.hasNext()){
+                Map.Entry entry =  iterator.next();
+                String key =(String) entry.getKey();
+                if(key.equals("tax")) {
+                    Map<String, String> map_area_kmbm = new HashMap();
+                    map_area_kmbm.put("amt", m.get("tax").toString());
+                    map_area_kmbm.put("type","1");
+                    map_area_kmbm.put("kmbm", m.get("kmbm") == null ? null : m.get("kmbm").toString());
+                    map_area_kmbm.put("kmmc", m.get("kmmc") == null ? null : m.get("kmmc").toString());
+                    map_area_kmbm.put("year", m.get("year") == null ? null : m.get("year").toString());
+                    list_incode_area.add(map_area_kmbm);
+                }
+                if(key.equals("finance")){
+                    Map<String, String> map_area_kmbm = new HashMap();
+                    map_area_kmbm.put("amt", m.get("finance").toString());
+                    map_area_kmbm.put("type","2");
+                    map_area_kmbm.put("kmbm", m.get("kmbm") == null ? null : m.get("kmbm").toString());
+                    map_area_kmbm.put("kmmc", m.get("kmmc") == null ? null : m.get("kmmc").toString());
+                    map_area_kmbm.put("year", m.get("year") == null ? null : m.get("year").toString());
+                    list_incode_area.add(map_area_kmbm);
+                }
+
+
+            }
+        }
     }
 
 }

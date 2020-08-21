@@ -28,7 +28,7 @@ public class POIUtil {
      * @param file
      * @throws IOException
      */
-    public static List<Map> readExcel(MultipartFile file,String sheetName,String[] keys) throws IOException{
+    public static List<Map> readExcel(MultipartFile file,String sheetName,String[] keys,int fromrowNum) throws IOException{
         //检查文件
         checkFile(file);
         //获得Workbook工作薄对象
@@ -48,7 +48,7 @@ public class POIUtil {
                     //获得当前sheet的结束行
                     int lastRowNum = sheet.getLastRowNum();
                     //循环除了第一行的所有行
-                    for(int rowNum = firstRowNum+4;rowNum <= lastRowNum;rowNum++){
+                    for(int rowNum = firstRowNum+fromrowNum;rowNum <= lastRowNum;rowNum++){
                         //获得当前行
                         Row row = sheet.getRow(rowNum);
                         if(row == null){
@@ -219,4 +219,5 @@ public class POIUtil {
         }
         return list;
     }
+
 }

@@ -275,7 +275,7 @@ function btn_import_click_13() {
     $(".btn-primary").attr("disabled",false);
     $("#KSRQ").val("");
     $("h4").text("导入");
-    $('#exampleModal').modal('show');
+    $('#modalImport_base').modal('show');
 
 }
 function btn_export_click() {
@@ -320,7 +320,7 @@ function clear_date_click() {
 function btn_export_confrim (){
 	var date = $("#KSRQ_exprot").val();
     $('#fileModal_exprot').modal('hide');
-    window.location.href=ctx+"/excel/excelExportByTemplate?date="+date;
+    window.location.href=ctx+"/excel_13/excelExportByTemplate?date="+date;
 /*    $.ajax({
         url:ctx+ "/excel/excelExportByTemplate?date="+date,
         type : "GET",
@@ -389,12 +389,13 @@ function btn_savefile_click(_this) {
 	}
 }
 
-var provice_data = {
+var tx_data = {
     btn_import_click:function () {
+        $(".fileinput-remove-button").click();
         $(".btn-primary").attr("disabled",false);
         $("#KSRQ").val("");
         $("h4").text("导入省级数据");
-        $('#fileModal').modal('show');
+        $('#modalImport_txdata').modal('show');
     },
     btn_savefile_click:function (_this) {
         $(_this).attr("disabled","disabled");

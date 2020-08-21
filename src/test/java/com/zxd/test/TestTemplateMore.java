@@ -88,4 +88,9 @@ public class TestTemplateMore {
         System.out.println( ResourceUtils.getFile("classpath:").getPath());;
     }
 
+    public static void main(String[] args) {
+        String a = "t.0";
+        System.out.println(a.split("\\.")[0]);
+    }
+
 }

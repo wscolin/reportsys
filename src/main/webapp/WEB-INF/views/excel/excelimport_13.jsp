@@ -92,13 +92,14 @@
 							<shiro:hasPermission name="st_user_import">
 								<%--<button class="btn btn-sm green-turquoise" id="btn_setresource" data-toggle="modal" onclick="btn_dwload_mb();"><i class="fa fa-download"></i>收入-支出表导入模板下载</button>--%>
 								<button class="btn btn-sm btn-default" style="display: none" id="btn_setresource" data-toggle="modal" onclick="btn_import_click();"><i class="fa fa-upload" ></i> 导入</button>
-								<button class="btn btn-sm btn-default" style="display: none" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
+
 							</shiro:hasPermission>
 							<shiro:hasPermission name="excel_import">
-								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_import_click_13();" data-target ="exampleModal"><i class="fa fa-upload"></i> 导入基础数据</button>
+								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="btn_import_click_13();" data-target ="modalImport_base"><i class="fa fa-upload"></i> 导入基础数据</button>
 							</shiro:hasPermission>
 							<shiro:hasPermission name="excel_import">
-								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="provice_data.btn_import_click();" data-target ="exampleModal"><i class="fa fa-upload"></i> 导入填写数据</button>
+								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="tx_data.btn_import_click();" data-target ="modalImport_txdata"><i class="fa fa-upload"></i> 导入填写数据</button>
+								<button class="btn btn-sm btn-default" style="" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
 							</shiro:hasPermission>
 							<shiro:hasPermission name="cleardata">
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="clear_date_click();"><i class="fa fa-trash-o"></i> 清除数据</button>
@@ -158,60 +159,12 @@
 
 			</div>
 		</div>
-   	</div> 
-<!-- 弹框-->
-<div id="fileModal" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
-	<div class="modal-dialog modal-md">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-				<h4 class="modal-title"></h4>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal" role="form" id="fileForm" enctype="multipart/form-data">
-					<div class="form-group">
-						<label class="control-label col-md-3">导入excel:</label>
-						<div class="col-md-9" style="padding-left: 1px">
-							<div class="fileinput fileinput-new" data-provides="fileinput">
-								<div class="input-group input-large">
-									<div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput" style="border-radius: 5px 0 0 5px!important;">
-										<i class="fa fa-file fileinput-exists"></i>&nbsp;
-										<span class="fileinput-filename"> </span>
-									</div>
-									<span class="input-group-addon btn default btn-file" style="border-radius: 0 5px 5px 0!important;">
-										<span class="fileinput-new">选择文件</span>
-										<span class="fileinput-exists">重新选择</span>
-										<input type="file" id="fileUpload" name="file" multiple="multiple">
-									</span>
-									<a href="javascript:;" class="input-group-addon btn red fileinput-exists delfile" data-dismiss="fileinput" style="border-radius: 0 5px 5px 0!important;">删除</a>
-								</div>
-							</div>
-						</div>
-						<label class="control-label col-md-3">导入日期:</label>
-						<div id="kssjDiv" class="col-md-5 col-lg-5 col-sm-5 input-group date dateDiv  pull-left paddingRight0">
-							<input class="form-control borderRadiusRight0 borderRight0"  type="text" id="KSRQ" name="KSRQ">
-							<span class="input-group-btn">
-								<button class="btn default date-set" type="button">
-									<i class="fa fa-calendar"></i>
-								</button>
-							</span>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-primary" onclick="btn_savefile_click(this);"><i class="fa fa-save"></i> 导入</button>
-				<button class="btn btn-default" data-dismiss="modal" onclick="btn_close_click();"><i class="fa fa-remove"></i> 取消</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   	</div>
+	<div class="modal fade" id="modalImport_base" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel_base" aria-hidden="true">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">上传文件</h5>
+					<h5 class="modal-title" id="exampleModalLabel_base">导入基础数据</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -219,20 +172,45 @@
 				<div class="modal-body">
 					<form enctype="multipart/form-data">
 						<div class="form-group center-block" style="width: 800px;" >
-							<input id="modelInput" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1"
+							<input id="modelInput_base" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1"
 								   data-max-file-count="13" name="file" accept="/*" >
+						</div>
+					</form>
+					<div id="kartik-file-errors_base"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--手动导入-->
+	<div class="modal fade" id="modalImport_txdata" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel_txdata" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">导入填写数据</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form enctype="multipart/form-data">
+						<div class="form-group center-block" style="width: 800px;" >
+							<input id="modelInput_txdata" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1"
+								   data-max-file-count="1" name="file" accept="/*" >
 						</div>
 					</form>
 					<div id="kartik-file-errors"></div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-					<!-- <button type="button" class="btn btn-primary" title="Your custom upload logic">保存</button>-->
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- 弹框-->
+	<!-- 导出模态框-->
 	<div id="fileModal_exprot" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content">
@@ -279,6 +257,7 @@
 <script src="${ctx}/plugins/assets/global/plugins/ajaxfileupload.js" type="text/javascript"></script>
 <script src="${ctx}/javascript/sys/excel_13.js" type="text/javascript"></script>
 <script>
-    initFileInput("modelInput","${ctx}excel/importfileBypoi_13");
+    initFileInput("modelInput_base","${ctx}excel_13/importfileBypoi_Base");
+    initFileInput("modelInput_txdata","${ctx}excel_13/importfileBypoi_txdata");
 </script>
 </html>

@@ -505,6 +505,51 @@
     </foreach>
 
   </insert>
+  <insert id="insertSelective_batch_importHyType_map" parameterType="java.util.List" >
+    insert into t_industrytax
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      AMT,
+      kmbm,
+      kmmc,
+      type,
+      year,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.amt},
+      #{income.kmbm},
+      #{income.kmmc},
+      #{income.type},
+      #{income.year}
+      )
+    </foreach>
+
+  </insert>
+  <insert id="insertSelective_expectgoal_map" parameterType="java.util.List" >
+    insert into t_expectgoal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      area,
+      area_code,
+      target_amt,
+      taxdept_amt,
+      financedept_amt,
+      year,
+    </trim>
+    VALUES
+    <foreach collection="list" item="income" index="index"  separator=",">
+      (
+      #{income.area},
+      #{income.area_code},
+      #{income.target_amt},
+      #{income.taxdept_amt},
+      #{income.financedept_amt},
+      #{income.year}
+      )
+    </foreach>
+
+  </insert>
+
   <select id="excutesql" parameterType="java.lang.String">
         ${sql}
   </select>

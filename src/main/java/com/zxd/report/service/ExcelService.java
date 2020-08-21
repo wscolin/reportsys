@@ -61,11 +61,24 @@ public interface ExcelService {
      */
     List<Map>   exportExcel_07shuibi(String year);
     /**
+     * 查询08产业报表数据
+     * @param year
+     * @return
+     */
+    List<Map>   exportExcel_08chanye(String year);
+    /**
+     * 查询09重点税收报表数据
+     * @param year
+     * @return
+     */
+    List<Map>   exportExcel_09zdtax(String year);
+    /**
      * 查询10支出报表数据
      * @param year
      * @return
      */
     List<Map>   exportExcel_10zhichu(String year);
+
     /**
      * 查询12省数据
      */
