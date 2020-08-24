@@ -70,6 +70,15 @@
 		height: 300px;
 		overflow-y: auto;
 	}
+	.input-group-btn button{
+		height:34px;
+		padding: 4px 12px!important;
+/*		border-top-right-radius: 5px!important;
+		border-bottom-right-radius: 5px!important;*/
+	}
+	.file-caption-name{
+		height:20px!important;
+	}
 </style>
 <body class="page-content">
 	<div class="my-col-md">
