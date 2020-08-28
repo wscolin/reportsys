@@ -110,6 +110,7 @@
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="tx_data.btn_import_click();" data-target ="modalImport_txdata"><i class="fa fa-upload"></i> 导入填写数据</button>
 								<button class="btn btn-sm btn-default" style="" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
 							</shiro:hasPermission>
+							<button class="btn btn-sm btn-default" style="" id="btn_setresource" data-toggle="modal" onclick="btn_word_click();"><i class="fa fa-download"></i> 导出word</button>
 							<shiro:hasPermission name="cleardata">
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="clear_date_click();"><i class="fa fa-trash-o"></i> 清除数据</button>
 							</shiro:hasPermission>
@@ -244,6 +245,35 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-primary" onclick="btn_export_confrim();"><i class="fa fa-save"></i> 确定</button>
+					<button class="btn btn-default" data-dismiss="modal" onclick="btn_close_click();"><i class="fa fa-remove"></i> 取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="fileModal_word" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" id="fileForm_word" enctype="multipart/form-data">
+						<div class="form-group">
+							<label class="control-label col-md-3">导出日期:</label>
+							<div id="kssjDiv_word" class="col-md-5 col-lg-5 col-sm-5 input-group date dateDiv  pull-left paddingRight0">
+								<input class="form-control borderRadiusRight0 borderRight0"  type="text" id="KSRQ_word" >
+								<span class="input-group-btn">
+								<button class="btn default date-set" type="button">
+									<i class="fa fa-calendar"></i>
+								</button>
+							</span>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary" onclick="btn_word_confrim();"><i class="fa fa-save"></i> 确定</button>
 					<button class="btn btn-default" data-dismiss="modal" onclick="btn_close_click();"><i class="fa fa-remove"></i> 取消</button>
 				</div>
 			</div>

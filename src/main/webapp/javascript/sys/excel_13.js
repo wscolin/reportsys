@@ -283,6 +283,10 @@ function btn_export_click() {
     $('#fileModal_exprot').modal('show');
 
 }
+function btn_word_click() {
+    $("h4").text("导出word");
+    $('#fileModal_word').modal('show');
+}
 function clear_date_click() {
         bootbox.dialog({
             message: "确定要清除所有导入数据吗？",
@@ -339,6 +343,29 @@ function btn_export_confrim (){
         }
     });*/
 }
+function btn_word_confrim (){
+    var date = $("#KSRQ_word").val();
+    $('#fileModal_word').modal('hide');
+    window.location.href=ctx+"/word/autoinput?date="+date;
+    /*    $.ajax({
+            url:ctx+ "/excel/excelExportByTemplate?date="+date,
+            type : "GET",
+            data : null,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType : "json",
+            success: function (data,status){
+                if(data.responseText=="success"){
+                    window.parent.toastr[MES_SUCCESS]("导出成功！！");
+                }else if(data.responseText=="error") {
+                    window.parent.toastr[MES_WARN]("导出成功失败！！");
+                }
+                $('#fileModal_exprot').modal('hide');
+            }
+        });*/
+}
+
 function btn_dwload_mb() {
 	window.location.href=ctx+"/excel/dwloadmb";
 }

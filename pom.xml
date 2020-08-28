@@ -7,7 +7,7 @@
     <groupId>com.zxd</groupId>
     <artifactId>report</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -262,7 +262,11 @@
             <artifactId>thymeleaf-extras-shiro</artifactId>
             <version>1.2.1</version>
         </dependency>-->
-
+        <dependency>
+                 <groupId>org.freemarker</groupId>
+                 <artifactId>freemarker</artifactId>
+                 <version>2.3.28</version>
+             </dependency>
     </dependencies>
     <build>
         <plugins>

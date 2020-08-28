@@ -47,9 +47,9 @@ function initFileInput(ctrlName,url) {
     }).on('fileuploaded', function(event, data, previewId, index) {
         // filebatchuploadcomplete此事件仅在ajax上传和完成同步或异步ajax批量上传后触发。
     }).on('filebatchuploadcomplete',function (event,data,files,extra) {
-        setTimeout(function(){ //执行延时关闭
+       /* setTimeout(function(){ //执行延时关闭
             $(".btn-secondary").click()
-        },5000);
+        },5000);*/
         inityearTable();
         initTable($("#yearTable tbody").find("tr").eq(0).find("td").eq(1).text(),'0');
     });
