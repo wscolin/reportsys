@@ -13,4 +13,5 @@ import java.util.Map;
  */
 public interface StAutoMapper {
     List<Map> selectBysql(@Param(value = "sql") String sql);
+    List<Map> selectBysqlList(@Param(value = "sql") String sql);
 }

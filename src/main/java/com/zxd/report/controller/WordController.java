@@ -3,6 +3,7 @@ package com.zxd.report.controller;
 import cn.afterturn.easypoi.word.WordExportUtil;
 import com.zxd.commonmodel.Page;
 import com.zxd.report.mapper.StAutoMapper;
+import com.zxd.util.DateUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import net.sf.json.JSONArray;
@@ -21,10 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/word")
@@ -36,6 +34,9 @@ public class WordController {
         String date = request.getParameter("date");
         String year = date.split("-")[0];//年
         String month=date.split("-")[1].substring(1);//月
+        Date date_sj = DateUtil.getStr2date(date,"yyyy-MM");
+        String this_year_this_month = DateUtil.getDate2str(date_sj,"yyyy-MM");//当年当月
+        String last_year_this_month = DateUtil.getDate2str( DateUtil.getAddTime(date_sj,-1,"YEAR"),"yyyy-MM");//去年当月
         String querysql = "select * from t_autoinputconfig where typecode='100'";
         List<Map> list =  stAutoMapper.selectBysql(querysql);
         Map root = new HashMap();
@@ -43,8 +44,11 @@ public class WordController {
         root.put("month",month);
         for(Map m: list){
             String sql = m.get("sql").toString();
-            String num = stAutoMapper.selectBysql(sql).get(0).get("num").toString();
-            if(num!=null && !"".equals(num)){
+            sql = sql.replaceAll("\\$\\{this_year_this_month\\}",this_year_this_month).replaceAll("\\$\\{last_year_this_month\\}",last_year_this_month);
+            List<Map> lists = stAutoMapper.selectBysql(sql);
+            String num = null;
+            if(lists.get(0)!=null){
+                num = lists.get(0).get("num").toString();
                 Double d =  new Double(num);
                 //百分比如果正数，增长多少，否则为降低多少
                 if(m.get("code").toString().endsWith("tb_bfb")){

@@ -1,0 +1,510 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>test2</title>
+    <!-- 引入 echarts.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts-en.common.js"></script>
+</head>
+<body>
+<!--支出表-->
+   <div style="width: 1000px;height: 500px;" id="test1"></div>
+<!--
+    <div style="width: 1000px;height: 500px;" id="test2"></div>
+-->
+
+</body>
+
+<script>
+    var chart1 = echarts.init(document.getElementById('test1'));
+    /*var chart2 = echarts.init(document.getElementById('test2'));*/
+    var ROOT_PATH='https://echarts-www.cdn.bcebos.com/examples'
+    var weatherIcons = {
+        'Sunny': ROOT_PATH + '/data/asset/img/weather/sunny_128.png',
+        'Cloudy': ROOT_PATH + '/data/asset/img/weather/cloudy_128.png',
+        'Showers': ROOT_PATH + '/data/asset/img/weather/showers_128.png'
+    };
+    var option = {
+/*            title: [
+                {
+                    top: '40%',
+                    left: 10,
+                  /!*  subtextStyle: {
+                        align: 'left',
+                        color: '#333fff',
+                        fontSize: 12,
+                    },*!/
+                 //   subtext: '单\n位\n:\n亿\n元'//   \n换行
+                },
+                {
+                    top: '40%',
+                    right: 10,
+            /!*        subtextStyle: {
+                        align: 'right',
+                        color: '#333fff',
+                        fontSize: 12,
+                    },*!/
+                    //subtext: '单\n位\n:\n%'
+                },
+            ],*/
+            grid: {
+                bottom: 200
+            },
+           /* backgroundColor: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                    offset: 0, color: 'rgba(70, 131, 254, 0)' // 0% 处的颜色
+                }, {
+                    offset: 1, color: 'rgba(70, 131, 254, 0.5)' // 100% 处的颜色
+                }],
+                global: true // 缺省为 false
+            },*/
+
+        //提示框
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+        //图例
+            legend: {
+                data: [
+                    {name: '2019年收入'},
+                    {name: '2020年收入'},
+                    {name: '2019年增减%'},
+                    {name: '2020年增减%'}
+                ],
+                textStyle: {
+                    color: '#333fff',
+                    fontSize: 11
+                },
+                y: 'bottom',
+                x: 'center',
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#1F7EFF',
+                            width: 1
+                        }
+                    },
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        interval: 0,//横轴信息全部显示
+                        textStyle: {
+                            color: '#333'
+                        },
+                        fontSize: 11,
+                        // rotate:45,//度角倾斜显示
+                        formatter: function (value) {
+                            return value.length > 5 ? value.substring(0, 5) + '...' : value;
+                        }
+                    }
+                }
+            ],
+            yAxis: [//这里配置两条Y轴
+                {
+                    type: 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#f8f8f8',
+                            width: 1
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#1F7EFF',
+                            width: 1
+                        }
+                    },
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#333'
+                        },
+                        fontSize: 11,
+                        interval: 'auto',
+                        formatter: '{value}'
+                    },
+                    name: '单位(亿元)',
+                    nameTextStyle: {
+                        color: '#333'
+                    }
+                },
+                {
+                    type: 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#fbfbfd',
+                            width: 1
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#1F7EFF',
+                            width: 1
+                        }
+                    },
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#333'
+                        },
+                        fontSize: 11,
+                        interval: 'auto',
+                        formatter: '{value}'
+                    },
+                    name: '单位（%）',
+                    nameTextStyle: {
+                        color: '#333',
+                        fontSize: 11,
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '2019年收入',
+                    barWidth: '30%',
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                color: '#c3e5f2'
+                            },
+                            color: '#c3e5f2',
+                        }
+                    },
+                    label:{
+                        normal:{
+                            show:true,
+                            position:'top'
+                        },
+                    },
+                    yAxisIndex: 0, //使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用。
+                    data: [
+                        32.01
+                        ,23.49
+                        ,22.42
+                        ,23.69
+                        , 20.58
+                        ,22.31
+                        , 15.82
+                        , 10.37
+                        , 19.22
+                        , 12.73
+                        , 5.04
+                        , 5.28
+                    ]
+                },
+                {
+                    name: '2020年收入',
+                    barWidth: '30%',
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                color: '#ffd8ec'
+                            },
+                            color: '#ffd8ec',
+                        }
+                    },
+                    label:{
+                        normal:{
+                            show:true,
+                            position:'top'
+                        }
+                    },
+                    yAxisIndex: 0,
+                    data: [
+                        34.04
+                        , 22.34
+                        , 14.31
+                        , 21.44
+                        , 21.25
+                        , 20.14
+                        ,
+                        ,
+                        ,
+                        ,
+                        ,
+                        ,
+                    ]
+                },
+                {
+                    name: '2019年增减%',
+                    barWidth: '10%',
+                    type: 'line',
+                    label:{
+                        normal:{
+                            show:true,
+                            position:'top'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                color: '#E63234'
+                            },
+                            fontSize: 11,
+                            color: '#E63234',
+                        }
+                    },
+                    symbol: 'circle',
+                    symbolSize: 10, //折线点的大小
+                    yAxisIndex: 1, ////使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用。
+                    data: [
+                        13.3
+                        , 9.0
+                        , 14.0
+                        , 8.9
+                        , -2.9
+                        , -8.1
+                        ,16.9
+                        ,-17.2
+                        ,6.8
+                        ,5.1
+                        ,3.4
+                        , 44.7]
+                },
+                {
+                    name: '2020年增减%',
+                    barWidth: '30%',
+                    label:{
+                        normal:{
+                            show:true,
+                            position:'top'
+                        }
+                    },
+                    type: 'line',
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                color: '#2b4df1'
+                            },
+                            fontSize: 11,
+                            color: '#2b4df1',
+                        }
+                    },
+                    symbol: 'circle',
+                    symbolSize: 10, //折线点的大小
+                    yAxisIndex: 1,
+                    data: [
+                        6.3
+                        , -4.9
+                        , -36.2
+                        , -9.5
+                        , 3.3
+                        , -9.8
+                        , 22.6
+                        ,
+                        ,
+                        ,
+                        ,
+                        ,
+                    ]
+                },
+                {
+                    type: 'scatter',
+                    data: [
+                        {
+                            value: [0,0],
+                            label: {
+                                normal: {
+                                    formatter: [
+
+                                        '{tc|年份}{tc|1月}{tc|2月}{tc|3月}{tc|4月}{tc|5月}{tc|6月}{tc|7月}{tc|8月}{tc|9月}{tc|10月}{tc|11月}{tc|12月} ',
+                                        '{tc|2020收入}{tc|1}{tc|2}{tc|3}{tc|4}{tc|5}{tc|6}{tc|7}{tc|8}{tc|9}{tc|10}{tc|12}{tc|123}'
+                                    ].join('\n'),
+
+                                }
+                            }
+                        },
+                    ],
+                    symbolSize: 1,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: [-102, 30],
+                            backgroundColor: '#ddd',
+                            borderColor: '#555',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            color: '#000',
+                            fontSize: 14,
+                            rich: {
+                                titleBg: {
+                                    backgroundColor: '#000',
+                                    height: 30,
+                                    borderRadius: [5, 5, 0, 0],
+                                    padding: [0, 10, 0, 10],
+                                    width: '100%',
+                                    color: '#eee'
+                                },
+                                tc: {
+                                    color: '#333',
+                                    height: 24,
+                                    width:25,
+                                    align: 'left',
+                                    padding: [0, 20, 0, 26],
+                                    fontsize:14,
+                                },
+                                value: {
+                                    width: 20,
+                                    padding: [0, 20, 0, 0],
+                                    align: 'left'
+                                },
+                                hr: {
+                                    borderColor: '#777',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                sunny: {
+                                    height: 30,
+                                    align: 'center',
+                                    backgroundColor: {
+                                        image: weatherIcons.Sunny
+                                    }
+                                },
+                                cloudy: {
+                                    height: 30,
+                                    align: 'center',
+                                    backgroundColor: {
+                                        image: weatherIcons.Cloudy
+                                    }
+                                },
+                                showers: {
+                                    height: 30,
+                                    align: 'center',
+                                    backgroundColor: {
+                                        image: weatherIcons.Showers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ;
+    option2= {
+        series: [
+            {
+                type: 'scatter',
+                data: [
+                    {
+                        value: [0,0],
+                        label: {
+                            normal: {
+                                formatter: [
+                                    '{tc|一月}{titleBg|}',
+                                    '  Content text xxxxxxxx {sunny|} xxxxxxxx {cloudy|}  ',
+                                    '{hr|}',
+                                    '  xxxxx {showers|} xxxxxxxx  xxxxxxxxx  '
+                                ].join('\n'),
+                                rich: {
+                                    titleBg: {
+                                        align: 'right'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                ],
+                symbolSize: 1,
+                label: {
+                    normal: {
+                        show: true,
+                        backgroundColor: '#ddd',
+                        borderColor: '#555',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        color: '#000',
+                        fontSize: 14,
+                        rich: {
+                            titleBg: {
+                                backgroundColor: '#000',
+                                height: 30,
+                                borderRadius: [5, 5, 0, 0],
+                                padding: [0, 10, 0, 10],
+                                width: '100%',
+                                color: '#eee'
+                            },
+                            tc: {
+                                align: 'center',
+                                color: '#eee'
+                            },
+                            hr: {
+                                borderColor: '#777',
+                                width: '100%',
+                                borderWidth: 0.5,
+                                height: 0
+                            },
+                            sunny: {
+                                height: 30,
+                                align: 'left',
+                                backgroundColor: {
+                                    image: weatherIcons.Sunny
+                                }
+                            },
+                            cloudy: {
+                                height: 30,
+                                align: 'left',
+                                backgroundColor: {
+                                    image: weatherIcons.Cloudy
+                                }
+                            },
+                            showers: {
+                                height: 30,
+                                align: 'left',
+                                backgroundColor: {
+                                    image: weatherIcons.Showers
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        xAxis: {
+            axisLabel: {show: false},
+            axisLine: {show: false},
+            splitLine: {show: false},
+            axisTick: {show: false},
+            min: -1,
+            max: 1
+        },
+        yAxis: {
+            axisLabel: {show: false},
+            axisLine: {show: false},
+            splitLine: {show: false},
+            axisTick: {show: false},
+            min: 0,
+            max: 2,
+            inverse: false
+        }
+    };
+    chart1.setOption(option);
+   // chart2.setOption(option2);
+</script>
+
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

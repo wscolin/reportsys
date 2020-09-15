@@ -108,7 +108,7 @@
 							</shiro:hasPermission>
 							<shiro:hasPermission name="excel_import">
 								<button class="btn btn-sm btn-default" id="btn_setresource" data-toggle="modal" onclick="tx_data.btn_import_click();" data-target ="modalImport_txdata"><i class="fa fa-upload"></i> 导入填写数据</button>
-								<button class="btn btn-sm btn-default" style="" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出</button>
+								<button class="btn btn-sm btn-default" style="" id="btn_setresource" data-toggle="modal" onclick="btn_export_click();"><i class="fa fa-download"></i> 导出excel</button>
 							</shiro:hasPermission>
 							<button class="btn btn-sm btn-default" style="" id="btn_setresource" data-toggle="modal" onclick="btn_word_click();"><i class="fa fa-download"></i> 导出word</button>
 							<shiro:hasPermission name="cleardata">

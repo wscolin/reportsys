@@ -4,5 +4,7 @@
   <select id="selectBysql" parameterType="String" resultType="java.util.Map" >
     ${sql}
   </select>
-
+  <select id="selectBysqlList" parameterType="String" resultType="java.util.LinkedHashMap" >
+    ${sql}
+  </select>
 </mapper>
