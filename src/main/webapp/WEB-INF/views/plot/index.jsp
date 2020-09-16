@@ -63,7 +63,7 @@
                             <li role="presentation"><a href="#" data-toggle="tab" index="8" kmbm="H002" declare="建筑安装业税收">建筑安装业税收变化图表</a></li>
                             <li role="presentation"><a href="#" data-toggle="tab" index="9" kmbm="H003" declare="交通运输业税收">交通运输业税收变化图表</a></li>
                             <li role="presentation"><a href="#" data-toggle="tab" index="10" kmbm="H004" declare="房地产业税收">房地产业税收变化图表</a></li>
-                            <li role="presentation"><a href="#" data-toggle="tab" index="11" kmbm="A027" declare="税比变化">税比变化图表</a></li>
+                            <li role="presentation"><a href="#" data-toggle="tab" index="11" kmbm="A027" declare="税比">税比变化图表</a></li>
                             <li role="presentation"><a href="#" data-toggle="tab" index="12" kmbm="A001" declare="一般公共预算收入">一般公共预算收入变化图表</a></li>
                             <li role="presentation"><a href="#" data-toggle="tab" index="13" kmbm="A024" declare="一般公共预算支出">一般公共预算支出变化图表</a></li>
 
@@ -84,7 +84,7 @@
             var kmbm = $(this).find("a").attr("kmbm");
             var declare=$(this).find("a").attr("declare");
             var type= kmbm=="A024"?"支出":"收入";
-            load_plot(kmbm,declare,type );
+            load_plot(kmbm,declare,type,index );
         });
     });
     var this_year ;
@@ -121,10 +121,10 @@
     var plot_obj={
         "load":load_plot
     }
-    load_plot("A007","财政总收入","收入");
-    function load_plot(kmbm,declare,type){
+    load_plot("A007","财政总收入","收入",0);
+    function load_plot(kmbm,declare,type,index){
         $.ajax({
-            url:ctx+ "/plot/canvos?kmbm="+kmbm,
+            url:ctx+ "/plot/canvos?kmbm="+kmbm+"&index="+index,
             type : "POST",
             dataType : "json",
             async:false,
@@ -159,11 +159,11 @@
                         'Cloudy': ROOT_PATH + '/data/asset/img/weather/cloudy_128.png',
                         'Showers': ROOT_PATH + '/data/asset/img/weather/showers_128.png'
                     };
-                    var option = {
+                    var option_dy = {
                         title:
                             {
                                 top: '40',
-                                text: declare+"分月情况",
+                                text: index=="11"?"财政总收入税比分月情况":declare+"分月情况",
                                 left: 700,
                                 align:"center",
                                 textStyle:{
@@ -209,7 +209,7 @@
                                 saveAsImage:{
                                     type:'png',
                                     title:'保存为图片',
-                                    name:declare+'分月情况',
+                                    name: index=="11"?"财政总收入税比分月情况":declare+"分月情况",
                                     show: true,
                                     position:"center"
                                 }
@@ -554,11 +554,11 @@
                         ]
                     };
 
-                    var option2 = {
+                    var option_lj = {
                         title:
                             {
                                 top: '40',
-                                text:declare+"累计情况",
+                                text:index=="11"?"一般公共预算收入税比分月情况":declare+'累计情况',
                                 left: 700,
                                 align:"center",
                                 textStyle:{
@@ -604,7 +604,7 @@
                                 saveAsImage:{
                                     type:'png',
                                     title:'保存为图片',
-                                    name:declare+'累计情况',
+                                    name:index=="11"?"一般公共预算收入税比分月情况":declare+'累计情况',
                                     show: true,
                                     position:"center"
                                 }
@@ -948,8 +948,8 @@
                             }
                         ]
                     };
-                    chart1.setOption(option);
-                    chart2.setOption(option2);
+                    chart1.setOption(option_dy);
+                    chart2.setOption(option_lj);
                 }else {
                     //alert("查询出错");
                 }
